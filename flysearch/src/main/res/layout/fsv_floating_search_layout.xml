@@ -1,0 +1,38 @@
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <include
+        android:id="@+id/fsv_search_container"
+        layout="@layout/fsv_search_query_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:transitionName="@string/fsv.transition.search.layout"
+        tools:ignore="UnusedAttribute"/>
+
+    <FrameLayout
+        android:id="@+id/fsv_suggestions_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignLeft="@+id/fsv_search_container"
+        android:layout_alignStart="@+id/fsv_search_container"
+        android:layout_below="@+id/fsv_search_container">
+
+        <view
+            android:id="@+id/fsv_suggestions_list"
+            class="org.brainail.flysearch.FloatingSearchView$RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            app:layoutManager="LinearLayoutManager"/>
+
+        <View
+            android:id="@+id/fsv_suggestions_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:visibility="invisible"/>
+    </FrameLayout>
+</merge>

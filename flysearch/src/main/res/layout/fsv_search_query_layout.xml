@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v4.widget.Space
+        style="@style/Widget.AppCompat.ActionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <ImageButton
+        android:id="@+id/fsv_search_action_navigation"
+        style="@style/Widget.AppCompat.ActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription"/>
+
+    <view
+        android:id="@+id/fsv_search_text"
+        class="org.brainail.flysearch.FloatingSearchView$LogoEditText"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:background="@null"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"/>
+
+    <android.support.v7.widget.ActionMenuView
+        android:id="@+id/fsv_search_action_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"/>
+</LinearLayout>

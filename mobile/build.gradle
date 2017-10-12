@@ -1,0 +1,126 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: "de.mannodermaus.android-junit5"
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion project.compile_sdk_version
+    buildToolsVersion project.build_tools_version
+
+    dataBinding {
+        enabled = true
+    }
+
+    defaultConfig {
+        applicationId "org.brainail.EverboxingLingo"
+
+        minSdkVersion project.min_sdk_version
+        targetSdkVersion project.target_sdk_version
+
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espresso_core", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
+    })
+
+    implementation "com.android.support:design:$support_version"
+    implementation "com.android.support.constraint:constraint-layout:$constraint_layout"
+    implementation "com.android.support:cardview-v7:$support_version"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    implementation "android.arch.lifecycle:runtime:$android_arch_version"
+    implementation "android.arch.lifecycle:extensions:$android_arch_version"
+    kapt "android.arch.lifecycle:compiler:$android_arch_version"
+
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "com.nhaarman:mockito-kotlin:$mockito_kotlin_version"
+
+    testImplementation "org.jetbrains.spek:spek-api:$spek_version"
+    testImplementation "org.jetbrains.spek:spek-data-driven-extension:$spek_version"
+    testImplementation "org.jetbrains.spek:spek-junit-platform-engine:$spek_version"
+    testImplementation "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+
+    implementation "org.jetbrains.anko:anko-common:$anko_common"
+    implementation "com.dmitrymalkovich.android:material-design-dimens:$material_dimens"
+    kapt "com.android.databinding:compiler:$gradle_plugin_version"
+
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+
+    implementation "nz.bradcampbell:paperparcel:$paperparcel_version"
+    kapt "nz.bradcampbell:paperparcel-compiler:$paperparcel_version"
+
+    implementation "com.roughike:bottom-bar:2.3.1"
+
+    implementation project(':domain')
+    implementation project(':data')
+
+    implementation project(':logger')
+    implementation project(':flysearch')
+}
+
+kapt {
+    generateStubs = true
+}
+
+repositories {
+    mavenCentral()
+    maven { url "http://dl.bintray.com/jetbrains/spek" }
+    maven { url "https://jitpack.io" }
+}
+
+junitPlatform {
+    filters {
+        engines {
+            include 'spek'
+        }
+    }
+}
+
+// Spec workaround AS 3 Alpha ...
+// add 2 task in run config to make kotlin test working for junit
+// https://stackoverflow.com/questions/44079918/android-studio-3-0-canary-1-kotlin-tests-or-java-tests-referring-to-kotlin-clas
+// ...
+// task copyTestClasses(type: Copy) {
+//     from "build/tmp/kotlin-classes/debugUnitTest"
+//     into "build/intermediates/classes/debug"
+// }
+//
+// afterEvaluate {
+//     compileDebugUnitTestSources.dependsOn copyTestClasses
+// }

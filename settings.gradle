@@ -1,0 +1,1 @@
+include ':mobile', ':domain', ':data', ':logger', ':flysearch'
