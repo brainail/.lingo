@@ -4,6 +4,10 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'kotlin-android-extensions'
 
+androidExtensions {
+    experimental = true
+}
+
 android {
     compileSdkVersion project.compile_sdk_version
     buildToolsVersion project.build_tools_version
@@ -30,6 +34,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'

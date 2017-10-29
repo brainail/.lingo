@@ -12,15 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_lingo_search.*
 import org.brainail.EverboxingLingo.R
-import org.brainail.EverboxingLingo.ui.ParcelableViewStateMvpFragment
+import org.brainail.EverboxingLingo.ui.BaseFragment
 import org.brainail.EverboxingLingo.util.NavigableBack
 import org.brainail.EverboxingLingo.util.TextWatcherAdapter
 import org.jetbrains.anko.toast
 import java.util.Locale
 
-class LingoSearchFragment:
-        ParcelableViewStateMvpFragment<LingoSearchView, LingoSearchViewState, LingoSearchPresenter>(),
-        LingoSearchView, NavigableBack {
+class LingoSearchFragment: BaseFragment(), NavigableBack {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

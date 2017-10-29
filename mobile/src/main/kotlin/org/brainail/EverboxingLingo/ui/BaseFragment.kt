@@ -1,14 +1,5 @@
 package org.brainail.EverboxingLingo.ui
 
-import android.os.Bundle
-import android.support.v4.app.Fragment
-import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerFragment
 
-open class BaseFragment: Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
-
-}
+abstract class BaseFragment: DaggerFragment()

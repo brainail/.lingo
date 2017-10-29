@@ -4,7 +4,7 @@ buildscript {
     ext.min_sdk_version = 16
     ext.target_sdk_version = 26
 
-    ext.gradle_plugin_version = '3.0.0-beta7'
+    ext.gradle_plugin_version = '3.0.0'
     ext.kotlin_version = '1.1.51'
     ext.playservices_version = '11.0.0'
     ext.support_version = '26.1.0'
@@ -16,7 +16,7 @@ buildscript {
     ext.paperparcel_version = '2.0.1'
     ext.material_dimens = '1.4'
     ext.anko_common = '0.9.1'
-    ext.constraint_layout = '1.1.0-beta2'
+    ext.constraint_layout = '1.1.0-beta3'
 
     ext.junit_version = '4.12'
     ext.junit5_execution_gradle_version = '1.0.0-M4-rev1'

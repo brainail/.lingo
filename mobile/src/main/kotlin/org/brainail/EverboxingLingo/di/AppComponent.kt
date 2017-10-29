@@ -1,6 +1,7 @@
 package org.brainail.EverboxingLingo.di
 
 import dagger.Component
+import dagger.android.AndroidInjector
 import org.brainail.EverboxingLingo.App
 import org.brainail.EverboxingLingo.data.di.module.DataModule
 import javax.inject.Singleton
@@ -12,6 +13,7 @@ import javax.inject.Singleton
         RxModule::class,
         DataModule::class
 ))
-interface AppComponent {
-    fun inject(app: App)
+interface AppComponent : AndroidInjector<App> {
+    @Component.Builder
+    abstract class Builder : AndroidInjector.Builder<App>()
 }

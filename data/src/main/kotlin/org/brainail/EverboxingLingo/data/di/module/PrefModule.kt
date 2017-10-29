@@ -1,5 +1,6 @@
 package org.brainail.EverboxingLingo.data.di.module
 
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import org.brainail.EverboxingLingo.data.settings.AppSettingsImpl
@@ -10,5 +11,5 @@ import javax.inject.Singleton
 internal class PrefModule {
     @Provides
     @Singleton
-    fun provideAppPreferences(sharedPreferences: android.content.SharedPreferences): AppSettings = AppSettingsImpl(sharedPreferences)
+    fun provideAppPreferences(sharedPreferences: SharedPreferences): AppSettings = AppSettingsImpl(sharedPreferences)
 }

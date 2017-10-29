@@ -16,7 +16,7 @@ class LingoHomeActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var viewModel: LingoHomeActivityViewModel
+    lateinit private var viewModel: LingoHomeActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

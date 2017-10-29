@@ -15,13 +15,15 @@ import org.brainail.EverboxingLingo.util.log.EventBusLogger
 import org.brainail.logger.L
 import javax.inject.Singleton
 
-@Module()
-class AppModule(val app: App) {
+@Module
+class AppModule {
     @Provides
-    fun provideApplicationContext(): Context = app
+    fun provideApplicationContext(app: App): Context {
+        return app.applicationContext
+    }
 
     @Provides
-    fun provideSharedPreferences(): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
+    fun provideSharedPreferences(app: App): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
 
     @Provides
     fun provideLogTree(): L.Tree = AndroidLogTree()
