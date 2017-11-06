@@ -1,17 +1,26 @@
 package org.brainail.EverboxingLingo.ui.home
 
-import android.arch.lifecycle.ViewModel
-import org.brainail.logger.L
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import org.brainail.EverboxingLingo.ui.BaseViewModel
 import javax.inject.Inject
 
-class LingoHomeActivityViewModel @Inject constructor() : ViewModel() {
-    init {
-        @Suppress("LeakingThis")
-        L.d("constructor(): $this")
+class LingoHomeActivityViewModel @Inject constructor() : BaseViewModel() {
+
+    enum class NavigationItem {
+        EXPLORE, FAVOURITE, HISTORY
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        L.d("onCleared(): $this")
+    private val mutableNavLiveData = MutableLiveData<NavigationItem>()
+    val navigationLiveData: LiveData<NavigationItem>
+        get() = mutableNavLiveData
+
+    init {
+        mutableNavLiveData.value = NavigationItem.EXPLORE
     }
+
+    fun navigate(navigationItem: NavigationItem) {
+        mutableNavLiveData.value = navigationItem
+    }
+
 }

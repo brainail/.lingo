@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tabs>
     <tab
-        id="@+id/tab_favorites"
+        id="@+id/tab_explore"
         icon="@drawable/ic_done_24dp"
         title="Explore"
         barColorWhenSelected="@color/material_green_700"/>
     <tab
-        id="@+id/tab_nearby"
+        id="@+id/tab_favourite"
         icon="@drawable/ic_done_24dp"
         title="Favourite"
         barColorWhenSelected="@color/material_pink_700"/>
     <tab
-        id="@+id/tab_friends"
+        id="@+id/tab_history"
         icon="@drawable/ic_done_24dp"
         title="History"
         barColorWhenSelected="@color/material_brown_700"/>

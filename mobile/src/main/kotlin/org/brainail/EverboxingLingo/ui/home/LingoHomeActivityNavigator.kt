@@ -12,7 +12,7 @@ class LingoHomeActivityNavigator(private val activity: AppCompatActivity) : Navi
         activity.finish()
     }
 
-    fun showSearchSubScreen() {
+    fun showExploreSubScreen() {
         activity.openFragment(LingoSearchFragment.FRAGMENT_TAG, R.id.containerView) {
             LingoSearchFragment.newInstance()
         }

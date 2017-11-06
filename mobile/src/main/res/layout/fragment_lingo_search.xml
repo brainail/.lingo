@@ -31,13 +31,6 @@
             tools:listitem="@layout/item_word"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <!--
-            * https://stackoverflow.com/questions/32761319/how-to-create-appbarlayout-which-overlaps-content-of-coordinatorlayout
-            * https://stackoverflow.com/questions/33101077/appbarlayout-transparency
-            * https://stackoverflow.com/questions/35383774/transparent-appbarlayout-with-cardview-within-it
-            * https://stackoverflow.com/questions/38563317/how-to-make-appbarlayout-background-transparent
-            * https://lab.getbase.com/nested-scrolling-with-coordinatorlayout-on-android/
-        -->
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarView"
             android:background="?attr/colorPrimary"
