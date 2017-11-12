@@ -1,25 +1,25 @@
 package org.brainail.EverboxingLingo.ui.home
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import org.brainail.EverboxingLingo.ui.BaseViewModel
+import org.brainail.EverboxingLingo.util.SingleEventLiveData
 import javax.inject.Inject
 
 class LingoHomeActivityViewModel @Inject constructor() : BaseViewModel() {
 
     enum class NavigationItem {
-        EXPLORE, FAVOURITE, HISTORY
+        EXPLORE, FAVOURITE, HISTORY, BACKWARD
     }
 
-    private val mutableNavLiveData = MutableLiveData<NavigationItem>()
-    val navigationLiveData: LiveData<NavigationItem>
+    private val mutableNavLiveData = SingleEventLiveData<NavigationItem>()
+    val navigation: LiveData<NavigationItem>
         get() = mutableNavLiveData
 
     init {
         mutableNavLiveData.value = NavigationItem.EXPLORE
     }
 
-    fun navigate(navigationItem: NavigationItem) {
+    fun navigateTo(navigationItem: NavigationItem) {
         mutableNavLiveData.value = navigationItem
     }
 

@@ -18,14 +18,17 @@ import javax.inject.Singleton
 @Module
 class AppModule {
     @Provides
+    @Singleton
     fun provideApplicationContext(app: App): Context {
         return app.applicationContext
     }
 
     @Provides
+    @Singleton
     fun provideSharedPreferences(app: App): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
 
     @Provides
+    @Singleton
     fun provideLogTree(): L.Tree = AndroidLogTree()
 
     @Provides
@@ -43,5 +46,6 @@ class AppModule {
             = EventBusLogger(globalBus)
 
     @Provides
+    @Singleton
     fun provideAppNavigator(context: Context): AppNavigator = AppNavigator(context)
 }

@@ -1,4 +1,4 @@
-package org.brainail.EverboxingLingo.ui.search
+package org.brainail.EverboxingLingo.ui.home.explore
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

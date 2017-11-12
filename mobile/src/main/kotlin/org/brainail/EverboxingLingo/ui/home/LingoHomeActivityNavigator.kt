@@ -3,14 +3,22 @@ package org.brainail.EverboxingLingo.ui.home
 import android.support.v7.app.AppCompatActivity
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.extensions.openFragment
-import org.brainail.EverboxingLingo.navigator.Navigator
-import org.brainail.EverboxingLingo.ui.search.LingoSearchFragment
+import org.brainail.EverboxingLingo.navigator.Intents
+import org.brainail.EverboxingLingo.navigator.SceneNavigator
+import org.brainail.EverboxingLingo.ui.home.explore.LingoSearchFragment
 import org.brainail.EverboxingLingo.util.NavigableBack
 
-class LingoHomeActivityNavigator(private val activity: AppCompatActivity) : Navigator(activity) {
+class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(activity) {
     fun closeScreen() {
-        activity.finish()
+        activity.supportFinishAfterTransition()
     }
+
+    fun showTextToSpeech(prompt: String) = startActivityForResult(REQ_CODE_SPEECH_INPUT) {
+        Intents.TextToSpeech.showVoiceRecognizer(prompt)
+    }
+
+    fun canShowTextToSpeech() =
+            null != Intents.TextToSpeech.showVoiceRecognizer(null).resolveActivity(context.packageManager)
 
     fun showExploreSubScreen() {
         activity.openFragment(LingoSearchFragment.FRAGMENT_TAG, R.id.containerView) {
@@ -18,8 +26,14 @@ class LingoHomeActivityNavigator(private val activity: AppCompatActivity) : Navi
         }
     }
 
-    fun goBack(): Boolean {
+    fun goBack() {
         val fragment = activity.supportFragmentManager.findFragmentById(R.id.containerView)
-        return (fragment as? NavigableBack)?.goBack() ?: false
+        if ((fragment as? NavigableBack)?.goBack() == false) {
+            closeScreen()
+        }
+    }
+
+    companion object {
+        val REQ_CODE_SPEECH_INPUT = 100
     }
 }
