@@ -50,7 +50,7 @@
         app:fsv_contentBackgroundColor="@color/material_light_white"
         app:fsv_cornerRadius="1dp"
         app:fsv_menu="@menu/menu_lingo_search"
-        app:logo="@drawable/logo"
+        app:logo="@drawable/ic_search_logo"
         app:theme="@style/FloatingSearchViewTheme"/>
 </android.support.design.widget.CoordinatorLayout>
 

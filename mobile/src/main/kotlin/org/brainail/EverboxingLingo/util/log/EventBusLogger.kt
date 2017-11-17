@@ -1,5 +1,6 @@
 package org.brainail.EverboxingLingo.util.log
 
+import android.annotation.SuppressLint
 import io.reactivex.disposables.CompositeDisposable
 import org.brainail.EverboxingLingo.domain.event.EventBus
 import org.brainail.logger.L
@@ -16,6 +17,7 @@ class EventBusLogger(vararg val eventBuses: EventBus<*>) {
 
     internal val disposable: CompositeDisposable = CompositeDisposable()
 
+    @SuppressLint("RxSubscribeOnError")
     private fun register() {
         eventBuses.forEach({ bus ->
             disposable.add(bus.observe().subscribe {

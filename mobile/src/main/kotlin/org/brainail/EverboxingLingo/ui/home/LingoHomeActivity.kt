@@ -5,13 +5,15 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.speech.RecognizerIntent
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.drawable.DrawerArrowDrawable
 import android.text.Editable
 import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.EverboxingLingo.R
+import org.brainail.EverboxingLingo.extensions.strim
+import org.brainail.EverboxingLingo.mapper.TextToSpeechResultMapper
+import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.ui.BaseActivity
+import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem.BACKWARD
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem.EXPLORE
@@ -28,9 +30,12 @@ class LingoHomeActivity : BaseActivity() {
     lateinit var navigator: LingoHomeActivityNavigator
 
     @Inject
+    internal lateinit var textToSpeechResultMapper: TextToSpeechResultMapper
+
+    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit private var viewModel: LingoHomeActivityViewModel
-    lateinit private var searchViewModel: SearchViewModel
+    private lateinit var viewModel: LingoHomeActivityViewModel
+    private lateinit var searchViewModel: SearchViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,73 +63,59 @@ class LingoHomeActivity : BaseActivity() {
     }
 
     private fun initSearch(savedInstanceState: Bundle?) {
-        floatingSearchView.menu.findItem(R.id.menu_tts)?.isVisible = navigator.canShowTextToSpeech()
-        floatingSearchView.showLogo(true)
-        floatingSearchView.showIcon(shouldShowSearchNavigationIcon())
-        floatingSearchView.icon = DrawerArrowDrawable(this)
-        floatingSearchView.setOnIconClickListener {
-            when (floatingSearchView.isActivated) {
-                true -> floatingSearchView.isActivated = false
-                else -> toast("open Drawer please")
-            }
-        }
-        floatingSearchView.setOnSearchListener { query ->
-            floatingSearchView.isActivated = false
-            searchForResults(query.toString())
-        }
-        floatingSearchView.setOnSearchFocusChangedListener { focused ->
-            showClearButton(focused && !floatingSearchView.text.isEmpty())
-            if (!focused) {
-                showProgress(false)
-            } else {
-                appBarView.setExpanded(true, true)
-            }
-            floatingSearchView.showLogo(!focused && floatingSearchView.text.isEmpty())
-            floatingSearchView.showIcon(focused || shouldShowSearchNavigationIcon())
-        }
-        floatingSearchView.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.menu_clear -> floatingSearchView.clearText()
-                R.id.menu_tts -> showTextToSpeech()
-            }
-            true
-        }
-        floatingSearchView.addTextChangedListener(object: TextWatcherAdapter() {
-            override fun afterTextChanged(query: Editable) {
-                showClearButton(query.isNotEmpty() && floatingSearchView.isActivated)
-                floatingSearchView.showLogo(!floatingSearchView.isActivated && floatingSearchView.text.isEmpty())
-                if (floatingSearchView.isActivated) {
-                    searchForSuggestions(query.toString().trim())
+        floatingSearchView.apply {
+            menu.findItem(R.id.menu_tts)?.isVisible = navigator.canShowTextToSpeech()
+            icon = DrawerArrowDrawable(this@LingoHomeActivity)
+            showLogo(true)
+            setOnIconClickListener {
+                when (isActivated) {
+                    true -> isActivated = false
+                    else -> toast("open Drawer please")
                 }
             }
-        })
+            setOnSearchListener { query ->
+                isActivated = false
+                searchViewModel.submitQuery(query.strim())
+            }
+            setOnSearchFocusChangedListener { focused ->
+                showClearButton(focused && !text.isEmpty())
+                if (!focused) {
+                    showProgress(false)
+                } else {
+                    this@LingoHomeActivity.appBarView.setExpanded(true, true)
+                }
+                showLogo(!focused && text.isEmpty())
+            }
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.menu_clear -> clearText()
+                    R.id.menu_tts -> navigator.showTextToSpeech("What are you looking for?")
+                }
+                true
+            }
+            addTextChangedListener(object: TextWatcherAdapter() {
+                override fun afterTextChanged(query: Editable) {
+                    showClearButton(query.isNotEmpty() && isActivated)
+                    showLogo(!isActivated && text.isEmpty())
+                    showProgress(isActivated)
+                    if (isActivated) {
+                        searchViewModel.updateQuery(query.strim())
+                    }
+                }
+            })
+        }
 
         if (null == savedInstanceState) {
             showClearButton(false)
         }
     }
 
-    private fun shouldShowSearchNavigationIcon(): Boolean = true
-
     private fun showProgress(shouldShow: Boolean) {
         // floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = shouldShow
     }
 
-    private fun searchForSuggestions(query: String) {
-        showProgress(floatingSearchView.isActivated) // it's should be decided by viewmodel, view is stupid! :(
-        searchViewModel.onQueryTextChange(query)
-    }
-
     private fun showClearButton(shouldShow: Boolean) {
         floatingSearchView.menu.findItem(R.id.menu_clear)?.isVisible = shouldShow
-    }
-
-    private fun showTextToSpeech() {
-        navigator.showTextToSpeech("What are you looking for?")
-    }
-
-    private fun searchForResults(query: String) {
-        searchViewModel.onQueryTextSubmit(query)
     }
 
     private fun navigateTo(navigationItem: NavigationItem) {
@@ -137,11 +128,9 @@ class LingoHomeActivity : BaseActivity() {
         }
     }
 
-    private fun goBack() {
-        return when (floatingSearchView.isActivated) {
-            true -> floatingSearchView.isActivated = false
-            else -> navigator.goBack()
-        }
+    private fun goBack() = when (floatingSearchView.isActivated) {
+        true -> floatingSearchView.isActivated = false
+        else -> navigator.goBack()
     }
 
     override fun onBackPressed() {
@@ -152,17 +141,16 @@ class LingoHomeActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-            LingoHomeActivityNavigator.REQ_CODE_SPEECH_INPUT -> handleSpeechInputActivityResult(resultCode, data)
-        }
-    }
+            REQ_CODE_SPEECH_INPUT -> {
+                // ---> viewModel.handleTextToSpeechResult(textToSpeechResultMapper.transform(resultCode, data))
+                // <--- update viewState
 
-    private fun handleSpeechInputActivityResult(activityResultCode: Int, activityResultData: Intent?) {
-        if (activityResultCode == AppCompatActivity.RESULT_OK) {
-            activityResultData?.run {
-                val result = getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                floatingSearchView.text = result[0]
-                floatingSearchView.setSelection(floatingSearchView.text.length)
-                floatingSearchView.isActivated = true
+                val result = textToSpeechResultMapper.transform(resultCode, data)
+                if (result is TextToSpeechResult.TextToSpeechSuccessfulResult) {
+                    floatingSearchView.text = result.text
+                    floatingSearchView.setSelection(result.text.length)
+                    floatingSearchView.isActivated = true
+                }
             }
         }
     }

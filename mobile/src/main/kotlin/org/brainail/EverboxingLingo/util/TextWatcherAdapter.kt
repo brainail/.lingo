@@ -4,7 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 
 open class TextWatcherAdapter: TextWatcher {
-    override fun afterTextChanged(p0: Editable) {
+    override fun afterTextChanged(query: Editable) {
         // Do nothing
     }
 

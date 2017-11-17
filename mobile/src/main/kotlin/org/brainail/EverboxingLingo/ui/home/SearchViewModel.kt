@@ -7,27 +7,27 @@ import javax.inject.Inject
 
 class SearchViewModel @Inject constructor() : BaseViewModel() {
 
-    private val mutableSearchForSuggestionsLiveData = SingleEventLiveData<String>()
+    private val searchForSuggestionsLiveData = SingleEventLiveData<String>()
     val searchForSuggestionsCall: LiveData<String>
-        get() = mutableSearchForSuggestionsLiveData
+        get() = searchForSuggestionsLiveData
 
-    private val mutableSearchForResultsLiveData = SingleEventLiveData<String>()
+    private val searchForResultsLiveData = SingleEventLiveData<String>()
     val searchForResultsCall: LiveData<String>
-        get() = mutableSearchForResultsLiveData
+        get() = searchForResultsLiveData
 
     init {
-        mutableSearchForSuggestionsLiveData.value = ""
+        searchForSuggestionsLiveData.value = ""
     }
 
-    fun onQueryTextChange(query: String) {
-        mutableSearchForSuggestionsLiveData.value = query
+    fun updateQuery(query: String) {
+        searchForSuggestionsLiveData.value = query
     }
 
-    fun onQueryTextSubmit(query: String) {
-        mutableSearchForResultsLiveData.value = query
+    fun submitQuery(query: String) {
+        searchForResultsLiveData.value = query
     }
 
-    fun onNewSuggestions() {
+    fun updateSuggestions() {
         TODO("...")
     }
 
