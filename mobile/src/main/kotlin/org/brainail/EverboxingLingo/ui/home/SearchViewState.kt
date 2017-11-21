@@ -1,4 +1,6 @@
-package org.brainail.EverboxingLingo.model
+package org.brainail.EverboxingLingo.ui.home
+
+import org.brainail.EverboxingLingo.extensions.EMPTY_TEXT
 
 /**
  * This file is part of Everboxing modules. <br/><br/>
@@ -25,7 +27,28 @@ package org.brainail.EverboxingLingo.model
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN <br/>
  * THE SOFTWARE.
  */
-sealed class TextToSpeechResult {
-    data class TextToSpeechSuccessfulResult(val text: String) : TextToSpeechResult()
-    class TextToSpeechNoResult : TextToSpeechResult()
+data class SearchViewState(
+        val isInFocus: Boolean = false,
+        val displayedText: String = EMPTY_TEXT,
+        val isClearAvailable: Boolean = false,
+        val isTextToSpeechResult: Boolean = false,
+        val isTextToSpeechAvailable: Boolean = false,
+        val isLogoDisplayed: Boolean = false,
+        private val isLoadingSuggestions: Boolean = false,
+        val displayedSuggestions: List<String> = emptyList()) {
+
+    val displayLoading = isInFocus && isLoadingSuggestions
+
+    companion object {
+        val INITIAL by lazy {
+            SearchViewState(
+                    isInFocus = false,
+                    isLogoDisplayed = true,
+                    displayedText = EMPTY_TEXT,
+                    isClearAvailable = false,
+                    isTextToSpeechAvailable = true,
+                    isTextToSpeechResult = false,
+                    isLoadingSuggestions = false)
+        }
+    }
 }

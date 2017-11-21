@@ -11,7 +11,6 @@ import org.brainail.EverboxingLingo.di.subcomponent.lingo.LingoHomeActivitySubco
 import org.brainail.EverboxingLingo.di.view_model.ViewModelKey
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel
-import org.brainail.EverboxingLingo.ui.home.SearchViewModel
 
 @Module
 abstract class LingoHomeSubcomponentsModule {
@@ -26,10 +25,4 @@ abstract class LingoHomeSubcomponentsModule {
     @IntoMap
     @ViewModelKey(LingoHomeActivityViewModel::class)
     abstract fun bindLingoHomeActivityViewModel(viewModel: LingoHomeActivityViewModel): ViewModel
-
-    @ActivityScope
-    @Binds
-    @IntoMap
-    @ViewModelKey(SearchViewModel::class)
-    abstract fun bindSearchViewModel(viewModel: SearchViewModel): ViewModel
 }

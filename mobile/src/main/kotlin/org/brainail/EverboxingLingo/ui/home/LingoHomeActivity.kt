@@ -9,16 +9,11 @@ import android.support.v7.graphics.drawable.DrawerArrowDrawable
 import android.text.Editable
 import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.EverboxingLingo.R
-import org.brainail.EverboxingLingo.extensions.strim
 import org.brainail.EverboxingLingo.mapper.TextToSpeechResultMapper
-import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.ui.BaseActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem
-import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem.BACKWARD
-import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem.EXPLORE
-import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem.FAVOURITE
-import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem.HISTORY
+import org.brainail.EverboxingLingo.ui.home.SearchViewModel.SearchNavigationItem
 import org.brainail.EverboxingLingo.util.TextWatcherAdapter
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
@@ -35,7 +30,6 @@ class LingoHomeActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: LingoHomeActivityViewModel
-    private lateinit var searchViewModel: SearchViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,98 +37,106 @@ class LingoHomeActivity : BaseActivity() {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(LingoHomeActivityViewModel::class.java)
-        searchViewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(SearchViewModel::class.java)
 
         initNavigation()
-        initSearch(savedInstanceState)
+        initSearch()
+        initViewState()
+    }
+
+    private fun initViewState() {
+        viewModel.searchViewState.observe(this, Observer { renderSearchViewState(it!!) })
+    }
+
+    private fun renderSearchViewState(viewState: SearchViewState) {
+        floatingSearchView.apply {
+            when (viewState.displayedText.isEmpty()) {
+                true -> clearText() // use clear instead of simple set due to issues with system widget
+                else -> if (viewState.displayedText != text.toString()) {
+                    text = viewState.displayedText // set only if new to get rid of recursive updates
+                }
+            }
+            if (viewState.isTextToSpeechResult) {
+                setSelection(viewState.displayedText.length)
+            }
+            isActivated = viewState.isInFocus
+            showClearButton(viewState.isClearAvailable)
+            showSearchProgress(viewState.displayLoading)
+            showSearchLogo(viewState.isLogoDisplayed)
+            showTextToSpeechIcon(viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech())
+        }
     }
 
     private fun initNavigation() {
         bottomNavigationBarView.setOnTabSelectListener({ tabId ->
             when (tabId) {
-                R.id.tab_explore -> viewModel.navigateTo(EXPLORE)
-                R.id.tab_favourite -> viewModel.navigateTo(FAVOURITE)
-                R.id.tab_history -> viewModel.navigateTo(HISTORY)
+                R.id.tab_explore -> viewModel.navigateTo(NavigationItem.EXPLORE)
+                R.id.tab_favourite -> viewModel.navigateTo(NavigationItem.FAVOURITE)
+                R.id.tab_history -> viewModel.navigateTo(NavigationItem.HISTORY)
             }
         }, false)
 
         viewModel.navigation.observe(this, Observer { navigateTo(it!!) })
+        viewModel.searchNavigation.observe(this, Observer { navigateTo(it!!) })
     }
 
-    private fun initSearch(savedInstanceState: Bundle?) {
+    private fun initSearch() {
         floatingSearchView.apply {
-            menu.findItem(R.id.menu_tts)?.isVisible = navigator.canShowTextToSpeech()
             icon = DrawerArrowDrawable(this@LingoHomeActivity)
-            showLogo(true)
-            setOnIconClickListener {
-                when (isActivated) {
-                    true -> isActivated = false
-                    else -> toast("open Drawer please")
-                }
-            }
-            setOnSearchListener { query ->
-                isActivated = false
-                searchViewModel.submitQuery(query.strim())
-            }
+            setOnIconClickListener { viewModel.navigationIconClicked() }
+            setOnSearchListener { query -> viewModel.submitQuery(query.toString()) }
             setOnSearchFocusChangedListener { focused ->
-                showClearButton(focused && !text.isEmpty())
-                if (!focused) {
-                    showProgress(false)
-                } else {
+                viewModel.requestFocusGain(focused)
+                if (focused) {
                     this@LingoHomeActivity.appBarView.setExpanded(true, true)
                 }
-                showLogo(!focused && text.isEmpty())
             }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.menu_clear -> clearText()
-                    R.id.menu_tts -> navigator.showTextToSpeech("What are you looking for?")
+                    R.id.menu_clear -> viewModel.clearIconClicked()
+                    R.id.menu_tts -> viewModel.textToSpeechIconClicked()
                 }
                 true
             }
-            addTextChangedListener(object: TextWatcherAdapter() {
+            addTextChangedListener(object : TextWatcherAdapter() {
                 override fun afterTextChanged(query: Editable) {
-                    showClearButton(query.isNotEmpty() && isActivated)
-                    showLogo(!isActivated && text.isEmpty())
-                    showProgress(isActivated)
-                    if (isActivated) {
-                        searchViewModel.updateQuery(query.strim())
-                    }
+                    viewModel.updateQuery(query.toString())
                 }
             })
         }
-
-        if (null == savedInstanceState) {
-            showClearButton(false)
-        }
     }
 
-    private fun showProgress(shouldShow: Boolean) {
+    private fun showSearchProgress(shouldShow: Boolean) {
         // floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = shouldShow
+    }
+
+    private fun showTextToSpeechIcon(shouldShow: Boolean) {
+        floatingSearchView.menu.findItem(R.id.menu_tts)?.isVisible = shouldShow
     }
 
     private fun showClearButton(shouldShow: Boolean) {
         floatingSearchView.menu.findItem(R.id.menu_clear)?.isVisible = shouldShow
     }
 
-    private fun navigateTo(navigationItem: NavigationItem) {
+    private fun navigateTo(navigationItem: LingoHomeActivityViewModel.NavigationItem) {
         L.v("navigateTo: navigationItem = $navigationItem")
         when (navigationItem) {
-            EXPLORE -> navigator.showExploreSubScreen()
-            FAVOURITE -> navigator.showExploreSubScreen()
-            HISTORY -> navigator.showExploreSubScreen()
-            BACKWARD -> goBack()
+            NavigationItem.EXPLORE -> navigator.showExploreSubScreen()
+            NavigationItem.FAVOURITE -> navigator.showExploreSubScreen()
+            NavigationItem.HISTORY -> navigator.showExploreSubScreen()
+            NavigationItem.BACKWARD -> navigator.goBack()
         }
     }
 
-    private fun goBack() = when (floatingSearchView.isActivated) {
-        true -> floatingSearchView.isActivated = false
-        else -> navigator.goBack()
+    private fun navigateTo(navigationItem: SearchViewModel.SearchNavigationItem) {
+        L.v("navigateTo: navigationItem = $navigationItem")
+        when (navigationItem) {
+            SearchNavigationItem.DRAWER -> toast("open Drawer please")
+            SearchNavigationItem.TEXT_TO_SPEECH -> navigator.showTextToSpeech("What are you looking for?")
+        }
     }
 
     override fun onBackPressed() {
-        viewModel.navigateTo(BACKWARD)
+        viewModel.navigateTo(NavigationItem.BACKWARD)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -142,15 +144,7 @@ class LingoHomeActivity : BaseActivity() {
 
         when (requestCode) {
             REQ_CODE_SPEECH_INPUT -> {
-                // ---> viewModel.handleTextToSpeechResult(textToSpeechResultMapper.transform(resultCode, data))
-                // <--- update viewState
-
-                val result = textToSpeechResultMapper.transform(resultCode, data)
-                if (result is TextToSpeechResult.TextToSpeechSuccessfulResult) {
-                    floatingSearchView.text = result.text
-                    floatingSearchView.setSelection(result.text.length)
-                    floatingSearchView.isActivated = true
-                }
+                viewModel.handleTextToSpeechResult(textToSpeechResultMapper.transform(resultCode, data))
             }
         }
     }

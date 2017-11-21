@@ -121,6 +121,11 @@ public class FloatingSearchView extends RelativeLayout {
     private Drawable mBackgroundDrawable;
     private boolean mSuggestionsShown;
     
+    @Nullable
+    private ValueAnimator mCurrentBackgroundAnimator;
+    @Nullable
+    private ObjectAnimator mCurrentIconAnimator;
+    
     public FloatingSearchView(Context context) {
         this(context, null);
     }
@@ -206,12 +211,12 @@ public class FloatingSearchView extends RelativeLayout {
         if (logoId != -1 && !isInEditMode()) {
             setLogo(AppCompatResources.getDrawable(mHostActivity, logoId));
         }
-    
+        
         int iconId = styledAttrs.getResourceId(R.styleable.FloatingSearchView_fsv_icon, -1);
         if (iconId != -1 && !isInEditMode()) {
             setIcon(AppCompatResources.getDrawable(mHostActivity, iconId));
         }
-    
+        
         setContentBackgroundColor(styledAttrs.getColor(R.styleable.FloatingSearchView_fsv_contentBackgroundColor, DEFAULT_CONTENT_COLOR));
         setRadius(styledAttrs.getDimensionPixelSize(R.styleable.FloatingSearchView_fsv_cornerRadius, ViewUtils.dpToPx(DEFAULT_RADIUS)));
         inflateMenu(styledAttrs.getResourceId(R.styleable.FloatingSearchView_fsv_menu, 0));
@@ -221,6 +226,7 @@ public class FloatingSearchView extends RelativeLayout {
         styledAttrs.recycle();
     }
     
+    @SuppressLint("ClickableViewAccessibility")
     private void setupViews() {
         mSearchContainer.setLayoutTransition(getDefaultLayoutTransition());
         mSearchContainer.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
@@ -241,43 +247,32 @@ public class FloatingSearchView extends RelativeLayout {
         setBackgroundDrawable(mBackgroundDrawable);
         mBackgroundDrawable.setAlpha(0);
         
-        mNavButtonView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mNavigationClickListener != null) {
-                    mNavigationClickListener.onNavigationClick();
-                }
+        mNavButtonView.setOnClickListener(v -> {
+            if (mNavigationClickListener != null) {
+                mNavigationClickListener.onNavigationClick();
             }
         });
         
-        setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!isActivated()) {
-                    return false;
-                }
-                setActivated(false);
-                return true;
+        setOnTouchListener((v, event) -> {
+            if (!isActivated()) {
+                return false;
+            }
+            setActivated(false);
+            return true;
+        });
+        
+        mSearchInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus != isActivated()) {
+                setActivated(hasFocus);
             }
         });
         
-        mSearchInput.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus != isActivated()) {
-                    setActivated(hasFocus);
-                }
+        mSearchInput.setOnKeyListener((view, keyCode, keyEvent) -> {
+            if (keyCode != KeyEvent.KEYCODE_ENTER) {
+                return false;
             }
-        });
-        
-        mSearchInput.setOnKeyListener(new OnKeyListener() {
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if (keyCode != KeyEvent.KEYCODE_ENTER) {
-                    return false;
-                }
-                setActivated(false);
-                return true;
-            }
+            setActivated(false);
+            return true;
         });
     }
     
@@ -305,7 +300,7 @@ public class FloatingSearchView extends RelativeLayout {
         if (menuRes == 0 || isInEditMode()) {
             return; // early exit
         }
-    
+        
         mHostActivity.getMenuInflater().inflate(menuRes, mActionMenu.getMenu());
         XmlResourceParser parser = null;
         try {
@@ -322,15 +317,12 @@ public class FloatingSearchView extends RelativeLayout {
     }
     
     public void setOnSearchListener(final OnSearchListener listener) {
-        mSearchInput.setOnKeyListener(new OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode != KeyEvent.KEYCODE_ENTER) {
-                    return false;
-                }
-                listener.onSearchAction(mSearchInput.getText());
-                return true;
+        mSearchInput.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode != KeyEvent.KEYCODE_ENTER) {
+                return false;
             }
+            listener.onSearchAction(mSearchInput.getText());
+            return true;
         });
     }
     
@@ -347,7 +339,11 @@ public class FloatingSearchView extends RelativeLayout {
     }
     
     public void setText(CharSequence text) {
-        mSearchInput.setText(text);
+        // usually some search is done after text changed
+        // so we don't wanna notify about the same things
+        if (!mSearchInput.getText().equals(text)) {
+            mSearchInput.setText(text);
+        }
     }
     
     public void setSelection(final int index) {
@@ -433,7 +429,7 @@ public class FloatingSearchView extends RelativeLayout {
         mNavButtonView.setImageDrawable(drawable);
     }
     
-    public void showLogo(boolean show) {
+    public void showSearchLogo(boolean show) {
         mSearchInput.showLogo(show);
     }
     
@@ -457,31 +453,32 @@ public class FloatingSearchView extends RelativeLayout {
     
     @SuppressLint("ObjectAnimatorBinding")
     private void fadeIn(boolean enter) {
-        ValueAnimator backgroundAnim;
-        
+        if (null != mCurrentBackgroundAnimator) {
+            mCurrentBackgroundAnimator.cancel();
+        }
         if (Build.VERSION.SDK_INT >= 19)
-            backgroundAnim = ObjectAnimator.ofInt(mBackgroundDrawable, "alpha", enter ? 255 : 0);
+            mCurrentBackgroundAnimator = ObjectAnimator.ofInt(mBackgroundDrawable, "alpha", enter ? 255 : 0);
         else {
-            backgroundAnim = ValueAnimator.ofInt(enter ? 0 : 255, enter ? 255 : 0);
-            backgroundAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    int value = (Integer) animation.getAnimatedValue();
-                    mBackgroundDrawable.setAlpha(value);
-                }
+            mCurrentBackgroundAnimator = ValueAnimator.ofInt(enter ? 0 : 255, enter ? 255 : 0);
+            mCurrentBackgroundAnimator.addUpdateListener(animation -> {
+                int value = (Integer) animation.getAnimatedValue();
+                mBackgroundDrawable.setAlpha(value);
             });
         }
         
-        backgroundAnim.setDuration(enter ? DEFAULT_DURATION_ENTER : DEFAULT_DURATION_EXIT);
-        backgroundAnim.setInterpolator(enter ? DECELERATE : ACCELERATE);
-        backgroundAnim.start();
+        mCurrentBackgroundAnimator.setDuration(enter ? DEFAULT_DURATION_ENTER : DEFAULT_DURATION_EXIT);
+        mCurrentBackgroundAnimator.setInterpolator(enter ? DECELERATE : ACCELERATE);
+        mCurrentBackgroundAnimator.start();
         
         Drawable icon = unwrap(getIcon());
         if (icon != null) {
-            ObjectAnimator iconAnim = ObjectAnimator.ofFloat(icon, "progress", enter ? 1 : 0);
-            iconAnim.setDuration(backgroundAnim.getDuration());
-            iconAnim.setInterpolator(backgroundAnim.getInterpolator());
-            iconAnim.start();
+            if (null != mCurrentIconAnimator) {
+                mCurrentIconAnimator.cancel();
+            }
+            mCurrentIconAnimator = ObjectAnimator.ofFloat(icon, "progress", enter ? 1 : 0);
+            mCurrentIconAnimator.setDuration(mCurrentBackgroundAnimator.getDuration());
+            mCurrentIconAnimator.setInterpolator(mCurrentBackgroundAnimator.getInterpolator());
+            mCurrentIconAnimator.start();
         }
     }
     
@@ -508,16 +505,13 @@ public class FloatingSearchView extends RelativeLayout {
         int childCount = mRecyclerView.getChildCount();
         int translation = 0;
         
-        final Runnable endAction = new Runnable() {
-            @Override
-            public void run() {
-                if (show)
-                    updateDivider();
-                else {
-                    showDivider(false);
-                    mRecyclerView.setVisibility(View.INVISIBLE);
-                    mRecyclerView.setTranslationY(-mRecyclerView.getHeight());
-                }
+        final Runnable endAction = () -> {
+            if (show)
+                updateDivider();
+            else {
+                showDivider(false);
+                mRecyclerView.setVisibility(View.INVISIBLE);
+                mRecyclerView.setTranslationY(-mRecyclerView.getHeight());
             }
         };
         
@@ -671,6 +665,7 @@ public class FloatingSearchView extends RelativeLayout {
             super(context, attrs, defStyle);
         }
         
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouchEvent(MotionEvent e) {
             View child = findChildViewUnder(e.getX(), e.getY());
