@@ -15,7 +15,6 @@ android {
     dataBinding {
         enabled = true
     }
-
     defaultConfig {
         applicationId "org.brainail.EverboxingLingo"
 
@@ -36,8 +35,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
