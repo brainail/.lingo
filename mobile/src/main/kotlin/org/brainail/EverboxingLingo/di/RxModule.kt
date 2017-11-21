@@ -25,8 +25,7 @@ class RxModule {
     @Singleton
     fun provideRxExecutor(
             @Named(MAIN_SCHEDULER) mainScheduler: Scheduler,
-            @Named(BACKGROUND_SCHEDULER) backgroundScheduler: Scheduler)
-            = RxExecutor(mainScheduler, backgroundScheduler)
+            @Named(BACKGROUND_SCHEDULER) backgroundScheduler: Scheduler) = RxExecutor(mainScheduler, backgroundScheduler)
 
     companion object {
         const val MAIN_SCHEDULER = "main_scheduler"

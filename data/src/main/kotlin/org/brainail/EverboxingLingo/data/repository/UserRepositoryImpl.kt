@@ -1,14 +1,17 @@
 package org.brainail.EverboxingLingo.data.repository
 
+import io.reactivex.Observable
+import io.reactivex.Observable.fromCallable
+import io.reactivex.Single
 import org.brainail.EverboxingLingo.domain.model.UserProfile
 import org.brainail.EverboxingLingo.domain.repository.UserRepository
 
 internal class UserRepositoryImpl(private val userDataSource: UserPrefDataSource) : UserRepository {
-    override fun getUserProfile(): io.reactivex.Observable<UserProfile> = io.reactivex.Observable.fromCallable {
+    override fun getUserProfile(): Observable<UserProfile> = fromCallable {
         userDataSource.getUserProfile() ?: UserProfile(defaultUserName)
     }
 
-    override fun updateUserProfile(userProfile: UserProfile): io.reactivex.Observable<UserProfile> = io.reactivex.Observable.fromCallable {
+    override fun updateUserProfile(userProfile: UserProfile): Observable<UserProfile> = fromCallable {
         var profile = userProfile
 
         if (profile.name.isEmpty()) {
@@ -19,7 +22,7 @@ internal class UserRepositoryImpl(private val userDataSource: UserPrefDataSource
         profile
     }
 
-    override fun getDefaultUserName(): io.reactivex.Single<String> = io.reactivex.Single.fromCallable {
+    override fun getDefaultUserName(): Single<String> = Single.fromCallable {
         defaultUserName
     }
 

@@ -15,7 +15,7 @@ import org.brainail.EverboxingLingo.util.NavigableBack
 import org.jetbrains.anko.toast
 import javax.inject.Inject
 
-class LingoSearchFragment: BaseFragment(), NavigableBack {
+class LingoSearchFragment : BaseFragment(), NavigableBack {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -28,8 +28,7 @@ class LingoSearchFragment: BaseFragment(), NavigableBack {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        searchViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-                .get(SearchViewModel::class.java)
+        searchViewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(SearchViewModel::class.java)
         searchViewModel.searchForResultsCall.observe(this, Observer {
             activity?.toast("Search for results where query = $it")
         })
@@ -42,11 +41,10 @@ class LingoSearchFragment: BaseFragment(), NavigableBack {
     }
 
     companion object {
-        val FRAGMENT_TAG = "LingoSearchFragmentTag"
+        const val FRAGMENT_TAG = "LingoSearchFragmentTag"
 
-        fun newInstance(): LingoSearchFragment {
-            return LingoSearchFragment()
-        }
+        @JvmStatic
+        fun newInstance(): LingoSearchFragment = LingoSearchFragment()
     }
 
 }

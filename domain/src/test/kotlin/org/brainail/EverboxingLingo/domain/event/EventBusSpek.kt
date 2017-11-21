@@ -39,7 +39,10 @@ object EventBusSpek : Spek({
                 bus.post(TestEvents.UiStateChanged(false))
 
                 it("should emit them in order") {
-                    test.assertValues(TestEvents.SingletonEvent, TestEvents.UiStateChanged(true), TestEvents.UiStateChanged(false))
+                    test.assertValues(
+                            TestEvents.SingletonEvent,
+                            TestEvents.UiStateChanged(true),
+                            TestEvents.UiStateChanged(false))
                 }
             }
 
@@ -48,7 +51,9 @@ object EventBusSpek : Spek({
                 bus.postSticky(TestEvents.UiStateChanged(true))
 
                 it("should emit them in order") {
-                    test.assertValues(TestEvents.UiStateChanged(false), TestEvents.UiStateChanged(true))
+                    test.assertValues(
+                            TestEvents.UiStateChanged(false),
+                            TestEvents.UiStateChanged(true))
                 }
             }
         }
@@ -86,7 +91,9 @@ object EventBusSpek : Spek({
                     bus.observe()
                             .test()
                             .assertValueCount(2)
-                            .assertValueSet(setOf(TestEvents.SingletonEvent, TestEvents.UiStateChanged(true)))
+                            .assertValueSet(setOf(
+                                    TestEvents.SingletonEvent,
+                                    TestEvents.UiStateChanged(true)))
                 }
             }
 

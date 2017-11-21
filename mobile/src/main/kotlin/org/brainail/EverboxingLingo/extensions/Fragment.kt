@@ -1,3 +1,5 @@
+@file:JvmName("FragmentUtils")
+
 package org.brainail.EverboxingLingo.extensions
 
 import android.support.v4.app.FragmentManager

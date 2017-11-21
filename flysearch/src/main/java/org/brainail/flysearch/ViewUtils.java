@@ -16,32 +16,35 @@ import android.widget.EditText;
 class ViewUtils {
     private static final int[] TEMP_ARRAY = new int[1];
     
-    public static void showSoftKeyboardDelayed(final EditText editText, long delay){
-        editText.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager inputMethodManager = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    public static void showSoftKeyboardDelayed(final EditText editText, long delay) {
+        editText.postDelayed(() -> {
+            final InputMethodManager inputMethodManager
+                    = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (null != inputMethodManager) {
                 inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
             }
         }, delay);
     }
     
-    public static void closeSoftKeyboard(Activity activity){
+    public static void closeSoftKeyboard(Activity activity) {
         View currentFocusView = activity.getCurrentFocus();
         if (currentFocusView != null) {
-            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(currentFocusView.getWindowToken(), 0);
+            final InputMethodManager inputMethodManager
+                    = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (null != inputMethodManager) {
+                inputMethodManager.hideSoftInputFromWindow(currentFocusView.getWindowToken(), 0);
+            }
         }
     }
     
-    public static int dpToPx(int dp){
+    public static int dpToPx(int dp) {
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         return (int) (dp * metrics.density);
     }
     
-    public static int pxToDp(int px){
+    public static int pxToDp(int px) {
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-        return (int) (px /metrics.density);
+        return (int) (px / metrics.density);
     }
     
     public static int getThemeAttrColor(Context context, @AttrRes int attr) {
@@ -54,8 +57,10 @@ class ViewUtils {
         }
     }
     
-    public static Drawable getTinted(Drawable icon, @ColorInt int color){
-        if(icon == null) return null;
+    public static Drawable getTinted(Drawable icon, @ColorInt int color) {
+        if (icon == null) {
+            return null;
+        }
         icon = DrawableCompat.wrap(icon);
         DrawableCompat.setTint(icon, color);
         return icon;

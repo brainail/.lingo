@@ -84,8 +84,8 @@ class AndroidLogTree : L.Tree() {
     }
 
     companion object {
-        private val MAX_LOG_LENGTH = 4000
-        private val MAX_TAG_LENGTH = 23
-        private val CALL_STACK_INDEX = 5
+        const private val MAX_LOG_LENGTH = 4000
+        const private val MAX_TAG_LENGTH = 23
+        const private val CALL_STACK_INDEX = 5
     }
 }

@@ -19,8 +19,10 @@ class SuggestionItemDecorator extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect rect, View view, RecyclerView parent, RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view);
         int count = state.getItemCount();
-        int shadows = RoundRectDrawableWithShadow.LEFT| RoundRectDrawableWithShadow.RIGHT;
-        if(position == count - 1) shadows|= RoundRectDrawableWithShadow.BOTTOM;
+        int shadows = RoundRectDrawableWithShadow.LEFT | RoundRectDrawableWithShadow.RIGHT;
+        if (position == count - 1) {
+            shadows |= RoundRectDrawableWithShadow.BOTTOM;
+        }
         drawable.setShadow(shadows);
         drawable.getPadding(rect);
     }
@@ -40,10 +42,12 @@ class SuggestionItemDecorator extends RecyclerView.ItemDecoration {
             float alpha = ViewCompat.getAlpha(view);
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
             
-            int shadows = RoundRectDrawableWithShadow.LEFT| RoundRectDrawableWithShadow.RIGHT;
-            if(position == count - 1 && adapterCount != 0) shadows|= RoundRectDrawableWithShadow.BOTTOM;
+            int shadows = RoundRectDrawableWithShadow.LEFT | RoundRectDrawableWithShadow.RIGHT;
+            if (position == count - 1 && adapterCount != 0) {
+                shadows |= RoundRectDrawableWithShadow.BOTTOM;
+            }
             
-            drawable.setAlpha((int) (255*alpha));
+            drawable.setAlpha((int) (255 * alpha));
             drawable.setShadow(shadows);
             drawable.setBounds(0, 0, parent.getWidth(), view.getHeight());
             int saved = canvas.save();

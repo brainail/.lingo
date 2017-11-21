@@ -8,7 +8,7 @@ import org.brainail.EverboxingLingo.ui.AppLifecycleObserver
 import org.brainail.logger.L
 import javax.inject.Inject
 
-class App: DaggerApplication() {
+class App : DaggerApplication() {
 
     @Inject
     fun configureLogging(logTree: L.Tree) {

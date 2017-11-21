@@ -5,7 +5,6 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.Scheduler
 import io.reactivex.SingleTransformer
 
-
 class RxExecutor(
         val mainScheduler: Scheduler,
         val backgroundScheduler: Scheduler) {

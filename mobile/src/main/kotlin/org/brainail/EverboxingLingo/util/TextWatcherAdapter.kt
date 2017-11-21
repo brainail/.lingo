@@ -3,7 +3,7 @@ package org.brainail.EverboxingLingo.util
 import android.text.Editable
 import android.text.TextWatcher
 
-open class TextWatcherAdapter: TextWatcher {
+open class TextWatcherAdapter : TextWatcher {
     override fun afterTextChanged(query: Editable) {
         // Do nothing
     }

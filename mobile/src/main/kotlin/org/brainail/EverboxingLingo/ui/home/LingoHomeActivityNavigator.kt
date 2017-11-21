@@ -34,6 +34,6 @@ class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(a
     }
 
     companion object {
-        val REQ_CODE_SPEECH_INPUT = 100
+        const val REQ_CODE_SPEECH_INPUT = 100
     }
 }
