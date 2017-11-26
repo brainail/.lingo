@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.brainail.EverboxingLingo.widget.AnimatedVectorAutoStartImageView
+    style="@style/Widget.AppCompat.ActionButton"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:clickable="true"
+    android:contentDescription="Loading..."
+    android:focusable="true"
+    android:gravity="center"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="4dp"
+    app:srcCompat="@drawable/ic_progress_material_24dp"/>

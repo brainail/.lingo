@@ -19,6 +19,10 @@ import org.brainail.logger.L
 import org.jetbrains.anko.toast
 import javax.inject.Inject
 
+
+
+
+
 class LingoHomeActivity : BaseActivity() {
 
     @Inject
@@ -106,7 +110,7 @@ class LingoHomeActivity : BaseActivity() {
     }
 
     private fun showSearchProgress(shouldShow: Boolean) {
-        // floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = shouldShow
+        floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = shouldShow
     }
 
     private fun showTextToSpeechIcon(shouldShow: Boolean) {
