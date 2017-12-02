@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:clickable="true"
-    android:contentDescription="Loading..."
+    android:contentDescription="@string/menu_loading"
     android:focusable="true"
     android:gravity="center"
     android:paddingBottom="4dp"

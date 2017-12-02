@@ -1,5 +1,5 @@
 package org.brainail.EverboxingLingo.domain.settings
 
-interface AppSettings {
+interface UserSettings {
     var userProfile: String?
 }

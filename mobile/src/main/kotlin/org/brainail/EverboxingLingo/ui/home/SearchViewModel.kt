@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import org.brainail.EverboxingLingo.extensions.EMPTY_TEXT
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.ui.BaseViewModel
+import org.brainail.EverboxingLingo.ui.home.SearchViewState.CursorPosition
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
 
 abstract class SearchViewModel : BaseViewModel() {
@@ -36,7 +37,7 @@ abstract class SearchViewModel : BaseViewModel() {
                 isClearAvailable = viewState.isInFocus && query.isNotEmpty(),
                 isLogoDisplayed = !viewState.isInFocus && query.isEmpty(),
                 isLoadingSuggestions = viewState.isInFocus,
-                isTextToSpeechResult = false)
+                cursorPosition = CursorPosition.KEEP)
         if (shouldSearchForSuggestions) {
             _searchForSuggestionsCall.value = query.trim()
         }
@@ -45,7 +46,7 @@ abstract class SearchViewModel : BaseViewModel() {
     protected fun submitQueryInternally(query: String) {
         _searchViewState.value = _searchViewState.value!!.copy(
                 isInFocus = false,
-                isTextToSpeechResult = false)
+                cursorPosition = CursorPosition.KEEP)
         _searchForResultsCall.value = query.trim()
     }
 
@@ -55,8 +56,8 @@ abstract class SearchViewModel : BaseViewModel() {
                 isInFocus = isInFocus,
                 isClearAvailable = isInFocus && viewState.displayedText.isNotEmpty(),
                 isLogoDisplayed = !isInFocus && viewState.displayedText.isEmpty(),
-                isLoadingSuggestions = if (!isInFocus) false else viewState.displayLoading,
-                isTextToSpeechResult = false)
+                isLoadingSuggestions = isInFocus,
+                cursorPosition = CursorPosition.KEEP)
     }
 
     protected fun navigationIconClickedInternally() {
@@ -64,7 +65,7 @@ abstract class SearchViewModel : BaseViewModel() {
         when (viewState.isInFocus) {
             true -> _searchViewState.value = viewState.copy(
                     isInFocus = false,
-                    isTextToSpeechResult = false)
+                    cursorPosition = CursorPosition.KEEP)
             else -> _searchNavigation.value = SearchNavigationItem.DRAWER
         }
     }
@@ -72,7 +73,7 @@ abstract class SearchViewModel : BaseViewModel() {
     protected fun clearIconClickedInternally() {
         _searchViewState.value = _searchViewState.value!!.copy(
                 displayedText = EMPTY_TEXT,
-                isTextToSpeechResult = false)
+                cursorPosition = CursorPosition.KEEP)
     }
 
     protected fun textToSpeechIconClickedInternally() {
@@ -84,7 +85,7 @@ abstract class SearchViewModel : BaseViewModel() {
             _searchViewState.value = _searchViewState.value!!.copy(
                     isInFocus = true,
                     displayedText = result.text,
-                    isTextToSpeechResult = true)
+                    cursorPosition = CursorPosition.END)
         }
     }
 

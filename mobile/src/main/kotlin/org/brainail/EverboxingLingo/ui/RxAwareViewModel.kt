@@ -6,8 +6,8 @@ open class RxAwareViewModel : BaseViewModel() {
 
     val disposables = CompositeDisposable()
 
-    override fun onCleared() {
-        super.onCleared()
+    override fun clear() {
+        super.clear()
         disposables.clear()
     }
 

@@ -5,13 +5,13 @@ import dagger.Provides
 import org.brainail.EverboxingLingo.data.repository.UserPrefDataSource
 import org.brainail.EverboxingLingo.data.repository.UserRepositoryImpl
 import org.brainail.EverboxingLingo.domain.repository.UserRepository
-import org.brainail.EverboxingLingo.domain.settings.AppSettings
+import org.brainail.EverboxingLingo.domain.settings.UserSettings
 
 @Module
 internal class UserModule {
     @Provides
-    fun provideUserPrefDataSource(appSettings: AppSettings): UserPrefDataSource
-            = UserPrefDataSource(appSettings)
+    fun provideUserPrefDataSource(userSettings: UserSettings): UserPrefDataSource
+            = UserPrefDataSource(userSettings)
 
     @Provides
     fun provideUserRepository(userPrefDataSource: UserPrefDataSource): UserRepository

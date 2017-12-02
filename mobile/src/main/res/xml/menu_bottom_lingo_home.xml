@@ -3,16 +3,16 @@
     <tab
         id="@+id/tab_explore"
         icon="@drawable/ic_done_24dp"
-        title="Explore"
+        title="@string/tab_explore"
         barColorWhenSelected="@color/material_green_700"/>
     <tab
         id="@+id/tab_favourite"
         icon="@drawable/ic_done_24dp"
-        title="Favourite"
+        title="@string/tab_favourite"
         barColorWhenSelected="@color/material_pink_700"/>
     <tab
         id="@+id/tab_history"
         icon="@drawable/ic_done_24dp"
-        title="History"
+        title="@string/tab_history"
         barColorWhenSelected="@color/material_brown_700"/>
 </tabs>

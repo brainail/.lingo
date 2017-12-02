@@ -1,15 +1,15 @@
 package org.brainail.EverboxingLingo.data.repository
 
 import org.brainail.EverboxingLingo.domain.model.UserProfile
-import org.brainail.EverboxingLingo.domain.settings.AppSettings
+import org.brainail.EverboxingLingo.domain.settings.UserSettings
 
-internal class UserPrefDataSource(private val appSettings: AppSettings) {
+internal class UserPrefDataSource(private val userSettings: UserSettings) {
     fun getUserProfile(): UserProfile? {
-        val data: String? = appSettings.userProfile
+        val data: String? = userSettings.userProfile
         return if (data != null) UserProfile(data) else null
     }
 
     fun setUserProfile(data: UserProfile) {
-        appSettings.userProfile = data.name
+        userSettings.userProfile = data.name
     }
 }

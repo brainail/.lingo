@@ -5,6 +5,9 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import android.support.v7.graphics.drawable.DrawerArrowDrawable
 import android.text.Editable
 import kotlinx.android.synthetic.main.activity_lingo_home.*
@@ -14,14 +17,11 @@ import org.brainail.EverboxingLingo.ui.BaseActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem
 import org.brainail.EverboxingLingo.ui.home.SearchViewModel.SearchNavigationItem
+import org.brainail.EverboxingLingo.ui.home.SearchViewState.CursorPosition
 import org.brainail.EverboxingLingo.util.TextWatcherAdapter
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
 import javax.inject.Inject
-
-
-
-
 
 class LingoHomeActivity : BaseActivity() {
 
@@ -53,20 +53,34 @@ class LingoHomeActivity : BaseActivity() {
 
     private fun renderSearchViewState(viewState: SearchViewState) {
         floatingSearchView.apply {
+            // update text
             when (viewState.displayedText.isEmpty()) {
                 true -> clearText() // use clear instead of simple set due to issues with system widget
                 else -> if (viewState.displayedText != text.toString()) {
                     text = viewState.displayedText // set only if new to get rid of recursive updates
                 }
             }
-            if (viewState.isTextToSpeechResult) {
+
+            // cursor
+            if (CursorPosition.END == viewState.cursorPosition) {
                 setSelection(viewState.displayedText.length)
             }
+
+            // focus
             isActivated = viewState.isInFocus
+
+            // icons
             showClearButton(viewState.isClearAvailable)
             showSearchProgress(viewState.displayLoading)
             showSearchLogo(viewState.isLogoDisplayed)
             showTextToSpeechIcon(viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech())
+
+            // scroll behavior
+            post { // post it to get rid of flickering effect
+                val toolbarUnderlayLp = toolbarUnderlay.layoutParams as AppBarLayout.LayoutParams
+                val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS)
+                toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply { scrollFlags = newScrollFlags }
+            }
         }
     }
 

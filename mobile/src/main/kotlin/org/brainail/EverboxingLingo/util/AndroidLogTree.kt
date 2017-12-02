@@ -2,6 +2,7 @@ package org.brainail.EverboxingLingo.util
 
 import android.util.Log
 import org.brainail.logger.L
+import java.util.regex.Pattern
 
 /**
  * A tree for debug builds.
@@ -42,10 +43,34 @@ class AndroidLogTree : L.Tree() {
     }
 
     /**
+     * Extract the class name without any anonymous class suffixes (e.g., `Foo$1`
+     * becomes `Foo`).
+     */
+    private fun extractClassName(element: StackTraceElement): String {
+        var tag = element.fileName
+        val m = ANONYMOUS_CLASS.matcher(tag)
+        if (m.find()) {
+            tag = m.replaceAll("")
+        }
+        return tag
+    }
+
+    /**
      * Break up `message` into maximum-length chunks (if needed) and send to either
      */
-    override fun log(priority: L.LogPriority, tag: String, message: String, t: Throwable?) {
+    override fun log(priority: L.LogPriority, tag: String, rawMessage: String, t: Throwable?) {
         val androidLogPriority = toAndroidLogPriority(priority)
+
+        // DO NOT switch this to Thread.getCurrentThread().getStackTrace(). The test will pass
+        // because Robolectric runs them on the JVM but on Android the elements are different.
+        val stackTrace = Throwable().stackTrace
+        if (stackTrace.size <= CALL_STACK_INDEX) {
+            throw IllegalStateException("Synthetic stacktrace didn't have enough elements: are you using proguard?")
+        }
+
+        val clazz = extractClassName(stackTrace[CALL_STACK_INDEX])
+        val lineNumber = stackTrace[CALL_STACK_INDEX].lineNumber
+        val message = "($clazz:$lineNumber) ⭆⭆⭆ \n$rawMessage"
 
         if (message.length < MAX_LOG_LENGTH) {
             when (priority) {
@@ -87,5 +112,6 @@ class AndroidLogTree : L.Tree() {
         const private val MAX_LOG_LENGTH = 4000
         const private val MAX_TAG_LENGTH = 23
         const private val CALL_STACK_INDEX = 5
+        private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
     }
 }

@@ -22,6 +22,7 @@
         android:background="?attr/colorPrimary">
 
         <View
+            android:id="@+id/toolbarUnderlay"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:background="@null"
@@ -42,7 +43,7 @@
         android:id="@+id/floatingSearchView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="Search ..."
+        android:hint="@string/menu_search"
         android:paddingLeft="6dp"
         android:paddingRight="6dp"
         android:paddingTop="4dp"
