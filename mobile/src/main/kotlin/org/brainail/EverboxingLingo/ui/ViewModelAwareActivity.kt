@@ -1,9 +1,10 @@
-package org.brainail.EverboxingLingo.mapper
+package org.brainail.EverboxingLingo.ui
 
-import android.content.Intent
-import android.speech.RecognizerIntent
-import android.support.v7.app.AppCompatActivity
-import org.brainail.EverboxingLingo.model.TextToSpeechResult
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
+import android.os.Bundle
+import android.support.annotation.LayoutRes
+import javax.inject.Inject
 
 /**
  * This file is part of Everboxing modules. <br/><br/>
@@ -30,11 +31,34 @@ import org.brainail.EverboxingLingo.model.TextToSpeechResult
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN <br/>
  * THE SOFTWARE.
  */
-internal class TextToSpeechResultMapper {
-    fun transform(activityResultCode: Int, activityResultData: Intent?): TextToSpeechResult = when (activityResultCode) {
-        AppCompatActivity.RESULT_OK -> activityResultData?.run {
-            TextToSpeechResult.Successful(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
-        } ?: TextToSpeechResult.Empty()
-        else -> TextToSpeechResult.Empty()
+abstract class ViewModelAwareActivity<VM : BaseViewModel> : BaseActivity() {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    protected lateinit var viewModel: VM
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(layoutResId())
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(viewModelType())
+        viewModel.initState(getViewModelStateFromBundle(savedInstanceState))
     }
+
+    @LayoutRes
+    abstract fun layoutResId(): Int
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveViewModelStateToBundle(outState, viewModel.stateToSave)
+    }
+
+    protected open fun getViewModelStateFromBundle(bundle: Bundle?): ViewModeSavedState? {
+        return null
+    }
+
+    protected open fun saveViewModelStateToBundle(bundle: Bundle, state: ViewModeSavedState?) {
+        // No-op
+    }
+
+    abstract fun viewModelType(): Class<VM>
 }

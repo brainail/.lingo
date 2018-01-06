@@ -81,7 +81,7 @@ abstract class SearchViewModel : BaseViewModel() {
     }
 
     protected fun handleTextToSpeechResultInternally(result: TextToSpeechResult) {
-        if (result is TextToSpeechResult.TextToSpeechSuccessfulResult) {
+        if (result is TextToSpeechResult.Successful) {
             _searchViewState.value = _searchViewState.value!!.copy(
                     isInFocus = true,
                     displayedText = result.text,

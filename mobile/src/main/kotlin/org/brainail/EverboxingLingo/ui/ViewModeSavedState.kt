@@ -1,9 +1,9 @@
-package org.brainail.EverboxingLingo.mapper
+package org.brainail.EverboxingLingo.ui
 
-import android.content.Intent
-import android.speech.RecognizerIntent
-import android.support.v7.app.AppCompatActivity
-import org.brainail.EverboxingLingo.model.TextToSpeechResult
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
 /**
  * This file is part of Everboxing modules. <br/><br/>
@@ -30,11 +30,6 @@ import org.brainail.EverboxingLingo.model.TextToSpeechResult
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN <br/>
  * THE SOFTWARE.
  */
-internal class TextToSpeechResultMapper {
-    fun transform(activityResultCode: Int, activityResultData: Intent?): TextToSpeechResult = when (activityResultCode) {
-        AppCompatActivity.RESULT_OK -> activityResultData?.run {
-            TextToSpeechResult.Successful(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
-        } ?: TextToSpeechResult.Empty()
-        else -> TextToSpeechResult.Empty()
-    }
-}
+@SuppressLint("ParcelCreator")
+@Parcelize
+class ViewModeSavedState(private val values: Bundle = Bundle()): Parcelable

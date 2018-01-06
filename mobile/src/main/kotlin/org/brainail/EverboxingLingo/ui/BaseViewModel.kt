@@ -4,7 +4,10 @@ import android.arch.lifecycle.ViewModel
 import android.support.annotation.CallSuper
 import org.brainail.logger.L
 
-open class BaseViewModel : ViewModel() {
+abstract class BaseViewModel : ViewModel() {
+
+    val stateToSave: ViewModeSavedState?
+        get() = saveState()
 
     private var isCleared = false
 
@@ -12,6 +15,13 @@ open class BaseViewModel : ViewModel() {
         @Suppress("LeakingThis")
         L.d("constructor(): $this")
     }
+
+    open fun initState(viewModelSavedState: ViewModeSavedState?) {
+        // No-op
+    }
+
+    @CallSuper
+    open fun saveState() = ViewModeSavedState()
 
     final override fun onCleared() {
         // sometimes we can get the same model using different keys and

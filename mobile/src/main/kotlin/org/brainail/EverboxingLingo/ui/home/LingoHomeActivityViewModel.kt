@@ -2,6 +2,7 @@ package org.brainail.EverboxingLingo.ui.home
 
 import android.arch.lifecycle.LiveData
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
+import org.brainail.EverboxingLingo.ui.ViewModeSavedState
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
 import javax.inject.Inject
 
@@ -20,8 +21,11 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
     val searchNavigation: LiveData<SearchNavigationItem>
         get() = _searchNavigation
 
-    init {
-        _navigation.value = NavigationItem.EXPLORE
+    override fun initState(viewModelSavedState: ViewModeSavedState?) {
+        super.initState(viewModelSavedState)
+        if (null == viewModelSavedState) {
+            _navigation.value = NavigationItem.EXPLORE
+        }
     }
 
     fun navigateTo(navigationItem: NavigationItem) {

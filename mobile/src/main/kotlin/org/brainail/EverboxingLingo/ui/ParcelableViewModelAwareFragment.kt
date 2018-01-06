@@ -1,9 +1,6 @@
-package org.brainail.EverboxingLingo.mapper
+package org.brainail.EverboxingLingo.ui
 
-import android.content.Intent
-import android.speech.RecognizerIntent
-import android.support.v7.app.AppCompatActivity
-import org.brainail.EverboxingLingo.model.TextToSpeechResult
+import android.os.Bundle
 
 /**
  * This file is part of Everboxing modules. <br/><br/>
@@ -30,11 +27,18 @@ import org.brainail.EverboxingLingo.model.TextToSpeechResult
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN <br/>
  * THE SOFTWARE.
  */
-internal class TextToSpeechResultMapper {
-    fun transform(activityResultCode: Int, activityResultData: Intent?): TextToSpeechResult = when (activityResultCode) {
-        AppCompatActivity.RESULT_OK -> activityResultData?.run {
-            TextToSpeechResult.Successful(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
-        } ?: TextToSpeechResult.Empty()
-        else -> TextToSpeechResult.Empty()
+abstract class ParcelableViewModelAwareFragment<VM : BaseViewModel> : ViewModelAwareFragment<VM>() {
+
+    companion object {
+        val KEY_VIEW_MODEL_STATE = "ParcelableViewModelAwareFragment.ViewModelState.Key"
     }
+
+    override fun getViewModelStateFromBundle(bundle: Bundle?): ViewModeSavedState? {
+        return bundle?.getParcelable(KEY_VIEW_MODEL_STATE)
+    }
+
+    override fun saveViewModelStateToBundle(bundle: Bundle, state: ViewModeSavedState?) {
+        state?.let { bundle.putParcelable(KEY_VIEW_MODEL_STATE, state) }
+    }
+
 }

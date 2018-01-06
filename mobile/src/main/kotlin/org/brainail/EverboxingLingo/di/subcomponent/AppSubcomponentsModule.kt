@@ -13,7 +13,7 @@ import org.brainail.EverboxingLingo.ui.home.LingoHomeActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel
 
 @Module
-abstract class LingoHomeSubcomponentsModule {
+abstract class AppSubcomponentsModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = arrayOf(
             LingoHomeActivitySubcomponentsModule::class,

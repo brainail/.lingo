@@ -1,8 +1,6 @@
 package org.brainail.EverboxingLingo.ui.home
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -13,7 +11,7 @@ import android.text.Editable
 import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.mapper.TextToSpeechResultMapper
-import org.brainail.EverboxingLingo.ui.BaseActivity
+import org.brainail.EverboxingLingo.ui.ParcelableViewModelAwareActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem
 import org.brainail.EverboxingLingo.ui.home.SearchViewModel.SearchNavigationItem
@@ -23,7 +21,7 @@ import org.brainail.logger.L
 import org.jetbrains.anko.toast
 import javax.inject.Inject
 
-class LingoHomeActivity : BaseActivity() {
+class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityViewModel>() {
 
     @Inject
     lateinit var navigator: LingoHomeActivityNavigator
@@ -31,21 +29,15 @@ class LingoHomeActivity : BaseActivity() {
     @Inject
     internal lateinit var textToSpeechResultMapper: TextToSpeechResultMapper
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var viewModel: LingoHomeActivityViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lingo_home)
-
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(LingoHomeActivityViewModel::class.java)
 
         initNavigation()
         initSearch()
         initViewState()
     }
+
+    override fun layoutResId() = R.layout.activity_lingo_home
 
     private fun initViewState() {
         viewModel.searchViewState.observe(this, Observer { renderSearchViewState(it!!) })
@@ -166,5 +158,7 @@ class LingoHomeActivity : BaseActivity() {
             }
         }
     }
+
+    override fun viewModelType() = LingoHomeActivityViewModel::class.java
 
 }

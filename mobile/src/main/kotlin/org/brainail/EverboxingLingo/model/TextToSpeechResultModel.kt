@@ -26,6 +26,6 @@ package org.brainail.EverboxingLingo.model
  * THE SOFTWARE.
  */
 sealed class TextToSpeechResult {
-    data class TextToSpeechSuccessfulResult(val text: String) : TextToSpeechResult()
-    class TextToSpeechNoResult : TextToSpeechResult()
+    class Successful(val text: String) : TextToSpeechResult()
+    class Empty : TextToSpeechResult()
 }
