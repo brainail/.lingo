@@ -34,6 +34,6 @@
     <style name="searchViewEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:imeOptions">actionSearch|flagNoExtractUi</item>
     </style>
 </resources>

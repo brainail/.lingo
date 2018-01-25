@@ -156,7 +156,7 @@ public class FloatingSearchView extends RelativeLayout {
                 ViewUtils.dpToPx(DEFAULT_RADIUS),
                 ViewUtils.dpToPx(DEFAULT_ELEVATION),
                 ViewUtils.dpToPx(DEFAULT_MAX_ELEVATION));
-        mSearchBackground.setAddPaddingForCorners(true);
+        mSearchBackground.setAddPaddingForCorners(false);
         
         mCardDecorator = new SuggestionItemDecorator(mSearchBackground.mutate());
         
@@ -231,7 +231,7 @@ public class FloatingSearchView extends RelativeLayout {
         mSearchContainer.setLayoutTransition(getDefaultLayoutTransition());
         mSearchContainer.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         
-        mSearchContainer.setBackgroundDrawable(mSearchBackground);
+        mSearchContainer.setBackground(mSearchBackground);
         mSearchContainer.setMinimumHeight((int) mSearchBackground.getMinHeight());
         mSearchContainer.setMinimumWidth((int) mSearchBackground.getMinWidth());
         

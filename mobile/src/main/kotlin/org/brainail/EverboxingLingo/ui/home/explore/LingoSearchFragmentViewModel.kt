@@ -1,6 +1,14 @@
 package org.brainail.EverboxingLingo.ui.home.explore
 
-import org.brainail.EverboxingLingo.ui.BaseViewModel
+import android.arch.lifecycle.LiveData
+import android.os.SystemClock
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import org.brainail.EverboxingLingo.ui.RxAwareViewModel
+import org.brainail.EverboxingLingo.util.SingleEventLiveData
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -28,4 +36,44 @@ import javax.inject.Inject
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN <br/>
  * THE SOFTWARE.
  */
-class LingoSearchFragmentViewModel @Inject constructor() : BaseViewModel()
+class LingoSearchFragmentViewModel @Inject constructor() : RxAwareViewModel() {
+
+    private val searchSubject: PublishSubject<String> by lazy {
+        val subject = PublishSubject.create<String>()
+        bindObservable(subject)
+        subject
+    }
+
+    private val presentSuggestions = SingleEventLiveData<List<String>>()
+
+    init {
+        searchSubject
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .switchMap { query ->
+                    findSuggestions(query)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .onErrorReturn { emptyList() }
+                }
+                .subscribe({
+                    presentSuggestions.value = it
+                })
+    }
+
+    fun presentSuggestions(): LiveData<List<String>> = presentSuggestions
+
+    fun searchSuggestions(query: String) {
+        searchSubject.onNext(query)
+    }
+
+    private fun findSuggestions(query: String): Observable<List<String>> = Observable.fromCallable {
+        SystemClock.sleep(2000)
+        if (query.startsWith("ex")) {
+            throw RuntimeException()
+        } else {
+            listOf("0. " + query, "1. " + query)
+        }
+    }
+
+}

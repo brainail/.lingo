@@ -12,19 +12,16 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
         EXPLORE, FAVOURITE, HISTORY, BACKWARD
     }
 
-    private val _navigation = SingleEventLiveData<NavigationItem>()
-    val navigation: LiveData<NavigationItem>
-        get() = _navigation
+    private val navigation = SingleEventLiveData<NavigationItem>()
 
-    val searchViewState: LiveData<SearchViewState>
-        get() = _searchViewState
-    val searchNavigation: LiveData<SearchNavigationItem>
-        get() = _searchNavigation
+    fun navigation(): LiveData<NavigationItem> = navigation
+    fun searchViewState(): LiveData<SearchViewState> = searchViewState
+    fun searchNavigation(): LiveData<SearchNavigationItem> = searchNavigation
 
     override fun initState(viewModelSavedState: ViewModeSavedState?) {
         super.initState(viewModelSavedState)
         if (null == viewModelSavedState) {
-            _navigation.value = NavigationItem.EXPLORE
+            navigation.value = NavigationItem.EXPLORE
         }
     }
 
@@ -38,7 +35,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
             }
         }
 
-        _navigation.value = navigationItem
+        navigation.value = navigationItem
     }
 
     // region search view model proxy

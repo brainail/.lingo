@@ -40,39 +40,42 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
     override fun layoutResId() = R.layout.activity_lingo_home
 
     private fun initViewState() {
-        viewModel.searchViewState.observe(this, Observer { renderSearchViewState(it!!) })
+        viewModel.searchViewState().observe(this, Observer { renderSearchViewState(it!!) })
     }
 
     private fun renderSearchViewState(viewState: SearchViewState) {
-        floatingSearchView.apply {
-            // update text
-            when (viewState.displayedText.isEmpty()) {
-                true -> clearText() // use clear instead of simple set due to issues with system widget
-                else -> if (viewState.displayedText != text.toString()) {
-                    text = viewState.displayedText // set only if new to get rid of recursive updates
-                }
+        L.i("renderSearchViewState: viewState = $viewState")
+        // update text
+        when (viewState.displayedText.isEmpty()) {
+            true -> floatingSearchView.clearText() // use clear instead of simple set due to issues with system widget
+            else -> if (viewState.displayedText != floatingSearchView.text.toString()) {
+                floatingSearchView.text = viewState.displayedText // set only if new to get rid of recursive updates
             }
+        }
 
-            // cursor
-            if (CursorPosition.END == viewState.cursorPosition) {
-                setSelection(viewState.displayedText.length)
-            }
+        // cursor
+        if (CursorPosition.END == viewState.cursorPosition) {
+            floatingSearchView.setSelection(viewState.displayedText.length)
+        }
 
-            // focus
-            isActivated = viewState.isInFocus
+        // focus
+        floatingSearchView.isActivated = viewState.isInFocus
 
-            // icons
-            showClearButton(viewState.isClearAvailable)
-            showSearchProgress(viewState.displayLoading)
-            showSearchLogo(viewState.isLogoDisplayed)
-            showTextToSpeechIcon(viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech())
+        // icons
+        floatingSearchView.showSearchLogo(viewState.isLogoDisplayed)
+        showClearButton(viewState.isClearAvailable)
+        showSearchProgress(viewState.displayLoading)
+        showTextToSpeechIcon(viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech())
 
-            // scroll behavior
-            post { // post it to get rid of flickering effect
-                val toolbarUnderlayLp = toolbarUnderlay.layoutParams as AppBarLayout.LayoutParams
-                val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS)
-                toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply { scrollFlags = newScrollFlags }
-            }
+        // suggestions
+        // TODO: set items
+        floatingSearchView.adapter?.notifyDataSetChanged()
+
+        // scroll behavior
+        floatingSearchView.post { // post it to get rid of flickering effect
+            val toolbarUnderlayLp = toolbarUnderlay.layoutParams as AppBarLayout.LayoutParams
+            val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS)
+            toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply { scrollFlags = newScrollFlags }
         }
     }
 
@@ -85,8 +88,8 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
             }
         }, false)
 
-        viewModel.navigation.observe(this, Observer { navigateTo(it!!) })
-        viewModel.searchNavigation.observe(this, Observer { navigateTo(it!!) })
+        viewModel.navigation().observe(this, Observer { navigateTo(it!!) })
+        viewModel.searchNavigation().observe(this, Observer { navigateTo(it!!) })
     }
 
     private fun initSearch() {
@@ -112,6 +115,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
                     viewModel.updateQuery(query.toString())
                 }
             })
+            adapter = LingoSearchSuggestionsAdapter()
         }
     }
 

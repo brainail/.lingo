@@ -24,15 +24,22 @@ class LingoSearchFragment : ParcelableViewModelAwareFragment<LingoSearchFragment
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        searchViewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(SearchViewModel::class.java)
-        searchViewModel.searchForResultsCall.observe(this, Observer {
-            activity?.toast("Search for results where query = $it")
-        })
-
-        initSearchResults()
+        initSearch()
     }
 
-    private fun initSearchResults() {
+    private fun initSearch() {
+        searchViewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(SearchViewModel::class.java)
+        searchViewModel.searchResults().observe(this, Observer {
+            activity?.toast("Search for results where query = $it")
+        })
+        searchViewModel.searchSuggestions().observe(this, Observer {
+            viewModel.searchSuggestions(it!!)
+        })
+
+        viewModel.presentSuggestions().observe(this, Observer {
+            searchViewModel.suggestionsPrepared(it!!)
+        })
+
         searchResultsRecyclerView.adapter = LingoSearchResultsAdapter()
     }
 
