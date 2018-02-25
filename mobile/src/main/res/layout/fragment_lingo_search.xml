@@ -7,6 +7,5 @@
     android:layout_height="match_parent"
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
-    android:paddingTop="4dp"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:listitem="@layout/item_word"/>

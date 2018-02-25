@@ -27,6 +27,12 @@ abstract class SearchViewModel : RxAwareViewModel() {
     fun searchSuggestions(): LiveData<String> = searchSuggestions
     fun searchResults(): LiveData<String> = searchResults
 
+    fun suggestionsStartedLoading() {
+        val viewState = searchViewState.value!!
+        searchViewState.value = viewState.copy(
+                isLoadingSuggestions = viewState.isInFocus)
+    }
+
     fun suggestionsPrepared(suggestions: List<String>) {
         searchViewState.value = searchViewState.value!!.copy(
                 isLoadingSuggestions = false,
@@ -40,7 +46,6 @@ abstract class SearchViewModel : RxAwareViewModel() {
                 displayedText = query,
                 isClearAvailable = viewState.isInFocus && query.isNotEmpty(),
                 isLogoDisplayed = !viewState.isInFocus && query.isEmpty(),
-                isLoadingSuggestions = viewState.isInFocus,
                 cursorPosition = CursorPosition.KEEP)
         if (shouldSearchForSuggestions) {
             searchSuggestions.value = query.trim()
@@ -56,12 +61,15 @@ abstract class SearchViewModel : RxAwareViewModel() {
 
     protected fun requestFocusGainInternally(isInFocus: Boolean) {
         val viewState = searchViewState.value!!
+        val suggestionsQuery = viewState.displayedText
         searchViewState.value = viewState.copy(
                 isInFocus = isInFocus,
                 isClearAvailable = isInFocus && viewState.displayedText.isNotEmpty(),
                 isLogoDisplayed = !isInFocus && viewState.displayedText.isEmpty(),
-                isLoadingSuggestions = isInFocus,
                 cursorPosition = CursorPosition.KEEP)
+        if (isInFocus) {
+            searchSuggestions.value = suggestionsQuery
+        }
     }
 
     protected fun navigationIconClickedInternally() {

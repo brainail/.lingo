@@ -23,11 +23,11 @@ import android.support.annotation.StyleRes;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.MarginLayoutParamsCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -42,8 +42,8 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -52,12 +52,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.brainail.flysearch.RoundRectDrawableWithShadow.BOTTOM;
-import static org.brainail.flysearch.RoundRectDrawableWithShadow.LEFT;
-import static org.brainail.flysearch.RoundRectDrawableWithShadow.RIGHT;
-import static org.brainail.flysearch.RoundRectDrawableWithShadow.TOP;
-
-public class FloatingSearchView extends RelativeLayout {
+public class FloatingSearchView extends FrameLayout {
     
     private static final int DEFAULT_BACKGROUND_COLOR = 0x90000000;
     private static final int DEFAULT_CONTENT_COLOR = 0xfff0f0f0;
@@ -66,7 +61,7 @@ public class FloatingSearchView extends RelativeLayout {
     private static final int DEFAULT_ELEVATION = 2;
     private static final int DEFAULT_MAX_ELEVATION = 2;
     
-    private static final long DEFAULT_DURATION_ENTER = 300;
+    private static final long DEFAULT_DURATION_ENTER = 500;
     private static final long DEFAULT_DURATION_EXIT = 400;
     
     private static final Interpolator DECELERATE = new DecelerateInterpolator(3f);
@@ -106,13 +101,11 @@ public class FloatingSearchView extends RelativeLayout {
     private final ImageView mNavButtonView;
     private final RecyclerView mRecyclerView;
     private final ViewGroup mSearchContainer;
+    private final CardView mSearchCard;
     private final View mDivider;
     private final ActionMenuView mActionMenu;
     
     private final Activity mHostActivity;
-    
-    private final RoundRectDrawableWithShadow mSearchBackground;
-    private final SuggestionItemDecorator mCardDecorator;
     
     private final List<Integer> mAlwaysShowingMenu = new ArrayList<>();
     
@@ -151,15 +144,12 @@ public class FloatingSearchView extends RelativeLayout {
         mSearchContainer = findViewById(R.id.fsv_search_container);
         mActionMenu = findViewById(R.id.fsv_search_action_menu);
         
-        mSearchBackground = new RoundRectDrawableWithShadow(
-                DEFAULT_CONTENT_COLOR,
-                ViewUtils.dpToPx(DEFAULT_RADIUS),
-                ViewUtils.dpToPx(DEFAULT_ELEVATION),
-                ViewUtils.dpToPx(DEFAULT_MAX_ELEVATION));
-        mSearchBackground.setAddPaddingForCorners(false);
-        
-        mCardDecorator = new SuggestionItemDecorator(mSearchBackground.mutate());
-        
+        mSearchCard = findViewById(R.id.fsv_search_card);
+        mSearchCard.setCardBackgroundColor(DEFAULT_CONTENT_COLOR);
+        mSearchCard.setRadius(ViewUtils.dpToPx(DEFAULT_RADIUS));
+        mSearchCard.setCardElevation(ViewUtils.dpToPx(DEFAULT_ELEVATION));
+        mSearchCard.setMaxCardElevation(ViewUtils.dpToPx(DEFAULT_MAX_ELEVATION));
+    
         applyXmlAttributes(attrs, defStyleAttr, 0);
         setupViews();
     }
@@ -177,7 +167,7 @@ public class FloatingSearchView extends RelativeLayout {
         suggestionsContainer.getLayoutParams().width = searchBarWidth;
         
         // Divider
-        mDivider.setBackgroundDrawable(styledAttrs.getDrawable(R.styleable.FloatingSearchView_android_divider));
+        mDivider.setBackground(styledAttrs.getDrawable(R.styleable.FloatingSearchView_android_divider));
         int dividerHeight = styledAttrs.getDimensionPixelSize(R.styleable.FloatingSearchView_android_dividerHeight, -1);
         
         final MarginLayoutParams dividerLayoutParams = (MarginLayoutParams) mDivider.getLayoutParams();
@@ -185,14 +175,6 @@ public class FloatingSearchView extends RelativeLayout {
             dividerLayoutParams.height = dividerHeight;
         }
         
-        float maxShadowSize = mSearchBackground.getMaxShadowSize();
-        float cornerRadius = mSearchBackground.getCornerRadius();
-        int horizontalPadding = (int) (RoundRectDrawableWithShadow.calculateHorizontalPadding(
-                maxShadowSize, cornerRadius, false) + .5f);
-        
-        dividerLayoutParams.setMargins(
-                horizontalPadding, dividerLayoutParams.topMargin,
-                horizontalPadding, dividerLayoutParams.bottomMargin);
         mDivider.setLayoutParams(dividerLayoutParams);
         
         // Content inset
@@ -231,20 +213,15 @@ public class FloatingSearchView extends RelativeLayout {
         mSearchContainer.setLayoutTransition(getDefaultLayoutTransition());
         mSearchContainer.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         
-        mSearchContainer.setBackground(mSearchBackground);
-        mSearchContainer.setMinimumHeight((int) mSearchBackground.getMinHeight());
-        mSearchContainer.setMinimumWidth((int) mSearchBackground.getMinWidth());
-        
-        mRecyclerView.addItemDecoration(mCardDecorator);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
         
         mBackgroundDrawable = getBackground();
         mBackgroundDrawable = mBackgroundDrawable != null
                 ? mBackgroundDrawable.mutate()
                 : new ColorDrawable(DEFAULT_BACKGROUND_COLOR);
         
-        setBackgroundDrawable(mBackgroundDrawable);
+        setBackground(mBackgroundDrawable);
         mBackgroundDrawable.setAlpha(0);
         
         mNavButtonView.setOnClickListener(v -> {
@@ -277,13 +254,11 @@ public class FloatingSearchView extends RelativeLayout {
     }
     
     public void setRadius(float radius) {
-        mSearchBackground.setCornerRadius(radius);
-        mCardDecorator.setCornerRadius(radius);
+        mSearchCard.setRadius(radius);
     }
     
     public void setContentBackgroundColor(@ColorInt int color) {
-        mSearchBackground.setColor(color);
-        mCardDecorator.setBackgroundColor(color);
+        mSearchCard.setCardBackgroundColor(color);
         mActionMenu.setBackgroundColor(color);
     }
     
@@ -502,52 +477,17 @@ public class FloatingSearchView extends RelativeLayout {
         
         mSuggestionsShown = show;
         
-        int childCount = mRecyclerView.getChildCount();
-        int translation = 0;
-        
-        final Runnable endAction = () -> {
-            if (show)
-                updateDivider();
-            else {
-                showDivider(false);
-                mRecyclerView.setVisibility(View.INVISIBLE);
-                mRecyclerView.setTranslationY(-mRecyclerView.getHeight());
-            }
-        };
-        
         if (show) {
             updateDivider();
             mRecyclerView.setVisibility(VISIBLE);
-            if (mRecyclerView.getTranslationY() == 0) {
-                mRecyclerView.setTranslationY(-mRecyclerView.getHeight());
-            }
-        } else if (childCount > 0) {
-            translation = -mRecyclerView.getChildAt(childCount - 1).getBottom();
         } else {
             showDivider(false);
-        }
-        
-        ViewPropertyAnimatorCompat listAnim = ViewCompat.animate(mRecyclerView)
-                .translationY(translation)
-                .setDuration(show ? DEFAULT_DURATION_ENTER : DEFAULT_DURATION_EXIT)
-                .setInterpolator(show ? DECELERATE : ACCELERATE)
-                .withLayer()
-                .withEndAction(endAction);
-        
-        if (show || childCount > 0) {
-            listAnim.start();
-        } else {
-            endAction.run();
+            mRecyclerView.setVisibility(View.GONE);
         }
     }
     
     private void showDivider(boolean visible) {
         mDivider.setVisibility(visible ? View.VISIBLE : View.GONE);
-        int shadows = TOP | LEFT | RIGHT;
-        if (!visible) {
-            shadows |= BOTTOM;
-        }
-        mSearchBackground.setShadow(shadows);
     }
     
     private void updateDivider() {
@@ -643,25 +583,27 @@ public class FloatingSearchView extends RelativeLayout {
     
     @SuppressLint("RestrictedApi")
     private static Drawable unwrap(Drawable icon) {
-        if (icon instanceof android.support.v7.graphics.drawable.DrawableWrapper)
+        if (icon instanceof android.support.v7.graphics.drawable.DrawableWrapper) {
             return ((android.support.v7.graphics.drawable.DrawableWrapper) icon).getWrappedDrawable();
-        if (icon instanceof android.support.v4.graphics.drawable.DrawableWrapper)
+        } else if (icon instanceof android.support.v4.graphics.drawable.DrawableWrapper) {
             return ((android.support.v4.graphics.drawable.DrawableWrapper) icon).getWrappedDrawable();
-        if (Build.VERSION.SDK_INT >= 23 && icon instanceof android.graphics.drawable.DrawableWrapper)
+        } else if (Build.VERSION.SDK_INT >= 23 && icon instanceof android.graphics.drawable.DrawableWrapper) {
             return ((android.graphics.drawable.DrawableWrapper) icon).getDrawable();
-        return DrawableCompat.unwrap(icon);
+        } else {
+            return DrawableCompat.unwrap(icon);
+        }
     }
     
-    private static class RecyclerView extends android.support.v7.widget.RecyclerView {
-        public RecyclerView(Context context) {
+    private static class FlyRecyclerView extends android.support.v7.widget.RecyclerView {
+        public FlyRecyclerView(Context context) {
             super(context);
         }
         
-        public RecyclerView(Context context, AttributeSet attrs) {
+        public FlyRecyclerView(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
         
-        public RecyclerView(Context context, AttributeSet attrs, int defStyle) {
+        public FlyRecyclerView(Context context, AttributeSet attrs, int defStyle) {
             super(context, attrs, defStyle);
         }
         

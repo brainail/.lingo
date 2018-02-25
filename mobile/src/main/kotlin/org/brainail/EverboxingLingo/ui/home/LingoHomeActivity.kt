@@ -6,14 +6,18 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+import android.support.v4.content.ContextCompat
 import android.support.v7.graphics.drawable.DrawerArrowDrawable
 import android.text.Editable
+import com.ashokvarma.bottomnavigation.BottomNavigationBar
+import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.mapper.TextToSpeechResultMapper
 import org.brainail.EverboxingLingo.ui.ParcelableViewModelAwareActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem
+import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationTabItem
 import org.brainail.EverboxingLingo.ui.home.SearchViewModel.SearchNavigationItem
 import org.brainail.EverboxingLingo.ui.home.SearchViewState.CursorPosition
 import org.brainail.EverboxingLingo.util.TextWatcherAdapter
@@ -45,6 +49,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
 
     private fun renderSearchViewState(viewState: SearchViewState) {
         L.i("renderSearchViewState: viewState = $viewState")
+
         // update text
         when (viewState.displayedText.isEmpty()) {
             true -> floatingSearchView.clearText() // use clear instead of simple set due to issues with system widget
@@ -80,15 +85,35 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
     }
 
     private fun initNavigation() {
-        bottomNavigationBarView.setOnTabSelectListener({ tabId ->
-            when (tabId) {
-                R.id.tab_explore -> viewModel.navigateTo(NavigationItem.EXPLORE)
-                R.id.tab_favourite -> viewModel.navigateTo(NavigationItem.FAVOURITE)
-                R.id.tab_history -> viewModel.navigateTo(NavigationItem.HISTORY)
+        bottomNavigationBarView
+                .addItem(BottomNavigationItem(R.drawable.ic_translate_24dp, R.string.tab_explore)
+                        .setActiveColor(ContextCompat.getColor(this, R.color.tab_explore)))
+                .addItem(BottomNavigationItem(R.drawable.ic_favorite_24dp, R.string.tab_favourite)
+                        .setActiveColor(ContextCompat.getColor(this, R.color.tab_favorite)))
+                .addItem(BottomNavigationItem(R.drawable.ic_history_24dp, R.string.tab_history)
+                        .setActiveColor(ContextCompat.getColor(this, R.color.tab_history)))
+                .initialise()
+
+        bottomNavigationBarView.setTabSelectedListener(object: BottomNavigationBar.OnTabSelectedListener {
+            override fun onTabReselected(position: Int) {
+                // No-impl
             }
-        }, false)
+
+            override fun onTabUnselected(position: Int) {
+                // No-impl
+            }
+
+            override fun onTabSelected(position: Int) {
+                when (position) {
+                    0 -> viewModel.navigateTabTo(NavigationTabItem.EXPLORE)
+                    1 -> viewModel.navigateTabTo(NavigationTabItem.FAVOURITE)
+                    2 -> viewModel.navigateTabTo(NavigationTabItem.HISTORY)
+                }
+            }
+        })
 
         viewModel.navigation().observe(this, Observer { navigateTo(it!!) })
+        viewModel.navigationTab().observe(this, Observer { navigateTabTo(it!!) })
         viewModel.searchNavigation().observe(this, Observer { navigateTo(it!!) })
     }
 
@@ -131,13 +156,28 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         floatingSearchView.menu.findItem(R.id.menu_clear)?.isVisible = shouldShow
     }
 
-    private fun navigateTo(navigationItem: LingoHomeActivityViewModel.NavigationItem) {
+    private fun navigateTo(navigationItem: NavigationItem) {
         L.v("navigateTo: navigationItem = $navigationItem")
         when (navigationItem) {
-            NavigationItem.EXPLORE -> navigator.showExploreSubScreen()
-            NavigationItem.FAVOURITE -> navigator.showExploreSubScreen()
-            NavigationItem.HISTORY -> navigator.showExploreSubScreen()
             NavigationItem.BACKWARD -> navigator.goBack()
+        }
+    }
+
+    private fun navigateTabTo(navigationTabItem: LingoHomeActivityViewModel.NavigationTabItem) {
+        L.v("navigateTabTo: navigationTabItem = $navigationTabItem")
+        when (navigationTabItem) {
+            NavigationTabItem.EXPLORE -> {
+                navigator.showExploreSubScreen()
+                bottomNavigationBarView.selectTab(0, false)
+            }
+            NavigationTabItem.FAVOURITE -> {
+                navigator.showExploreSubScreen()
+                bottomNavigationBarView.selectTab(1, false)
+            }
+            NavigationTabItem.HISTORY -> {
+                navigator.showExploreSubScreen()
+                bottomNavigationBarView.selectTab(2, false)
+            }
         }
     }
 

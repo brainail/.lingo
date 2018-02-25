@@ -92,7 +92,7 @@ dependencies {
     implementation "nz.bradcampbell:paperparcel:$paperparcel_version"
     kapt "nz.bradcampbell:paperparcel-compiler:$paperparcel_version"
 
-    implementation "com.roughike:bottom-bar:2.3.1"
+    implementation "com.ashokvarma.android:bottom-navigation-bar:$bottom_navigation"
 
     implementation project(':domain')
     implementation project(':data')
@@ -103,6 +103,7 @@ dependencies {
 
 kapt {
     generateStubs = true
+    useBuildCache = true
 }
 
 repositories {

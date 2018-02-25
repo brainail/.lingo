@@ -18,7 +18,7 @@ class LingoSearchResultsAdapter : RecyclerView.Adapter<LingoSearchResultsAdapter
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return 5
     }
 
     class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {

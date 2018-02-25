@@ -29,15 +29,12 @@
             app:layout_scrollFlags="scroll|enterAlways"/>
     </android.support.design.widget.AppBarLayout>
 
-    <com.roughike.bottombar.BottomBar
+    <com.ashokvarma.bottomnavigation.BottomNavigationBar
         android:id="@+id/bottomNavigationBarView"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        app:bb_activeTabColor="#f5f5f5"
-        app:bb_behavior="shy"
-        app:bb_inActiveTabColor="#bdbdbd"
-        app:bb_tabXmlResource="@xml/menu_bottom_lingo_home"/>
+        app:bnbBackgroundStyle="background_style_ripple"
+        android:layout_gravity="bottom"/>
 
     <org.brainail.flysearch.FloatingSearchView
         android:id="@+id/floatingSearchView"

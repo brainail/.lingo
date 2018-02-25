@@ -15,6 +15,7 @@
         <activity
             android:theme="@style/Theme.Lingo.NoActionBar"
             android:name=".ui.home.LingoHomeActivity"
+            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
