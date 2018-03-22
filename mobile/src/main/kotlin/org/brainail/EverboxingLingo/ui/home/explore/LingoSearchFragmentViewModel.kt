@@ -1,17 +1,16 @@
 package org.brainail.EverboxingLingo.ui.home.explore
 
 import android.arch.lifecycle.LiveData
-import android.os.SystemClock
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import org.brainail.EverboxingLingo.domain.usecase.FindSuggestionsUseCase
 import org.brainail.EverboxingLingo.ui.RxAwareViewModel
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class LingoSearchFragmentViewModel @Inject constructor() : RxAwareViewModel() {
+class LingoSearchFragmentViewModel @Inject constructor(
+        private val findSuggestionsUseCase: FindSuggestionsUseCase) : RxAwareViewModel() {
 
     private val searchSubject: PublishSubject<String> by lazy {
         val subject = PublishSubject.create<String>()
@@ -27,15 +26,12 @@ class LingoSearchFragmentViewModel @Inject constructor() : RxAwareViewModel() {
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .switchMap { query ->
-                    findSuggestions(query)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
+                    findSuggestionsUseCase.execute(query)
                             .doOnSubscribe { startSuggestionsLoading.call() }
                             .subscribeOn(AndroidSchedulers.mainThread())
-                            .onErrorReturn { emptyList() }
                 }
                 .subscribe({
-                    presentSuggestions.value = it
+                    presentSuggestions.value = it.map { suggestion -> suggestion.word }
                 })
     }
 
@@ -44,20 +40,6 @@ class LingoSearchFragmentViewModel @Inject constructor() : RxAwareViewModel() {
 
     fun searchSuggestions(query: String) {
         searchSubject.onNext(query)
-    }
-
-    private fun findSuggestions(query: String): Observable<List<String>> = Observable.fromCallable {
-        // https://api.urbandictionary.com/v0/autocomplete?term=holymoly
-        // https//api.urbandictionary.com/v0/autocomplete-extra?term=holymoly
-        // https://api.urbandictionary.com/v0/define with ?term=WORD_HERE or ?defid=DEFID_HERE
-        // https://api.urbandictionary.com/v0/random
-        // https://api.urbandictionary.com/v0/vote POST: {defid: 665139, direction: "up"}
-        SystemClock.sleep(2000)
-        if (query.startsWith("ex")) {
-            throw RuntimeException()
-        } else {
-            listOf("0. " + query, "1. " + query)
-        }
     }
 
 }

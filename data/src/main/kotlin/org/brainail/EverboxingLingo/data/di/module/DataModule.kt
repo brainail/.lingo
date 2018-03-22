@@ -4,6 +4,8 @@ import dagger.Module
 
 @Module(includes = arrayOf(
         PrefModule::class,
-        UserModule::class
+        UserModule::class,
+        SuggestionsModule::class,
+        NetworkModule::class
 ))
 class DataModule

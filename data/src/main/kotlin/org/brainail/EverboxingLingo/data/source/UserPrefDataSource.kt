@@ -1,4 +1,4 @@
-package org.brainail.EverboxingLingo.data.repository
+package org.brainail.EverboxingLingo.data.source
 
 import org.brainail.EverboxingLingo.domain.model.UserProfile
 import org.brainail.EverboxingLingo.domain.settings.UserSettings

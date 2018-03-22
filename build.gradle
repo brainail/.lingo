@@ -10,14 +10,17 @@ buildscript {
     ext.playservices_version = '11.0.0'
 
     ext.constraint_layout = '1.1.0-beta5'
-    ext.support_version = '27.0.2'
-    ext.android_arch_version = '1.1.0'
+    ext.support_version = '27.1.0'
+    ext.android_arch_version = '1.1.1'
     ext.material_dimens = '1.4'
     ext.bottom_navigation = '2.0.4'
 
     ext.rxjava_version = '2.1.1'
     ext.rxandroid_version = '2.0.1'
     ext.rxkotlin_version = '2.1.0'
+
+    ext.okhttp_version = '3.10.0'
+    ext.retrofit_version = '2.4.0'
 
     ext.dagger_version = '2.12'
 

@@ -17,5 +17,5 @@ abstract class LingoHomeActivitySubcomponentsModule {
     @Binds
     @IntoMap
     @ViewModelKey(LingoSearchFragmentViewModel::class)
-    abstract fun bindLingoHomeActivityViewModel(viewModel: LingoSearchFragmentViewModel): ViewModel
+    abstract fun bindLingoSearchFragmentViewModel(viewModel: LingoSearchFragmentViewModel): ViewModel
 }

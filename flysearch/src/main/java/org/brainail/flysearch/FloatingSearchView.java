@@ -585,8 +585,6 @@ public class FloatingSearchView extends FrameLayout {
     private static Drawable unwrap(Drawable icon) {
         if (icon instanceof android.support.v7.graphics.drawable.DrawableWrapper) {
             return ((android.support.v7.graphics.drawable.DrawableWrapper) icon).getWrappedDrawable();
-        } else if (icon instanceof android.support.v4.graphics.drawable.DrawableWrapper) {
-            return ((android.support.v4.graphics.drawable.DrawableWrapper) icon).getWrappedDrawable();
         } else if (Build.VERSION.SDK_INT >= 23 && icon instanceof android.graphics.drawable.DrawableWrapper) {
             return ((android.graphics.drawable.DrawableWrapper) icon).getDrawable();
         } else {
