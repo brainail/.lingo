@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_lingo_search.*
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.extensions.reObserve
+import org.brainail.EverboxingLingo.model.SuggestionViewModel
 import org.brainail.EverboxingLingo.ui.ParcelableViewModelAwareFragment
 import org.brainail.EverboxingLingo.ui.home.SearchViewModel
 import org.brainail.EverboxingLingo.util.NavigableBack
@@ -26,7 +27,7 @@ class LingoSearchFragment : ParcelableViewModelAwareFragment<LingoSearchFragment
         viewModel.searchSuggestions(it!!)
     }
 
-    private val presentSuggestionsObserver = Observer<List<String>> {
+    private val presentSuggestionsObserver = Observer<List<SuggestionViewModel>> {
         searchViewModel.suggestionsPrepared(it!!)
     }
 
@@ -52,6 +53,7 @@ class LingoSearchFragment : ParcelableViewModelAwareFragment<LingoSearchFragment
         viewModel.presentSuggestions().reObserve(this, presentSuggestionsObserver)
         viewModel.startSuggestionsLoading().reObserve(this, startSuggestionsLoadingObserver)
 
+        // TODO("https://medium.com/google-developers/android-data-binding-recyclerview-db7c40d9f0e4")
         searchResultsRecyclerView.adapter = LingoSearchResultsAdapter()
     }
 

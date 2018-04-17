@@ -1,40 +1,49 @@
+apply plugin: "com.github.ben-manes.versions"
+
 buildscript {
-    ext.compile_sdk_version = 26
-    ext.build_tools_version = '26.0.2'
-    ext.min_sdk_version = 16
-    ext.target_sdk_version = 26
+    ext.compileSdkVersion = 26
+    ext.buildToolsVersion = '26.0.2'
+    ext.minSdkVersion = 16
+    ext.targetSdkVersion = 26
 
-    ext.gradle_plugin_version = '3.0.1'
-    ext.kotlin_version = '1.2.21'
+    ext.gradlePluginVersion = '3.0.1'
+    ext.kotlinVersion = '1.2.31'
 
-    ext.playservices_version = '11.0.0'
+    ext.playServicesVersion = '11.0.0'
 
-    ext.constraint_layout = '1.1.0-beta5'
-    ext.support_version = '27.1.0'
-    ext.android_arch_version = '1.1.1'
-    ext.material_dimens = '1.4'
-    ext.bottom_navigation = '2.0.4'
+    ext.constraintLayoutVersion = '1.1.0'
+    ext.supportLibraryVersion = '27.1.1'
+    ext.androidArchVersion = '1.1.1'
+    ext.materialDimensVersion = '1.4'
+    ext.bottomNavigationVersion = '2.0.4'
 
-    ext.rxjava_version = '2.1.1'
-    ext.rxandroid_version = '2.0.1'
-    ext.rxkotlin_version = '2.1.0'
+    ext.rxJavaVersion = '2.1.1'
+    ext.rxAndroidVersion = '2.0.2'
+    ext.rxKotlinVersion = '2.1.0'
 
-    ext.okhttp_version = '3.10.0'
-    ext.retrofit_version = '2.4.0'
+    ext.javaxAnnotationVersion = '1.0'
+    ext.javaxInjectVersion = '1'
 
-    ext.dagger_version = '2.12'
+    ext.gsonVersion = '2.8.1'
 
-    ext.paperparcel_version = '2.0.1'
+    ext.okHttpVersion = '3.10.0'
+    ext.retrofitVersion = '2.4.0'
 
-    ext.anko_common = '0.9.1'
+    ext.daggerVersion = '2.15'
 
-    ext.junit_version = '4.12'
-    ext.junit5_execution_gradle_version = '1.0.0-M4-rev1'
-    ext.junit_platform_version = '1.0.0-M4'
-    ext.mockito_version = '2.8.9'
-    ext.mockito_kotlin_version = '1.5.0'
-    ext.spek_version = '1.1.2'
-    ext.espresso_core = '2.2.2'
+    ext.paperparcelVersion = '2.0.1'
+
+    ext.ankoCommonVersion = '0.9.1'
+
+    ext.junitVersion = '4.12'
+    ext.junitMannodermausGradlePluginVersion = '1.0.0-M4-rev1'
+    ext.junitGradlePlatformVersion = '1.0.0-M4'
+    ext.mockitoVersion = '2.8.9'
+    ext.mockitoKotlinVersion = '1.5.0'
+    ext.spekVersion = '1.1.2'
+    ext.espressoCoreVersion = '2.2.2'
+
+    ext.gradleVersionsPluginVersion = '0.17.0'
 
     repositories {
         google()
@@ -42,10 +51,11 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:$gradle_plugin_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:$junit5_execution_gradle_version"
-        classpath "org.junit.platform:junit-platform-gradle-plugin:$junit_platform_version"
+        classpath "com.android.tools.build:gradle:$gradlePluginVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:$junitMannodermausGradlePluginVersion"
+        classpath "org.junit.platform:junit-platform-gradle-plugin:$junitGradlePlatformVersion"
+        classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
     }
 }
 

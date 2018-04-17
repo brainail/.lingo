@@ -3,6 +3,7 @@ package org.brainail.EverboxingLingo.ui.home
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import org.brainail.EverboxingLingo.extensions.EMPTY_TEXT
+import org.brainail.EverboxingLingo.model.SuggestionViewModel
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.ui.RxAwareViewModel
 import org.brainail.EverboxingLingo.ui.home.SearchViewState.CursorPosition
@@ -33,7 +34,7 @@ abstract class SearchViewModel : RxAwareViewModel() {
                 isLoadingSuggestions = viewState.isInFocus)
     }
 
-    fun suggestionsPrepared(suggestions: List<String>) {
+    fun suggestionsPrepared(suggestions: List<SuggestionViewModel>) {
         searchViewState.value = searchViewState.value!!.copy(
                 isLoadingSuggestions = false,
                 displayedSuggestions = suggestions)

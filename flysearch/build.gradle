@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion project.compile_sdk_version
-    buildToolsVersion project.build_tools_version
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion project.min_sdk_version
-        targetSdkVersion project.target_sdk_version
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
 
         versionCode 1
         versionName "1.0"
@@ -30,8 +30,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.android.support:appcompat-v7:$support_version"
-    implementation "com.android.support:recyclerview-v7:$support_version"
-    implementation "com.android.support.constraint:constraint-layout:$constraint_layout"
-    implementation "com.android.support:cardview-v7:$support_version"
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+    implementation "com.android.support:cardview-v7:$supportLibraryVersion"
 }

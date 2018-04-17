@@ -1,1 +1,1 @@
-include ':mobile', ':domain', ':data', ':logger', ':flysearch'
+include ':mobile', ':domain', ':data', ':remote', ':cache', ':logger', ':flysearch', ':logger-rx'

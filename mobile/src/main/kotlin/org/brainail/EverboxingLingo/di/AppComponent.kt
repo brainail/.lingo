@@ -3,7 +3,6 @@ package org.brainail.EverboxingLingo.di
 import dagger.Component
 import dagger.android.AndroidInjector
 import org.brainail.EverboxingLingo.App
-import org.brainail.EverboxingLingo.data.di.module.DataModule
 import javax.inject.Singleton
 
 @Singleton

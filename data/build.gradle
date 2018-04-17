@@ -4,12 +4,12 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "de.mannodermaus.android-junit5"
 
 android {
-    compileSdkVersion project.compile_sdk_version
-    buildToolsVersion project.build_tools_version
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion project.min_sdk_version
-        targetSdkVersion project.target_sdk_version
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
 
         versionCode 1
         versionName "1.0"
@@ -38,39 +38,29 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espresso_core", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    implementation "com.android.support:appcompat-v7:$support_version"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
-    testImplementation "junit:junit:$junit_version"
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "com.nhaarman:mockito-kotlin:$mockito_kotlin_version"
-
-    testImplementation "org.jetbrains.spek:spek-api:$spek_version"
-    testImplementation "org.jetbrains.spek:spek-junit-platform-engine:$spek_version"
-    testImplementation "org.junit.platform:junit-platform-launcher:$junit_platform_version"
-
-    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
-    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
-
-    implementation "com.squareup.okhttp3:okhttp:${okhttp_version}"
-    implementation "com.squareup.okhttp3:logging-interceptor:${okhttp_version}"
-    implementation "com.squareup.retrofit2:retrofit:${retrofit_version}"
-    implementation "com.squareup.retrofit2:converter-gson:${retrofit_version}"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofit_version}"
+    implementation "javax.annotation:jsr250-api:$javaxAnnotationVersion"
+    implementation "javax.inject:javax.inject:$javaxInjectVersion"
 
     implementation project(':domain')
     implementation project(':logger')
+
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
+    testImplementation "org.jetbrains.spek:spek-api:$spekVersion"
+    testImplementation "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+    testImplementation "org.junit.platform:junit-platform-launcher:$junitGradlePlatformVersion"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoCoreVersion", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 }
 
 repositories {

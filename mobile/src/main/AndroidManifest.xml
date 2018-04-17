@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.brainail.EverboxingLingo">
+    package="org.brainail.EverboxingLingo"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".App"
@@ -13,10 +16,10 @@
         android:theme="@style/Theme.Lingo">
 
         <activity
-            android:theme="@style/Theme.Lingo.NoActionBar"
             android:name=".ui.home.LingoHomeActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Lingo.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

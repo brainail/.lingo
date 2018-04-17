@@ -72,9 +72,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         showSearchProgress(viewState.displayLoading)
         showTextToSpeechIcon(viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech())
 
-        // suggestions
-        // TODO: set items
-        floatingSearchView.adapter?.notifyDataSetChanged()
+        (floatingSearchView.adapter as LingoSearchSuggestionsAdapter).submitList(viewState.displayedSuggestions)
 
         // scroll behavior
         floatingSearchView.post { // post it to get rid of flickering effect

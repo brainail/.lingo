@@ -7,7 +7,9 @@ import org.brainail.EverboxingLingo.data.source.UserPrefDataSource
 import org.brainail.EverboxingLingo.domain.model.UserProfile
 import org.brainail.EverboxingLingo.domain.repository.UserRepository
 
-internal class UserRepositoryImpl(private val userDataSource: UserPrefDataSource) : UserRepository {
+class UserRepositoryImpl(
+        private val userDataSource: UserPrefDataSource) : UserRepository {
+
     override fun getUserProfile(): Observable<UserProfile> = fromCallable {
         userDataSource.getUserProfile() ?: UserProfile(defaultUserName)
     }
