@@ -80,6 +80,10 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
             val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS)
             toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply { scrollFlags = newScrollFlags }
         }
+
+        // bottom navigation
+        bottomNavigationBarView.isAutoHideEnabled = !viewState.isInFocus
+        bottomNavigationBarView.takeIf { viewState.isInFocus }?.show()
     }
 
     private fun initNavigation() {

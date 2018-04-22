@@ -19,14 +19,12 @@
             android:id="@+id/heyHey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/cormorant_infant_bold"
             android:text="Hey, I'm a title. Lorem Ipsum is simply dummy text of the printing"
             android:textSize="@dimen/material_typography_title"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/cormorant_infant_semibold"
             android:text="Hey, I'm a subtitle. Lorem Ipsum is simply dummy text of the printing"
             android:textSize="@dimen/material_typography_subheading"/>
     </LinearLayout>

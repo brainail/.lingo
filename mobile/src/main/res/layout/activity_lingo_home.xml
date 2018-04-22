@@ -29,13 +29,6 @@
             app:layout_scrollFlags="scroll|enterAlways"/>
     </android.support.design.widget.AppBarLayout>
 
-    <com.ashokvarma.bottomnavigation.BottomNavigationBar
-        android:id="@+id/bottomNavigationBarView"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:bnbBackgroundStyle="background_style_ripple"
-        android:layout_gravity="bottom"/>
-
     <org.brainail.flysearch.FloatingSearchView
         android:id="@+id/floatingSearchView"
         android:layout_width="match_parent"
@@ -50,5 +43,12 @@
         app:layout_behavior="org.brainail.EverboxingLingo.util.SearchViewBehavior"
         app:logo="@drawable/ic_search_logo"
         app:theme="@style/FloatingSearchViewTheme"/>
+
+    <com.ashokvarma.bottomnavigation.BottomNavigationBar
+        android:id="@+id/bottomNavigationBarView"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:bnbBackgroundStyle="background_style_ripple"
+        android:layout_gravity="bottom"/>
 </android.support.design.widget.CoordinatorLayout>
 

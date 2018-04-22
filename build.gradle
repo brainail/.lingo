@@ -13,6 +13,7 @@ buildscript {
 
     ext.constraintLayoutVersion = '1.1.0'
     ext.supportLibraryVersion = '27.1.1'
+    ext.androidKtxVersion = '0.3'
     ext.androidArchVersion = '1.1.1'
     ext.materialDimensVersion = '1.4'
     ext.bottomNavigationVersion = '2.0.4'

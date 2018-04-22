@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_suggestion.*
 import org.brainail.EverboxingLingo.R
@@ -26,6 +27,8 @@ class LingoSearchSuggestionsAdapter : ListAdapter<SuggestionViewModel, Suggestio
     class SuggestionViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bindTo(item: SuggestionViewModel) {
             suggestionItemText.text = item.word
+            suggestionItemDescription.text = item.description
+            suggestionItemDescription.isVisible = !item.description.isEmpty()
             itemView.setOnClickListener {
                 L.i("Click on $adapterPosition")
             }
