@@ -37,6 +37,14 @@ class ViewUtils {
         }
     }
     
+    public static void closeSoftKeyboard(final View view) {
+        final InputMethodManager inputMethodManager
+                = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (null != inputMethodManager) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+    
     public static int dpToPx(int dp) {
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         return (int) (dp * metrics.density);
@@ -65,4 +73,5 @@ class ViewUtils {
         DrawableCompat.setTint(icon, color);
         return icon;
     }
+    
 }

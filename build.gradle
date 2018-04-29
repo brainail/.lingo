@@ -36,14 +36,6 @@ buildscript {
 
     ext.ankoCommonVersion = '0.9.1'
 
-    ext.junitVersion = '4.12'
-    ext.junitMannodermausGradlePluginVersion = '1.0.0-M4-rev1'
-    ext.junitGradlePlatformVersion = '1.0.0-M4'
-    ext.mockitoVersion = '2.8.9'
-    ext.mockitoKotlinVersion = '1.5.0'
-    ext.spekVersion = '1.1.2'
-    ext.espressoCoreVersion = '2.2.2'
-
     ext.gradleVersionsPluginVersion = '0.17.0'
 
     repositories {
@@ -54,8 +46,6 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$gradlePluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:$junitMannodermausGradlePluginVersion"
-        classpath "org.junit.platform:junit-platform-gradle-plugin:$junitGradlePlatformVersion"
         classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
     }
 }

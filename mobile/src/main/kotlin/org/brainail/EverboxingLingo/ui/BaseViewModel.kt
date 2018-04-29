@@ -6,7 +6,7 @@ import org.brainail.logger.L
 
 abstract class BaseViewModel : ViewModel() {
 
-    val stateToSave: ViewModeSavedState?
+    val stateToSave: ViewModelSavedState?
         get() = saveState()
 
     private var isCleared = false
@@ -16,12 +16,12 @@ abstract class BaseViewModel : ViewModel() {
         L.d("constructor(): $this")
     }
 
-    open fun initState(viewModelSavedState: ViewModeSavedState?) {
+    open fun initState(viewModelSavedState: ViewModelSavedState?) {
         // No-op
     }
 
     @CallSuper
-    open fun saveState() = ViewModeSavedState()
+    open fun saveState() = ViewModelSavedState()
 
     final override fun onCleared() {
         // sometimes we can get the same model using different keys and

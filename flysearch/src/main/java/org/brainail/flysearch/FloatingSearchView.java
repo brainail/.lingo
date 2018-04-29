@@ -36,6 +36,7 @@ import android.view.InflateException;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -604,12 +605,12 @@ public class FloatingSearchView extends FrameLayout {
             super(context, attrs, defStyle);
         }
         
-//        @SuppressLint("ClickableViewAccessibility")
-//        @Override
-//        public boolean onTouchEvent(MotionEvent e) {
-//            View child = findChildViewUnder(e.getX(), e.getY());
-//            return child != null && super.onTouchEvent(e);
-//        }
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouchEvent(MotionEvent e) {
+            ViewUtils.closeSoftKeyboard(this);
+            return super.onTouchEvent(e);
+        }
     }
     
     private static class LogoEditText extends AppCompatEditText {

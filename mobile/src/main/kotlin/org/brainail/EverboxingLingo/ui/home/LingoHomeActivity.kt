@@ -78,7 +78,10 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         floatingSearchView.post { // post it to get rid of flickering effect
             val toolbarUnderlayLp = toolbarUnderlay.layoutParams as AppBarLayout.LayoutParams
             val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS)
-            toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply { scrollFlags = newScrollFlags }
+            toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply {
+                scrollFlags = newScrollFlags
+                toolbarUnderlay.layoutParams = this
+            }
         }
 
         // bottom navigation

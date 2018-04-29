@@ -2,7 +2,7 @@ package org.brainail.EverboxingLingo.ui.home
 
 import android.arch.lifecycle.LiveData
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
-import org.brainail.EverboxingLingo.ui.ViewModeSavedState
+import org.brainail.EverboxingLingo.ui.ViewModelSavedState
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
     fun searchViewState(): LiveData<SearchViewState> = searchViewState
     fun searchNavigation(): LiveData<SearchNavigationItem> = searchNavigation
 
-    override fun initState(viewModelSavedState: ViewModeSavedState?) {
+    override fun initState(viewModelSavedState: ViewModelSavedState?) {
         super.initState(viewModelSavedState)
 
         // restore navigation
@@ -32,7 +32,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
         navigationTab.value = NavigationTabItem.valueOf(savedNavigation)
     }
 
-    override fun saveState(): ViewModeSavedState {
+    override fun saveState(): ViewModelSavedState {
         val saveState = super.saveState()
         navigationTab.value?.let { saveState.put(KEY_NAVIGATION_TAB_STATE, it.name) }
         return saveState

@@ -22,11 +22,11 @@ abstract class ViewModelAwareFragment<VM : BaseViewModel> : BaseFragment() {
         saveViewModelStateToBundle(outState, viewModel.stateToSave)
     }
 
-    protected open fun getViewModelStateFromBundle(bundle: Bundle?): ViewModeSavedState? {
+    protected open fun getViewModelStateFromBundle(bundle: Bundle?): ViewModelSavedState? {
         return null
     }
 
-    protected open fun saveViewModelStateToBundle(bundle: Bundle, state: ViewModeSavedState?) {
+    protected open fun saveViewModelStateToBundle(bundle: Bundle, state: ViewModelSavedState?) {
         // No-op
     }
 
