@@ -1,8 +1,10 @@
 package org.brainail.EverboxingLingo.ui.home.explore
 
 import android.arch.lifecycle.LiveData
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
+import org.brainail.EverboxingLingo.domain.model.Suggestion
 import org.brainail.EverboxingLingo.domain.usecase.FindSuggestionsUseCase
 import org.brainail.EverboxingLingo.mapper.SuggestionViewModelMapper
 import org.brainail.EverboxingLingo.model.SuggestionViewModel
@@ -15,7 +17,7 @@ class LingoSearchFragmentViewModel @Inject constructor(
         private val findSuggestionsUseCase: FindSuggestionsUseCase,
         private val suggestionViewModelMapper: SuggestionViewModelMapper) : RxAwareViewModel() {
 
-    private val searchSubject: PublishSubject<String> by lazy {
+    private val searchSuggestionsSubject: PublishSubject<String> by lazy {
         val subject = PublishSubject.create<String>()
         bindObservable(subject)
         subject
@@ -24,26 +26,30 @@ class LingoSearchFragmentViewModel @Inject constructor(
     private val presentSuggestions = SingleEventLiveData<List<SuggestionViewModel>>()
     private val startSuggestionsLoading = SingleEventLiveData<Void>()
 
-    init {
-        searchSubject
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .switchMap { query ->
-                    findSuggestionsUseCase.execute(query)
-                            .toObservable()
-                            .doOnSubscribe { startSuggestionsLoading.call() }
-                            .subscribeOn(AndroidSchedulers.mainThread())
-                }
-                .subscribe({
-                    presentSuggestions.value = it.map { suggestionViewModelMapper.mapToViewModel(it) }
-                })
-    }
-
     fun presentSuggestions(): LiveData<List<SuggestionViewModel>> = presentSuggestions
     fun startSuggestionsLoading(): LiveData<Void> = startSuggestionsLoading
 
+    init {
+        searchSuggestionsSubject
+                .debounce(700, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .switchMap { findSuggestions(it) }
+                .subscribe({
+                    presentSuggestions.value = it.map {
+                        suggestionViewModelMapper.mapToViewModel(it)
+                    }
+                })
+    }
+
+    private fun findSuggestions(query: String): Observable<List<Suggestion>> {
+        return findSuggestionsUseCase.execute(query)
+                .toObservable()
+                .doOnSubscribe { startSuggestionsLoading.call() }
+                .subscribeOn(AndroidSchedulers.mainThread())
+    }
+
     fun searchSuggestions(query: String) {
-        searchSubject.onNext(query)
+        searchSuggestionsSubject.onNext(query)
     }
 
 }

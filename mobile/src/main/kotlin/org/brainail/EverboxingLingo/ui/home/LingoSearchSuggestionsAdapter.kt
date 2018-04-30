@@ -12,9 +12,14 @@ import kotlinx.android.synthetic.main.item_suggestion.*
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.model.SuggestionViewModel
 import org.brainail.EverboxingLingo.ui.home.LingoSearchSuggestionsAdapter.SuggestionViewHolder
-import org.brainail.logger.L
 
-class LingoSearchSuggestionsAdapter : ListAdapter<SuggestionViewModel, SuggestionViewHolder>(diffCallback) {
+class LingoSearchSuggestionsAdapter(private val suggestionClickListener: SuggestionClickListener)
+    : ListAdapter<SuggestionViewModel, SuggestionViewHolder>(diffCallback) {
+
+    interface SuggestionClickListener {
+        fun onSuggestionClick(item: SuggestionViewModel)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionViewHolder {
         return SuggestionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_suggestion, parent, false))
     }
@@ -24,14 +29,17 @@ class LingoSearchSuggestionsAdapter : ListAdapter<SuggestionViewModel, Suggestio
         holder.bindTo(getItem(position))
     }
 
-    class SuggestionViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    inner class SuggestionViewHolder(override val containerView: View)
+        : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        private lateinit var suggestionItem: SuggestionViewModel
+
         fun bindTo(item: SuggestionViewModel) {
+            suggestionItem = item
             suggestionItemText.text = item.word
             suggestionItemDescription.text = item.description
             suggestionItemDescription.isVisible = !item.description.isEmpty()
-            itemView.setOnClickListener {
-                L.i("Click on $adapterPosition")
-            }
+            itemView.setOnClickListener { suggestionClickListener.onSuggestionClick(suggestionItem) }
         }
     }
 

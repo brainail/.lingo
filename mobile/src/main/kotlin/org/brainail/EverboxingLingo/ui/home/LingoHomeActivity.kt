@@ -14,10 +14,12 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.mapper.TextToSpeechResultMapper
+import org.brainail.EverboxingLingo.model.SuggestionViewModel
 import org.brainail.EverboxingLingo.ui.ParcelableViewModelAwareActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationTabItem
+import org.brainail.EverboxingLingo.ui.home.LingoSearchSuggestionsAdapter.SuggestionClickListener
 import org.brainail.EverboxingLingo.ui.home.SearchViewModel.SearchNavigationItem
 import org.brainail.EverboxingLingo.ui.home.SearchViewState.CursorPosition
 import org.brainail.EverboxingLingo.util.TextWatcherAdapter
@@ -25,8 +27,7 @@ import org.brainail.logger.L
 import org.jetbrains.anko.toast
 import javax.inject.Inject
 
-class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityViewModel>() {
-
+class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityViewModel>(), SuggestionClickListener {
     @Inject
     lateinit var navigator: LingoHomeActivityNavigator
 
@@ -80,7 +81,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
             val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS)
             toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply {
                 scrollFlags = newScrollFlags
-                toolbarUnderlay.layoutParams = this
+                toolbarUnderlay.layoutParams = this // important in order to have the proper effect
             }
         }
 
@@ -145,7 +146,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
                     viewModel.updateQuery(query.toString())
                 }
             })
-            adapter = LingoSearchSuggestionsAdapter()
+            adapter = LingoSearchSuggestionsAdapter(this@LingoHomeActivity)
         }
     }
 
@@ -159,6 +160,11 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
 
     private fun showClearButton(shouldShow: Boolean) {
         floatingSearchView.menu.findItem(R.id.menu_clear)?.isVisible = shouldShow
+    }
+
+    override fun onSuggestionClick(item: SuggestionViewModel) {
+        L.i("onSuggestionClick: $item")
+        viewModel.suggestionClicked(item)
     }
 
     private fun navigateTo(navigationItem: NavigationItem) {
