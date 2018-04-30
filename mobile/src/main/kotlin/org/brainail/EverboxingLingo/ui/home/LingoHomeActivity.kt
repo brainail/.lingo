@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
 import android.support.v4.content.ContextCompat
 import android.support.v7.graphics.drawable.DrawerArrowDrawable
 import android.text.Editable
@@ -78,7 +79,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         // scroll behavior
         floatingSearchView.post { // post it to get rid of flickering effect
             val toolbarUnderlayLp = toolbarUnderlay.layoutParams as AppBarLayout.LayoutParams
-            val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS)
+            val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_SNAP or SCROLL_FLAG_ENTER_ALWAYS)
             toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply {
                 scrollFlags = newScrollFlags
                 toolbarUnderlay.layoutParams = this // important in order to have the proper effect

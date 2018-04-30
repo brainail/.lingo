@@ -1,6 +1,8 @@
 package org.brainail.EverboxingLingo
 
 import android.arch.lifecycle.ProcessLifecycleOwner
+import android.content.Context
+import android.support.multidex.MultiDex
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import org.brainail.EverboxingLingo.di.DaggerAppComponent
@@ -20,6 +22,11 @@ class App : DaggerApplication() {
     @Inject
     fun registerAppLifecycleObserver(observer: AppLifecycleObserver) {
         ProcessLifecycleOwner.get().lifecycle.addObserver(observer)
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

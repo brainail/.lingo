@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:background="@null"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+            app:layout_scrollFlags="scroll|snap|enterAlways"/>
     </android.support.design.widget.AppBarLayout>
 
     <org.brainail.flysearch.FloatingSearchView

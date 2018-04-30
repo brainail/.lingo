@@ -1,13 +1,13 @@
 apply plugin: "com.github.ben-manes.versions"
 
 buildscript {
-    ext.compileSdkVersion = 26
+    ext.compileSdkVersion = 27
     ext.buildToolsVersion = '26.0.2'
     ext.minSdkVersion = 16
-    ext.targetSdkVersion = 26
+    ext.targetSdkVersion = 27
 
     ext.gradlePluginVersion = '3.0.1'
-    ext.kotlinVersion = '1.2.31'
+    ext.kotlinVersion = '1.2.41'
 
     ext.playServicesVersion = '11.0.0'
 
@@ -37,6 +37,8 @@ buildscript {
     ext.ankoCommonVersion = '0.9.1'
 
     ext.gradleVersionsPluginVersion = '0.17.0'
+
+    ext.multiDexVersion = '1.0.3'
 
     repositories {
         google()
