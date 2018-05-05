@@ -103,6 +103,6 @@ abstract class SearchViewModel : RxAwareViewModel() {
     }
 
     protected fun suggestionClickedInternally(suggestion: SuggestionViewModel) {
-        submitQueryInternally(suggestion.word)
+        submitQueryInternally(suggestion.word.toString())
     }
 }

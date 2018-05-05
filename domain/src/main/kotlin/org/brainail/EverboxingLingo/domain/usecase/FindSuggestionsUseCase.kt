@@ -12,5 +12,5 @@ class FindSuggestionsUseCase @Inject constructor(
 
     fun execute(query: String): Single<List<Suggestion>> = suggestionsRepository.getSuggestions(query)
             .onErrorReturn { emptyList() }
-            .compose(rxExecutor.applySingleSchedulers())
+            .compose(rxExecutor.applySingleBackgroundSchedulers())
 }

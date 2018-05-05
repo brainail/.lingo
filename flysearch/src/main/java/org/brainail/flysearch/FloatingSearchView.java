@@ -440,7 +440,7 @@ public class FloatingSearchView extends FrameLayout {
                 mBackgroundDrawable.setAlpha(value);
             });
         }
-        
+
         mCurrentBackgroundAnimator.setDuration(enter ? DEFAULT_DURATION_ENTER : DEFAULT_DURATION_EXIT);
         mCurrentBackgroundAnimator.setInterpolator(enter ? DECELERATE : ACCELERATE);
         mCurrentBackgroundAnimator.start();
@@ -451,8 +451,8 @@ public class FloatingSearchView extends FrameLayout {
                 mCurrentIconAnimator.cancel();
             }
             mCurrentIconAnimator = ObjectAnimator.ofFloat(icon, "progress", enter ? 1 : 0);
-            mCurrentIconAnimator.setDuration(mCurrentBackgroundAnimator.getDuration());
-            mCurrentIconAnimator.setInterpolator(mCurrentBackgroundAnimator.getInterpolator());
+            mCurrentIconAnimator.setDuration(enter ? DEFAULT_DURATION_ENTER : DEFAULT_DURATION_EXIT);
+            mCurrentIconAnimator.setInterpolator(enter ? DECELERATE : ACCELERATE);
             mCurrentIconAnimator.start();
         }
     }

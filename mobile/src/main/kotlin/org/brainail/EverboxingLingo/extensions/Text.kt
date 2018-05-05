@@ -1,11 +1,9 @@
 @file:JvmName("TextUtils")
+@file:Suppress("NOTHING_TO_INLINE")
 
 package org.brainail.EverboxingLingo.extensions
 
-import android.text.Editable
-
 const val EMPTY_TEXT = ""
 
-fun Editable.strim() = toString().trim()
-fun CharSequence.strim() = toString().trim()
+inline fun Char.compareCaselessTo(other: Char) = toLowerCase() == other.toLowerCase()
 

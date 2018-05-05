@@ -42,7 +42,7 @@
         app:fsv_menu="@menu/menu_lingo_search"
         app:layout_behavior="org.brainail.EverboxingLingo.util.SearchViewBehavior"
         app:logo="@drawable/ic_search_logo"
-        app:theme="@style/FloatingSearchViewTheme"/>
+        app:theme="@style/floatingSearchView"/>
 
     <com.ashokvarma.bottomnavigation.BottomNavigationBar
         android:id="@+id/bottomNavigationBarView"

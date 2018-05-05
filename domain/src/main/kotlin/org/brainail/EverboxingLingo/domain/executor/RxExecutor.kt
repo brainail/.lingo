@@ -20,4 +20,8 @@ class RxExecutor(
     fun <T> applySingleSchedulers(): SingleTransformer<T, T> = SingleTransformer {
         it.subscribeOn(backgroundScheduler).observeOn(mainScheduler)
     }
+
+    fun <T> applySingleBackgroundSchedulers(): SingleTransformer<T, T> = SingleTransformer {
+        it.subscribeOn(backgroundScheduler).observeOn(backgroundScheduler)
+    }
 }

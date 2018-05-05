@@ -7,4 +7,6 @@
     <color name="tab_explore">@color/material_pink_400</color>
     <color name="tab_favorite">@color/material_red_400</color>
     <color name="tab_history">@color/material_brown_400</color>
+
+    <color name="elastic_search_highlighter">@color/material_green_700</color>
 </resources>

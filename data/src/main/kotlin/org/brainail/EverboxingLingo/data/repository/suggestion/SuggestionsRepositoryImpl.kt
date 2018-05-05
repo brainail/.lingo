@@ -39,7 +39,7 @@ class SuggestionsRepositoryImpl @Inject constructor(
                 }
                 .map { list ->
                     list.map { listItem ->
-                        suggestionMapper.mapFromEntity(listItem)
+                        suggestionMapper.mapFromEntity(listItem).copy(highlights = query)
                     }
                 }
     }

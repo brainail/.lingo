@@ -1,3 +1,5 @@
+@file:JvmName("KeyboardUtils")
+
 package org.brainail.EverboxingLingo.extensions
 
 import android.app.Activity

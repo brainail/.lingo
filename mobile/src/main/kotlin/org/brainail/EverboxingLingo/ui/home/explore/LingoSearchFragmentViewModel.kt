@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
+import org.brainail.EverboxingLingo.domain.executor.RxExecutor
 import org.brainail.EverboxingLingo.domain.model.Suggestion
 import org.brainail.EverboxingLingo.domain.usecase.FindSuggestionsUseCase
 import org.brainail.EverboxingLingo.mapper.SuggestionViewModelMapper
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class LingoSearchFragmentViewModel @Inject constructor(
         private val findSuggestionsUseCase: FindSuggestionsUseCase,
-        private val suggestionViewModelMapper: SuggestionViewModelMapper) : RxAwareViewModel() {
+        private val suggestionViewModelMapper: SuggestionViewModelMapper,
+        private val rxExecutor: RxExecutor) : RxAwareViewModel() {
 
     private val searchSuggestionsSubject: PublishSubject<String> by lazy {
         val subject = PublishSubject.create<String>()
@@ -34,11 +36,9 @@ class LingoSearchFragmentViewModel @Inject constructor(
                 .debounce(700, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .switchMap { findSuggestions(it) }
-                .subscribe({
-                    presentSuggestions.value = it.map {
-                        suggestionViewModelMapper.mapToViewModel(it)
-                    }
-                })
+                .map { it.map { suggestionViewModelMapper.mapToViewModel(it) } }
+                .observeOn(rxExecutor.mainScheduler)
+                .subscribe({ presentSuggestions.value = it })
     }
 
     private fun findSuggestions(query: String): Observable<List<Suggestion>> {
@@ -51,5 +51,4 @@ class LingoSearchFragmentViewModel @Inject constructor(
     fun searchSuggestions(query: String) {
         searchSuggestionsSubject.onNext(query)
     }
-
 }
