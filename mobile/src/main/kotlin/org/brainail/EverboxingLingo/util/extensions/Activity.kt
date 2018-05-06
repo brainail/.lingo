@@ -1,6 +1,6 @@
 @file:JvmName("ActivityUtils")
 
-package org.brainail.EverboxingLingo.extensions
+package org.brainail.EverboxingLingo.util.extensions
 
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity

@@ -2,7 +2,7 @@ package org.brainail.EverboxingLingo.ui.home
 
 import android.support.v7.app.AppCompatActivity
 import org.brainail.EverboxingLingo.R
-import org.brainail.EverboxingLingo.extensions.openFragment
+import org.brainail.EverboxingLingo.util.extensions.openFragment
 import org.brainail.EverboxingLingo.navigator.Intents
 import org.brainail.EverboxingLingo.navigator.SceneNavigator
 import org.brainail.EverboxingLingo.ui.home.explore.LingoSearchFragment

@@ -1,6 +1,6 @@
-package org.brainail.EverboxingLingo.internalparcel
+package org.brainail.EverboxingLingo.util.paperParcel
 
-import org.brainail.EverboxingLingo.internalparcel.adapter.StubParcelableAdapter
+import org.brainail.EverboxingLingo.util.paperParcel.adapter.StubParcelableAdapter
 import paperparcel.Adapter
 import paperparcel.ProcessorConfig
 

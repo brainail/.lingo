@@ -1,9 +1,11 @@
 package org.brainail.EverboxingLingo.ui.home
 
 import android.arch.lifecycle.LiveData
-import org.brainail.EverboxingLingo.model.SuggestionViewModel
+import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.ui.ViewModelSavedState
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewModel
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
 import javax.inject.Inject
 
@@ -89,7 +91,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
         handleTextToSpeechResultInternally(result)
     }
 
-    fun suggestionClicked(suggestion: SuggestionViewModel) {
+    fun suggestionClicked(suggestion: SuggestionModel) {
         suggestionClickedInternally(suggestion)
     }
     // endregion

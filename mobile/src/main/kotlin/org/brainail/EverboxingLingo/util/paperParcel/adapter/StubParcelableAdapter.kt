@@ -1,7 +1,7 @@
-package org.brainail.EverboxingLingo.internalparcel.adapter
+package org.brainail.EverboxingLingo.util.paperParcel.adapter
 
 import android.os.Parcel
-import org.brainail.EverboxingLingo.internalparcel.StubParcelable
+import org.brainail.EverboxingLingo.util.paperParcel.StubParcelable
 import paperparcel.TypeAdapter
 
 class StubParcelableAdapter<T : StubParcelable> : TypeAdapter<T?> {

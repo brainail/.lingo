@@ -7,7 +7,7 @@ import android.text.style.ForegroundColorSpan
 import androidx.core.text.set
 import androidx.core.text.toSpannable
 import org.brainail.EverboxingLingo.R
-import org.brainail.EverboxingLingo.extensions.compareCaselessTo
+import org.brainail.EverboxingLingo.util.extensions.compareCaselessTo
 import javax.inject.Inject
 
 class ElasticSearchHighlighter @Inject constructor(private val context: Context) {

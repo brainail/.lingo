@@ -9,15 +9,15 @@ import androidx.core.view.isVisible
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_suggestion.*
 import org.brainail.EverboxingLingo.R
-import org.brainail.EverboxingLingo.extensions.inflate
-import org.brainail.EverboxingLingo.model.SuggestionViewModel
+import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.ui.home.LingoSearchSuggestionsAdapter.SuggestionViewHolder
+import org.brainail.EverboxingLingo.util.extensions.inflate
 
 class LingoSearchSuggestionsAdapter(private val suggestionClickListener: SuggestionClickListener)
-    : ListAdapter<SuggestionViewModel, SuggestionViewHolder>(diffCallback) {
+    : ListAdapter<SuggestionModel, SuggestionViewHolder>(diffCallback) {
 
     interface SuggestionClickListener {
-        fun onSuggestionClick(item: SuggestionViewModel)
+        fun onSuggestionClick(item: SuggestionModel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionViewHolder {
@@ -32,9 +32,9 @@ class LingoSearchSuggestionsAdapter(private val suggestionClickListener: Suggest
     inner class SuggestionViewHolder(override val containerView: View)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        private lateinit var suggestionItem: SuggestionViewModel
+        private lateinit var suggestionItem: SuggestionModel
 
-        fun bindTo(item: SuggestionViewModel) {
+        fun bindTo(item: SuggestionModel) {
             suggestionItem = item
             suggestionItemText.text = item.word
             suggestionItemDescription.text = item.description
@@ -44,11 +44,11 @@ class LingoSearchSuggestionsAdapter(private val suggestionClickListener: Suggest
     }
 
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<SuggestionViewModel>() {
-            override fun areItemsTheSame(oldItem: SuggestionViewModel, newItem: SuggestionViewModel): Boolean =
+        private val diffCallback = object : DiffUtil.ItemCallback<SuggestionModel>() {
+            override fun areItemsTheSame(oldItem: SuggestionModel, newItem: SuggestionModel): Boolean =
                     false
 
-            override fun areContentsTheSame(oldItem: SuggestionViewModel, newItem: SuggestionViewModel): Boolean =
+            override fun areContentsTheSame(oldItem: SuggestionModel, newItem: SuggestionModel): Boolean =
                     oldItem == newItem
         }
     }

@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_lingo_search.*
 import org.brainail.EverboxingLingo.R
-import org.brainail.EverboxingLingo.extensions.reObserve
-import org.brainail.EverboxingLingo.model.SuggestionViewModel
+import org.brainail.EverboxingLingo.util.extensions.reObserve
+import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.ui.ParcelableViewModelAwareFragment
-import org.brainail.EverboxingLingo.ui.home.SearchViewModel
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewModel
 import org.brainail.EverboxingLingo.util.NavigableBack
 import org.jetbrains.anko.toast
 
@@ -27,7 +27,7 @@ class LingoSearchFragment : ParcelableViewModelAwareFragment<LingoSearchFragment
         viewModel.searchSuggestions(it!!)
     }
 
-    private val presentSuggestionsObserver = Observer<List<SuggestionViewModel>> {
+    private val presentSuggestionsObserver = Observer<List<SuggestionModel>> {
         searchViewModel.suggestionsPrepared(it!!)
     }
 

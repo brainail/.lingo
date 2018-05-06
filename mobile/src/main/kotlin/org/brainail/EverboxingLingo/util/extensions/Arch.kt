@@ -1,4 +1,4 @@
-package org.brainail.EverboxingLingo.extensions
+package org.brainail.EverboxingLingo.util.extensions
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData

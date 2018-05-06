@@ -15,14 +15,16 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.mapper.TextToSpeechResultMapper
-import org.brainail.EverboxingLingo.model.SuggestionViewModel
+import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.ui.ParcelableViewModelAwareActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationTabItem
 import org.brainail.EverboxingLingo.ui.home.LingoSearchSuggestionsAdapter.SuggestionClickListener
-import org.brainail.EverboxingLingo.ui.home.SearchViewModel.SearchNavigationItem
-import org.brainail.EverboxingLingo.ui.home.SearchViewState.CursorPosition
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewModel
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewModel.SearchNavigationItem
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.CursorPosition
 import org.brainail.EverboxingLingo.util.TextWatcherAdapter
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
@@ -70,10 +72,12 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
 
         // icons
         floatingSearchView.showSearchLogo(viewState.isLogoDisplayed)
-        showClearButton(viewState.isClearAvailable)
-        showSearchProgress(viewState.displayLoading)
-        showTextToSpeechIcon(viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech())
+        floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = viewState.isClearAvailable
+        floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = viewState.displayLoading
+        floatingSearchView.menu.findItem(R.id.menu_tts)?.isVisible =
+                viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech()
 
+        // items
         (floatingSearchView.adapter as LingoSearchSuggestionsAdapter).submitList(viewState.displayedSuggestions)
 
         // scroll behavior
@@ -129,12 +133,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
             icon = DrawerArrowDrawable(this@LingoHomeActivity)
             setOnIconClickListener { viewModel.navigationIconClicked() }
             setOnSearchListener { query -> viewModel.submitQuery(query.toString()) }
-            setOnSearchFocusChangedListener { focused ->
-                viewModel.requestFocusGain(focused)
-                if (focused) {
-                    this@LingoHomeActivity.appBarView.setExpanded(true, true)
-                }
-            }
+            setOnSearchFocusChangedListener { viewModel.requestFocusGain(it) }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.menu_clear -> viewModel.clearIconClicked()
@@ -151,19 +150,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         }
     }
 
-    private fun showSearchProgress(shouldShow: Boolean) {
-        floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = shouldShow
-    }
-
-    private fun showTextToSpeechIcon(shouldShow: Boolean) {
-        floatingSearchView.menu.findItem(R.id.menu_tts)?.isVisible = shouldShow
-    }
-
-    private fun showClearButton(shouldShow: Boolean) {
-        floatingSearchView.menu.findItem(R.id.menu_clear)?.isVisible = shouldShow
-    }
-
-    override fun onSuggestionClick(item: SuggestionViewModel) {
+    override fun onSuggestionClick(item: SuggestionModel) {
         L.i("onSuggestionClick: $item")
         viewModel.suggestionClicked(item)
     }

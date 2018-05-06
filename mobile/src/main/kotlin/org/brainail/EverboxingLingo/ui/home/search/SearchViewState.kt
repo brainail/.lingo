@@ -1,7 +1,7 @@
-package org.brainail.EverboxingLingo.ui.home
+package org.brainail.EverboxingLingo.ui.home.search
 
-import org.brainail.EverboxingLingo.extensions.EMPTY_TEXT
-import org.brainail.EverboxingLingo.model.SuggestionViewModel
+import org.brainail.EverboxingLingo.util.extensions.EMPTY_TEXT
+import org.brainail.EverboxingLingo.model.SuggestionModel
 
 data class SearchViewState(
         val isInFocus: Boolean = false,
@@ -11,7 +11,7 @@ data class SearchViewState(
         val isTextToSpeechAvailable: Boolean = false,
         val isLogoDisplayed: Boolean = false,
         private val isLoadingSuggestions: Boolean = false,
-        val displayedSuggestions: List<SuggestionViewModel> = emptyList()) {
+        val displayedSuggestions: List<SuggestionModel> = emptyList()) {
 
     val displayLoading = isInFocus && isLoadingSuggestions
 

@@ -1,12 +1,12 @@
-package org.brainail.EverboxingLingo.ui.home
+package org.brainail.EverboxingLingo.ui.home.search
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import org.brainail.EverboxingLingo.extensions.EMPTY_TEXT
-import org.brainail.EverboxingLingo.model.SuggestionViewModel
+import org.brainail.EverboxingLingo.util.extensions.EMPTY_TEXT
+import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.ui.RxAwareViewModel
-import org.brainail.EverboxingLingo.ui.home.SearchViewState.CursorPosition
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.CursorPosition
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
 
 
@@ -34,7 +34,7 @@ abstract class SearchViewModel : RxAwareViewModel() {
                 isLoadingSuggestions = viewState.isInFocus)
     }
 
-    fun suggestionsPrepared(suggestions: List<SuggestionViewModel>) {
+    fun suggestionsPrepared(suggestions: List<SuggestionModel>) {
         searchViewState.value = searchViewState.value!!.copy(
                 isLoadingSuggestions = false,
                 displayedSuggestions = suggestions)
@@ -102,7 +102,7 @@ abstract class SearchViewModel : RxAwareViewModel() {
         }
     }
 
-    protected fun suggestionClickedInternally(suggestion: SuggestionViewModel) {
+    protected fun suggestionClickedInternally(suggestion: SuggestionModel) {
         submitQueryInternally(suggestion.word.toString())
     }
 }

@@ -1,6 +1,6 @@
 @file:JvmName("ContextUtils")
 
-package org.brainail.EverboxingLingo.extensions
+package org.brainail.EverboxingLingo.util.extensions
 
 import android.content.Context
 import org.brainail.EverboxingLingo.App

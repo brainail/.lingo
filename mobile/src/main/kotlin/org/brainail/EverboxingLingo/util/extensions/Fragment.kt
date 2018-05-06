@@ -1,6 +1,6 @@
 @file:JvmName("FragmentUtils")
 
-package org.brainail.EverboxingLingo.extensions
+package org.brainail.EverboxingLingo.util.extensions
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction

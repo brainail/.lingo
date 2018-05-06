@@ -1,6 +1,6 @@
 @file:JvmName("ViewGroupUtils")
 
-package org.brainail.EverboxingLingo.extensions
+package org.brainail.EverboxingLingo.util.extensions
 
 import android.view.LayoutInflater
 import android.view.View
