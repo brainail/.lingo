@@ -1,7 +1,7 @@
 package org.brainail.EverboxingLingo.ui.home.search
 
-import org.brainail.EverboxingLingo.util.extensions.EMPTY_TEXT
 import org.brainail.EverboxingLingo.model.SuggestionModel
+import org.brainail.EverboxingLingo.util.extensions.EMPTY_TEXT
 
 data class SearchViewState(
         val isInFocus: Boolean = false,
@@ -29,13 +29,9 @@ data class SearchViewState(
     }
 
     enum class CursorPosition {
-        /**
-         * Move to the end
-         */
+        /** Move to the end */
         END,
-        /**
-         * Keep it as it is
-         */
+        /** Keep it as it is */
         KEEP
     }
 }

@@ -9,7 +9,7 @@ import org.brainail.EverboxingLingo.App
 import org.brainail.EverboxingLingo.AppNavigator
 import org.brainail.EverboxingLingo.domain.event.EventBus
 import org.brainail.EverboxingLingo.domain.event.GlobalEvents
-import org.brainail.EverboxingLingo.ui.AppLifecycleObserver
+import org.brainail.EverboxingLingo.ui.base.AppLifecycleObserver
 import org.brainail.EverboxingLingo.util.AndroidLogTree
 import org.brainail.EverboxingLingo.util.log.EventBusLogger
 import org.brainail.logger.L

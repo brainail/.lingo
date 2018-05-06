@@ -1,11 +1,11 @@
-package org.brainail.EverboxingLingo.ui
+package org.brainail.EverboxingLingo.ui.base
 
 import android.os.Bundle
 
-abstract class ParcelableViewModelAwareActivity<VM : BaseViewModel> : ViewModelAwareActivity<VM>() {
+abstract class ParcelableViewModelAwareFragment<VM : BaseViewModel> : ViewModelAwareFragment<VM>() {
 
-    private companion object {
-        const val KEY_VIEW_MODEL_STATE = "view_model_state"
+    companion object {
+        const val KEY_VIEW_MODEL_STATE = "ParcelableViewModelAwareFragment.ViewModelState.Key"
     }
 
     override fun getViewModelStateFromBundle(bundle: Bundle?): ViewModelSavedState? {

@@ -2,13 +2,18 @@ package org.brainail.EverboxingLingo.ui.home.search
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import org.brainail.EverboxingLingo.util.extensions.EMPTY_TEXT
 import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
-import org.brainail.EverboxingLingo.ui.RxAwareViewModel
-import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.CursorPosition
+import org.brainail.EverboxingLingo.ui.base.RxAwareViewModel
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.ClearIconClicked
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.NavigationIconClickedInFocus
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.RequestFocusGain
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SubmitQuery
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SuggestionsPrepared
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SuggestionsStartedLoading
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.TextToSpeechResultSuccess
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.UpdateQuery
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
-
 
 abstract class SearchViewModel : RxAwareViewModel() {
 
@@ -29,80 +34,53 @@ abstract class SearchViewModel : RxAwareViewModel() {
     fun searchResults(): LiveData<String> = searchResults
 
     fun suggestionsStartedLoading() {
-        val viewState = searchViewState.value!!
-        searchViewState.value = viewState.copy(
-                isLoadingSuggestions = viewState.isInFocus)
+        applyChanges(SuggestionsStartedLoading)
     }
 
     fun suggestionsPrepared(suggestions: List<SuggestionModel>) {
-        searchViewState.value = searchViewState.value!!.copy(
-                isLoadingSuggestions = false,
-                displayedSuggestions = suggestions)
+        applyChanges(SuggestionsPrepared(suggestions))
     }
 
-    protected fun updateQueryInternally(query: String) {
-        val viewState = searchViewState.value!!
-        val shouldSearchForSuggestions = viewState.isInFocus
-        searchViewState.value = viewState.copy(
-                displayedText = query,
-                isClearAvailable = viewState.isInFocus && query.isNotEmpty(),
-                isLogoDisplayed = !viewState.isInFocus && query.isEmpty(),
-                cursorPosition = CursorPosition.KEEP)
-        if (shouldSearchForSuggestions) {
+    fun updateQuery(query: String) {
+        applyChanges(UpdateQuery(query)).takeIf { it.isInFocus }?.run {
             searchSuggestions.value = query.trim()
         }
     }
 
-    protected fun submitQueryInternally(query: String) {
-        searchViewState.value = searchViewState.value!!.copy(
-                isInFocus = false,
-                cursorPosition = CursorPosition.KEEP)
+    fun submitQuery(query: String) {
+        applyChanges(SubmitQuery(query))
         searchResults.value = query.trim()
     }
 
-    protected fun requestFocusGainInternally(isInFocus: Boolean) {
-        val viewState = searchViewState.value!!
-        val suggestionsQuery = viewState.displayedText
-        searchViewState.value = viewState.copy(
-                isInFocus = isInFocus,
-                isClearAvailable = isInFocus && viewState.displayedText.isNotEmpty(),
-                isLogoDisplayed = !isInFocus && viewState.displayedText.isEmpty(),
-                cursorPosition = CursorPosition.KEEP)
-        if (isInFocus) {
-            searchSuggestions.value = suggestionsQuery
+    fun requestFocusGain(isInFocus: Boolean) {
+        applyChanges(RequestFocusGain(isInFocus)).takeIf { it.isInFocus }?.run {
+            searchSuggestions.value = displayedText
         }
     }
 
-    protected fun navigationIconClickedInternally() {
-        val viewState = searchViewState.value!!
-        when (viewState.isInFocus) {
-            true -> searchViewState.value = viewState.copy(
-                    isInFocus = false,
-                    cursorPosition = CursorPosition.KEEP)
+    fun navigationIconClicked() {
+        when (searchViewState.value!!.isInFocus) {
+            true -> applyChanges(NavigationIconClickedInFocus)
             else -> searchNavigation.value = SearchNavigationItem.DRAWER
         }
     }
 
-    protected fun clearIconClickedInternally() {
-        searchViewState.value = searchViewState.value!!.copy(
-                displayedText = EMPTY_TEXT,
-                cursorPosition = CursorPosition.KEEP)
+    fun clearIconClicked() {
+        applyChanges(ClearIconClicked)
     }
 
-    protected fun textToSpeechIconClickedInternally() {
+    fun textToSpeechIconClicked() {
         searchNavigation.value = SearchNavigationItem.TEXT_TO_SPEECH
     }
 
-    protected fun handleTextToSpeechResultInternally(result: TextToSpeechResult) {
-        if (result is TextToSpeechResult.Successful) {
-            searchViewState.value = searchViewState.value!!.copy(
-                    isInFocus = true,
-                    displayedText = result.text,
-                    cursorPosition = CursorPosition.END)
+    fun handleTextToSpeechResult(result: TextToSpeechResult) {
+        when (result) {
+            is TextToSpeechResult.Successful -> applyChanges(TextToSpeechResultSuccess(result))
         }
     }
 
-    protected fun suggestionClickedInternally(suggestion: SuggestionModel) {
-        submitQueryInternally(suggestion.word.toString())
+    private fun applyChanges(partialViewStateChanges: PartialViewStateChanges): SearchViewState {
+        searchViewState.value = partialViewStateChanges.applyTo(searchViewState.value!!)
+        return searchViewState.value!!
     }
 }

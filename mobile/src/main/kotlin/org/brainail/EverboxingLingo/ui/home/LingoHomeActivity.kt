@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.mapper.TextToSpeechResultMapper
 import org.brainail.EverboxingLingo.model.SuggestionModel
-import org.brainail.EverboxingLingo.ui.ParcelableViewModelAwareActivity
+import org.brainail.EverboxingLingo.ui.base.ParcelableViewModelAwareActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationTabItem
@@ -72,7 +72,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
 
         // icons
         floatingSearchView.showSearchLogo(viewState.isLogoDisplayed)
-        floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = viewState.isClearAvailable
+        floatingSearchView.menu.findItem(R.id.menu_clear)?.isVisible = viewState.isClearAvailable
         floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = viewState.displayLoading
         floatingSearchView.menu.findItem(R.id.menu_tts)?.isVisible =
                 viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech()
@@ -203,5 +203,4 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
     }
 
     override fun viewModelType() = LingoHomeActivityViewModel::class.java
-
 }

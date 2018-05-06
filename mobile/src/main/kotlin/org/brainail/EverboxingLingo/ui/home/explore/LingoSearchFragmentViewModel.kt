@@ -9,7 +9,7 @@ import org.brainail.EverboxingLingo.domain.model.Suggestion
 import org.brainail.EverboxingLingo.domain.usecase.FindSuggestionsUseCase
 import org.brainail.EverboxingLingo.mapper.SuggestionModelMapper
 import org.brainail.EverboxingLingo.model.SuggestionModel
-import org.brainail.EverboxingLingo.ui.RxAwareViewModel
+import org.brainail.EverboxingLingo.ui.base.RxAwareViewModel
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

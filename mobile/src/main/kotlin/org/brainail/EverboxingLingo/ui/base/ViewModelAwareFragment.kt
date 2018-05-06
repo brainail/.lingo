@@ -1,4 +1,4 @@
-package org.brainail.EverboxingLingo.ui
+package org.brainail.EverboxingLingo.ui.base
 
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders

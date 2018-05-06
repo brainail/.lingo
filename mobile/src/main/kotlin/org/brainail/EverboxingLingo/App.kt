@@ -6,7 +6,7 @@ import android.support.multidex.MultiDex
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import org.brainail.EverboxingLingo.di.DaggerAppComponent
-import org.brainail.EverboxingLingo.ui.AppLifecycleObserver
+import org.brainail.EverboxingLingo.ui.base.AppLifecycleObserver
 import org.brainail.logger.L
 import javax.inject.Inject
 

@@ -2,8 +2,7 @@ package org.brainail.EverboxingLingo.ui.home
 
 import android.arch.lifecycle.LiveData
 import org.brainail.EverboxingLingo.model.SuggestionModel
-import org.brainail.EverboxingLingo.model.TextToSpeechResult
-import org.brainail.EverboxingLingo.ui.ViewModelSavedState
+import org.brainail.EverboxingLingo.ui.base.ViewModelSavedState
 import org.brainail.EverboxingLingo.ui.home.search.SearchViewModel
 import org.brainail.EverboxingLingo.ui.home.search.SearchViewState
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
@@ -62,42 +61,11 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
         navigation.value = navigationItem
     }
 
-    // region search view model proxy
-    fun updateQuery(query: String) {
-        updateQueryInternally(query)
-    }
-
-    fun submitQuery(query: String) {
-        submitQueryInternally(query)
-    }
-
-    fun requestFocusGain(isInFocus: Boolean) {
-        requestFocusGainInternally(isInFocus)
-    }
-
-    fun navigationIconClicked() {
-        navigationIconClickedInternally()
-    }
-
-    fun clearIconClicked() {
-        clearIconClickedInternally()
-    }
-
-    fun textToSpeechIconClicked() {
-        textToSpeechIconClickedInternally()
-    }
-
-    fun handleTextToSpeechResult(result: TextToSpeechResult) {
-        handleTextToSpeechResultInternally(result)
-    }
-
     fun suggestionClicked(suggestion: SuggestionModel) {
-        suggestionClickedInternally(suggestion)
+        submitQuery(suggestion.word.toString())
     }
-    // endregion
 
     private companion object {
         const val KEY_NAVIGATION_TAB_STATE = "navigation_tab_state"
     }
-
 }
