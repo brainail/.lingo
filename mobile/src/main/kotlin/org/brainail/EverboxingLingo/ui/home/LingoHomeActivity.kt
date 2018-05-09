@@ -8,6 +8,7 @@ import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
 import android.support.v4.content.ContextCompat
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.graphics.drawable.DrawerArrowDrawable
 import android.text.Editable
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
@@ -97,11 +98,14 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
 
     private fun initNavigation() {
         bottomNavigationBarView
-                .addItem(BottomNavigationItem(R.drawable.ic_translate_24dp, R.string.tab_explore)
+                .addItem(BottomNavigationItem(
+                        AppCompatResources.getDrawable(this, R.drawable.ic_translate_24dp), R.string.tab_explore)
                         .setActiveColor(ContextCompat.getColor(this, R.color.tab_explore)))
-                .addItem(BottomNavigationItem(R.drawable.ic_favorite_24dp, R.string.tab_favourite)
+                .addItem(BottomNavigationItem(
+                        AppCompatResources.getDrawable(this, R.drawable.ic_favorite_24dp), R.string.tab_favourite)
                         .setActiveColor(ContextCompat.getColor(this, R.color.tab_favorite)))
-                .addItem(BottomNavigationItem(R.drawable.ic_history_24dp, R.string.tab_history)
+                .addItem(BottomNavigationItem(
+                        AppCompatResources.getDrawable(this, R.drawable.ic_history_24dp), R.string.tab_history)
                         .setActiveColor(ContextCompat.getColor(this, R.color.tab_history)))
                 .initialise()
 
