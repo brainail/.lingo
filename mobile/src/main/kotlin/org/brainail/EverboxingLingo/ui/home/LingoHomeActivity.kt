@@ -110,15 +110,17 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
                 .initialise()
 
         bottomNavigationBarView.setTabSelectedListener(object: BottomNavigationBar.OnTabSelectedListener {
-            override fun onTabReselected(position: Int) {
-                // No-impl
-            }
+            override fun onTabUnselected(position: Int) { /* No-impl */ }
 
-            override fun onTabUnselected(position: Int) {
-                // No-impl
+            override fun onTabReselected(position: Int) {
+                selectTab(position)
             }
 
             override fun onTabSelected(position: Int) {
+                selectTab(position)
+            }
+
+            private fun selectTab(position: Int) {
                 when (position) {
                     0 -> viewModel.navigateTabTo(NavigationTabItem.EXPLORE)
                     1 -> viewModel.navigateTabTo(NavigationTabItem.FAVOURITE)
@@ -163,6 +165,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         L.v("navigateTo: navigationItem = $navigationItem")
         when (navigationItem) {
             NavigationItem.BACKWARD -> navigator.goBack()
+            NavigationItem.SCROLL_TO_TOP -> navigator.scrollToTop()
         }
     }
 

@@ -16,7 +16,7 @@ class SuggestionCacheImpl @Inject constructor(
 
     override fun saveSuggestions(suggestions: List<SuggestionEntity>): Completable {
         return Completable.defer {
-            // daos...
+            // ninja
             Completable.complete()
         }
     }

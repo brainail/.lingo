@@ -1,6 +1,7 @@
 package org.brainail.EverboxingLingo.domain.executor
 
 import io.reactivex.CompletableTransformer
+import io.reactivex.FlowableTransformer
 import io.reactivex.ObservableTransformer
 import io.reactivex.Scheduler
 import io.reactivex.SingleTransformer
@@ -22,6 +23,10 @@ class RxExecutor(
     }
 
     fun <T> applySingleBackgroundSchedulers(): SingleTransformer<T, T> = SingleTransformer {
+        it.subscribeOn(backgroundScheduler).observeOn(backgroundScheduler)
+    }
+
+    fun <T> applyFlowableBackgroundSchedulers(): FlowableTransformer<T, T> = FlowableTransformer {
         it.subscribeOn(backgroundScheduler).observeOn(backgroundScheduler)
     }
 }

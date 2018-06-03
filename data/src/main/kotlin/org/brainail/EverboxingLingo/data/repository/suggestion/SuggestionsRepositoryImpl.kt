@@ -23,10 +23,6 @@ class SuggestionsRepositoryImpl @Inject constructor(
         return saveSuggestionEntities(suggestionEntities)
     }
 
-    private fun saveSuggestionEntities(suggestions: List<SuggestionEntity>): Completable {
-        return dataSourceFactory.obtainCacheDataSource().saveSuggestions(suggestions)
-    }
-
     override fun getSuggestions(query: String): Single<List<Suggestion>> {
         val dataSource = dataSourceFactory.obtainDataSource()
         return dataSource.getSuggestions(query)
@@ -42,5 +38,9 @@ class SuggestionsRepositoryImpl @Inject constructor(
                         suggestionMapper.mapFromEntity(listItem).copy(highlights = query)
                     }
                 }
+    }
+
+    private fun saveSuggestionEntities(suggestions: List<SuggestionEntity>): Completable {
+        return dataSourceFactory.obtainCacheDataSource().saveSuggestions(suggestions)
     }
 }

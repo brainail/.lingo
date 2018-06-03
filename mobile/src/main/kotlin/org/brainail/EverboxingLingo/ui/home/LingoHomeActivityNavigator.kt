@@ -2,11 +2,12 @@ package org.brainail.EverboxingLingo.ui.home
 
 import android.support.v7.app.AppCompatActivity
 import org.brainail.EverboxingLingo.R
-import org.brainail.EverboxingLingo.util.extensions.openFragment
 import org.brainail.EverboxingLingo.navigator.Intents
 import org.brainail.EverboxingLingo.navigator.SceneNavigator
 import org.brainail.EverboxingLingo.ui.home.explore.LingoSearchFragment
 import org.brainail.EverboxingLingo.util.NavigableBack
+import org.brainail.EverboxingLingo.util.ScrollablePage
+import org.brainail.EverboxingLingo.util.extensions.openFragment
 
 class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(activity) {
     fun closeScreen() {
@@ -31,6 +32,11 @@ class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(a
         if ((fragment as? NavigableBack)?.goBack() == false) {
             closeScreen()
         }
+    }
+
+    fun scrollToTop() {
+        val fragment = activity.supportFragmentManager.findFragmentById(R.id.containerView)
+        (fragment as? ScrollablePage)?.scrollToTop()
     }
 
     companion object {

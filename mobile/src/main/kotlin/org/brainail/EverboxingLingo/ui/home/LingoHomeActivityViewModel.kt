@@ -11,7 +11,7 @@ import javax.inject.Inject
 class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
 
     enum class NavigationItem {
-        BACKWARD
+        BACKWARD, SCROLL_TO_TOP
     }
 
     enum class NavigationTabItem {
@@ -42,9 +42,10 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
 
     fun navigateTabTo(navigationTabItem: NavigationTabItem) {
         if (searchViewState.value!!.isInFocus) {
-            if (navigation.value != navigationTabItem) {
-                requestFocusGain(false)
-            }
+            requestFocusGain(false)
+        } else if (navigationTab.value == navigationTabItem) {
+            navigation.value = NavigationItem.SCROLL_TO_TOP
+            return
         }
 
         navigationTab.value = navigationTabItem
