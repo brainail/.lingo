@@ -1,5 +1,6 @@
 package org.brainail.EverboxingLingo.ui.home.search
 
+import org.brainail.EverboxingLingo.model.SearchResultModel
 import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.util.extensions.EMPTY_TEXT
 
@@ -11,7 +12,9 @@ data class SearchViewState(
         val isTextToSpeechAvailable: Boolean = false,
         val isLogoDisplayed: Boolean = false,
         private val isLoadingSuggestions: Boolean = false,
-        val displayedSuggestions: List<SuggestionModel> = emptyList()) {
+        val isLoadingSearchResults: Boolean = false,
+        val displayedSuggestions: List<SuggestionModel> = emptyList(),
+        val displayedSearchResults: List<SearchResultModel> = emptyList()) {
 
     val displayLoading = isInFocus && isLoadingSuggestions
 
@@ -24,6 +27,7 @@ data class SearchViewState(
                     isClearAvailable = false,
                     isTextToSpeechAvailable = true,
                     cursorPosition = CursorPosition.KEEP,
+                    isLoadingSearchResults = false,
                     isLoadingSuggestions = false)
         }
     }

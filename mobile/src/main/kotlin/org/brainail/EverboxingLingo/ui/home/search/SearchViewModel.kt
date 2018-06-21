@@ -2,12 +2,15 @@ package org.brainail.EverboxingLingo.ui.home.search
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import org.brainail.EverboxingLingo.model.SearchResultModel
 import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.ui.base.RxAwareViewModel
 import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.ClearIconClicked
 import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.NavigationIconClickedInFocus
 import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.RequestFocusGain
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SearchResultsPrepared
+import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SearchResultsStartedLoading
 import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SubmitQuery
 import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SuggestionsPrepared
 import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SuggestionsStartedLoading
@@ -39,6 +42,14 @@ abstract class SearchViewModel : RxAwareViewModel() {
 
     fun suggestionsPrepared(suggestions: List<SuggestionModel>) {
         applyChanges(SuggestionsPrepared(suggestions))
+    }
+
+    fun searchResultsStartedLoading() {
+        applyChanges(SearchResultsStartedLoading)
+    }
+
+    fun searchResultsPrepared(searchResults: List<SearchResultModel>) {
+        applyChanges(SearchResultsPrepared(searchResults))
     }
 
     fun updateQuery(query: String) {

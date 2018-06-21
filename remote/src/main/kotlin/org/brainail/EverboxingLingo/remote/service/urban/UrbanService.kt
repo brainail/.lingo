@@ -1,6 +1,7 @@
-package org.brainail.EverboxingLingo.remote
+package org.brainail.EverboxingLingo.remote.service.urban
 
 import io.reactivex.Single
+import org.brainail.EverboxingLingo.remote.model.UrbanSearchResultsResponse
 import org.brainail.EverboxingLingo.remote.model.UrbanSuggestionsResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,6 +13,9 @@ import retrofit2.http.Query
 interface UrbanService {
     @GET("/v0/autocomplete-extra")
     fun getSuggestions(@Query("term") term: String): Single<UrbanSuggestionsResponse>
+
+    @GET("/v0/define")
+    fun getSearchResults(@Query("term") term: String): Single<UrbanSearchResultsResponse>
 
     // https://api.urbandictionary.com/v0/define with ?term=WORD_HERE or ?defid=DEFID_HERE
     // https://api.urbandictionary.com/v0/random

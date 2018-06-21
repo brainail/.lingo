@@ -6,6 +6,7 @@ import javax.inject.Inject
 
 class SearchResultModelMapper @Inject constructor(): Mapper<SearchResult, SearchResultModel> {
     override fun mapToModel(input: SearchResult): SearchResultModel {
-        return SearchResultModel(input.id, input.word, input.definition, input.example)
+        return SearchResultModel(input.id, input.definitionId,
+                input.word, input.definition, input.example, input.link)
     }
 }

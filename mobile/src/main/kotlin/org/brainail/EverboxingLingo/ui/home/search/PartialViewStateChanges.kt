@@ -1,5 +1,6 @@
 package org.brainail.EverboxingLingo.ui.home.search
 
+import org.brainail.EverboxingLingo.model.SearchResultModel
 import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.util.extensions.EMPTY_TEXT
@@ -12,6 +13,20 @@ sealed class PartialViewStateChanges {
             return viewState.copy(
                     // only indicate progress if we are currently in focus
                     isLoadingSuggestions = viewState.isInFocus)
+        }
+    }
+
+    object SearchResultsStartedLoading: PartialViewStateChanges() {
+        override fun applyTo(viewState: SearchViewState): SearchViewState {
+            return viewState.copy(isLoadingSearchResults = true)
+        }
+    }
+
+    data class SearchResultsPrepared(private val searchResults: List<SearchResultModel>): PartialViewStateChanges() {
+        override fun applyTo(viewState: SearchViewState): SearchViewState {
+            return viewState.copy(
+                    isLoadingSearchResults = false,
+                    displayedSearchResults = searchResults)
         }
     }
 
@@ -37,6 +52,7 @@ sealed class PartialViewStateChanges {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                     isInFocus = false,
+                    displayedText = query,
                     cursorPosition = SearchViewState.CursorPosition.KEEP)
         }
     }

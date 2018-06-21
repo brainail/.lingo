@@ -210,8 +210,8 @@ public class FloatingSearchView extends FrameLayout {
     
     @SuppressLint("ClickableViewAccessibility")
     private void setupViews() {
-        mSearchContainer.setLayoutTransition(getDefaultLayoutTransition());
-        mSearchContainer.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+        // mSearchContainer.setLayoutTransition(getDefaultLayoutTransition());
+        // mSearchContainer.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         
         // mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setVisibility(View.GONE);

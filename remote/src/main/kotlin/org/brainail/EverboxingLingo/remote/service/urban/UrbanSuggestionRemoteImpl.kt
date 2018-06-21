@@ -1,4 +1,4 @@
-package org.brainail.EverboxingLingo.remote
+package org.brainail.EverboxingLingo.remote.service.urban
 
 import io.reactivex.Single
 import org.brainail.EverboxingLingo.data.model.SuggestionEntity

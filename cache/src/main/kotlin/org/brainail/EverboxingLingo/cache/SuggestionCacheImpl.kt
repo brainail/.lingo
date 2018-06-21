@@ -24,12 +24,4 @@ class SuggestionCacheImpl @Inject constructor(
     override fun getSuggestions(query: String): Single<List<SuggestionEntity>> {
         TODO("No-impl")
     }
-
-    override fun isCached(): Boolean {
-        return false
-    }
-
-    override fun isExpired(): Boolean {
-        TODO("No-impl")
-    }
 }

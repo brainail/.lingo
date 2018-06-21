@@ -5,8 +5,11 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
-import org.brainail.EverboxingLingo.App
-import org.brainail.EverboxingLingo.AppNavigator
+import org.brainail.EverboxingLingo.app.App
+import org.brainail.EverboxingLingo.app.initializers.AppInitializers
+import org.brainail.EverboxingLingo.app.initializers.AppLifecycleInitializer
+import org.brainail.EverboxingLingo.app.initializers.LoggerInitializer
+import org.brainail.EverboxingLingo.app.initializers.StethoInitializer
 import org.brainail.EverboxingLingo.domain.event.EventBus
 import org.brainail.EverboxingLingo.domain.event.GlobalEvents
 import org.brainail.EverboxingLingo.ui.base.AppLifecycleObserver
@@ -19,9 +22,7 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideApplicationContext(app: App): Context {
-        return app.applicationContext
-    }
+    fun provideApplicationContext(app: App): Context = app.applicationContext
 
     @Provides
     @Singleton
@@ -33,8 +34,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideAppLifecycleObserver(globalBus: EventBus<GlobalEvents>): AppLifecycleObserver
-            = AppLifecycleObserver(globalBus)
+    fun provideAppLifecycleObserver(globalBus: EventBus<GlobalEvents>) = AppLifecycleObserver(globalBus)
 
     @Provides
     @Singleton
@@ -42,10 +42,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideEventBusLogger(globalBus: EventBus<GlobalEvents>): EventBusLogger
-            = EventBusLogger(globalBus)
+    fun provideEventBusLogger(globalBus: EventBus<GlobalEvents>) = EventBusLogger(globalBus)
 
     @Provides
     @Singleton
-    fun provideAppNavigator(context: Context): AppNavigator = AppNavigator(context)
+    fun provideAppInitializers(
+            appLifecycleInitializer: AppLifecycleInitializer,
+            loggerInitializer: LoggerInitializer,
+            stethoInitializer: StethoInitializer) =
+            AppInitializers(appLifecycleInitializer, loggerInitializer, stethoInitializer)
 }

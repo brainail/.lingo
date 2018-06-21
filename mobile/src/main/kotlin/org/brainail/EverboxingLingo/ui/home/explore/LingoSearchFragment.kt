@@ -15,8 +15,8 @@ import org.brainail.EverboxingLingo.ui.base.ParcelableViewModelAwareFragment
 import org.brainail.EverboxingLingo.ui.home.search.SearchViewModel
 import org.brainail.EverboxingLingo.util.NavigableBack
 import org.brainail.EverboxingLingo.util.ScrollablePage
+import org.brainail.EverboxingLingo.util.extensions.inflate
 import org.brainail.EverboxingLingo.util.extensions.reObserve
-import org.brainail.logger.L
 
 class LingoSearchFragment :
         ParcelableViewModelAwareFragment<LingoSearchFragmentViewModel>(),
@@ -40,27 +40,26 @@ class LingoSearchFragment :
         searchViewModel.suggestionsStartedLoading()
     }
 
-    // TODO https://stackoverflow.com/questions/48966985/android-room-livedata-select-query-parameters
     private val presentSearchResultsObserver = Observer<List<SearchResultModel>> {
-        L.v("presentSearchResultsObserver: $it")
+        searchViewModel.searchResultsPrepared(it!!)
     }
 
     private val startSearchResultsLoadingObserver = Observer<Void> {
-        L.v("startSearchResultsLoadingObserver")
+        searchViewModel.searchResultsStartedLoading()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_lingo_search, container, false)
+        return container?.inflate(R.layout.fragment_lingo_search)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         initSearch()
     }
 
     override fun scrollToTop() {
-        (searchResultsRecyclerView.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(0, 0)
+        (searchResultsRecyclerView.layoutManager as? LinearLayoutManager)
+                ?.scrollToPositionWithOffset(0, 0)
     }
 
     private fun initSearch() {

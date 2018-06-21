@@ -16,9 +16,6 @@ class SuggestionsCacheDataSource @Inject constructor(
 
     override fun saveSuggestions(suggestions: List<SuggestionEntity>): Completable {
         return suggestionCache.saveSuggestions(suggestions)
-                .doOnComplete {
-                    // TODO: Probably update cache time
-                }
     }
 
     override fun getSuggestions(query: String): Single<List<SuggestionEntity>> {

@@ -9,7 +9,9 @@ import org.brainail.EverboxingLingo.data.source.suggestion.SuggestionsRemoteData
 import org.brainail.EverboxingLingo.domain.model.Suggestion
 import org.brainail.EverboxingLingo.domain.repository.SuggestionsRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SuggestionsRepositoryImpl @Inject constructor(
         private val dataSourceFactory: SuggestionsDataSourceFactory,
         private val suggestionMapper: SuggestionDataMapper) : SuggestionsRepository {

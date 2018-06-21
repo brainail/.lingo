@@ -16,9 +16,6 @@ class SearchResultCacheDataSource @Inject constructor(
 
     override fun saveSearchResults(searchResults: List<SearchResultEntity>): Completable {
         return searchResultCache.saveSearchResults(searchResults)
-                .doOnComplete {
-                    // TODO: Probably update cache time
-                }
     }
 
     override fun getSearchResults(query: String): Flowable<List<SearchResultEntity>> {

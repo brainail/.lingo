@@ -11,10 +11,9 @@ import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator
 class LingoHomeActivityModule {
     @Provides
     @ActivityScope
-    fun provideLingoHomeActivityNavigator(activity: LingoHomeActivity): LingoHomeActivityNavigator
-            = LingoHomeActivityNavigator(activity)
+    fun provideLingoHomeActivityNavigator(activity: LingoHomeActivity) = LingoHomeActivityNavigator(activity)
 
     @Provides
     @ActivityScope
-    internal fun provideTextToSpeechResultMapper(): TextToSpeechResultMapper = TextToSpeechResultMapper()
+    internal fun provideTextToSpeechResultMapper() = TextToSpeechResultMapper()
 }

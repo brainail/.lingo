@@ -8,6 +8,8 @@ interface SuggestionCache {
     fun clearSuggestions(): Completable
     fun saveSuggestions(suggestions: List<SuggestionEntity>): Completable
     fun getSuggestions(query: String): Single<List<SuggestionEntity>>
-    fun isCached(): Boolean
-    fun isExpired(): Boolean
+    @JvmDefault
+    fun isCached(): Boolean = false
+    @JvmDefault
+    fun isExpired(): Boolean = true
 }

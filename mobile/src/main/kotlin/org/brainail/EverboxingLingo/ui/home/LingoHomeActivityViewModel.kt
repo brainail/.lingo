@@ -30,7 +30,9 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
         super.initState(viewModelSavedState)
 
         // restore navigation
-        val savedNavigation = viewModelSavedState?.get<String>(KEY_NAVIGATION_TAB_STATE) ?: NavigationTabItem.EXPLORE.name
+        val savedNavigation = viewModelSavedState
+                ?.get<String>(KEY_NAVIGATION_TAB_STATE)
+                ?: NavigationTabItem.EXPLORE.name
         navigationTab.value = NavigationTabItem.valueOf(savedNavigation)
     }
 

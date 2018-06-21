@@ -62,7 +62,7 @@ dependencies {
 
     implementation "org.jetbrains.anko:anko-common:$ankoCommonVersion"
     implementation "com.dmitrymalkovich.android:material-design-dimens:$materialDimensVersion"
-    kapt "com.android.databinding:compiler:$gradlePluginVersion"
+    kapt "com.android.databinding:compiler:$gradlePluginVersion" // TODO: need?
 
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
@@ -78,6 +78,9 @@ dependencies {
 
     implementation "com.ashokvarma.android:bottom-navigation-bar:$bottomNavigationVersion"
 
+    implementation "com.facebook.stetho:stetho:$facebookStethoVersion"
+    implementation "com.facebook.stetho:stetho-okhttp3:$facebookStethoVersion"
+
     implementation project(':domain')
     implementation project(':data')
     implementation project(':cache')
@@ -92,7 +95,6 @@ configurations.all {
 }
 
 kapt {
-    generateStubs = true
     useBuildCache = true
 }
 

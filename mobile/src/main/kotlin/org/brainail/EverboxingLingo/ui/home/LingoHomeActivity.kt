@@ -94,6 +94,9 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         // bottom navigation
         bottomNavigationBarView.isAutoHideEnabled = !viewState.isInFocus
         bottomNavigationBarView.takeIf { viewState.isInFocus }?.show()
+
+        // refresh
+        swipeRefreshView.isRefreshing = viewState.isLoadingSearchResults
     }
 
     private fun initNavigation() {
@@ -154,6 +157,12 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
             })
             adapter = LingoSearchSuggestionsAdapter(this@LingoHomeActivity)
         }
+
+        swipeRefreshView.isEnabled = false
+        swipeRefreshView.setColorSchemeResources(
+                R.color.material_pink_500,
+                R.color.material_indigo_500,
+                R.color.material_lime_500)
     }
 
     override fun onSuggestionClick(item: SuggestionModel) {

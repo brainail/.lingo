@@ -8,6 +8,6 @@ class UrbanSearchResultRemoteMapper @Inject constructor()
     : Mapper<UrbanSearchResultRemoteEntity, SearchResultEntity> {
 
     override fun mapFromRemote(input: UrbanSearchResultRemoteEntity): SearchResultEntity {
-        TODO("No-impl")
+        return SearchResultEntity(input.defid, input.word, input.definition, input.example, input.permalink)
     }
 }

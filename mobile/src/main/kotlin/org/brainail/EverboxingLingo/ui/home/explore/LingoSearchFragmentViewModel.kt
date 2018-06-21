@@ -4,7 +4,8 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.LiveData
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import org.brainail.EverboxingLingo.domain.executor.RxExecutor
+import org.brainail.EverboxingLingo.app.Constants
+import org.brainail.EverboxingLingo.domain.executor.AppExecutors
 import org.brainail.EverboxingLingo.domain.model.SearchResult
 import org.brainail.EverboxingLingo.domain.model.Suggestion
 import org.brainail.EverboxingLingo.domain.usecase.FindSearchResultsUseCase
@@ -15,6 +16,7 @@ import org.brainail.EverboxingLingo.model.SearchResultModel
 import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.ui.base.RxAwareViewModel
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
+import org.brainail.EverboxingLingo.util.extensions.seamlessLoading
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -23,7 +25,7 @@ class LingoSearchFragmentViewModel @Inject constructor(
         private val findSearchResultsUseCase: FindSearchResultsUseCase,
         private val suggestionModelMapper: SuggestionModelMapper,
         private val searchResultModelMapper: SearchResultModelMapper,
-        private val rxExecutor: RxExecutor) : RxAwareViewModel() {
+        private val appExecutors: AppExecutors) : RxAwareViewModel() {
 
     private val searchSuggestionsSubject: PublishSubject<String> by lazy {
         val subject = PublishSubject.create<String>()
@@ -63,37 +65,37 @@ class LingoSearchFragmentViewModel @Inject constructor(
     @SuppressLint("CheckResult")
     private fun initSuggestions() {
         searchSuggestionsSubject
-                .debounce(700, TimeUnit.MILLISECONDS)
+                .debounce(Constants.DEBOUNCE_REQUEST_MILLIS, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .switchMap { findSuggestions(it) }
                 .map { it.map { suggestionModelMapper.mapToModel(it) } }
-                .observeOn(rxExecutor.mainScheduler)
-                .subscribe({ presentSuggestions.value = it })
+                .observeOn(appExecutors.mainScheduler)
+                .subscribe { presentSuggestions.value = it }
     }
 
     private fun findSuggestions(query: String): Observable<List<Suggestion>> {
         return findSuggestionsUseCase.execute(query)
                 .toObservable()
                 .doOnSubscribe { startSuggestionsLoading.call() }
-                .subscribeOn(rxExecutor.mainScheduler) // for doOnSubscribe
+                .subscribeOn(appExecutors.mainScheduler) // for doOnSubscribe
     }
 
     @SuppressLint("CheckResult")
     private fun initResults() {
         searchResultsSubject
-                .debounce(700, TimeUnit.MILLISECONDS)
+                .debounce(Constants.DEBOUNCE_REQUEST_MILLIS, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .switchMap { findResults(it) }
                 .map { it.map { searchResultModelMapper.mapToModel(it) } }
-                .observeOn(rxExecutor.mainScheduler)
-                .subscribe({ presentSearchResults.value = it })
+                .observeOn(appExecutors.mainScheduler)
+                .subscribe { presentSearchResults.value = it }
     }
 
     private fun findResults(query: String): Observable<List<SearchResult>> {
         return findSearchResultsUseCase.execute(query)
+                .seamlessLoading()
                 .toObservable()
                 .doOnSubscribe { startSearchResultsLoading.call() }
-                .subscribeOn(rxExecutor.mainScheduler) // for doOnSubscribe
-        // return Observable.just(listOf(SearchResult("21", query, "$query it is ...", "I like when you say - $query")))
+                .subscribeOn(appExecutors.mainScheduler) // for doOnSubscribe
     }
 }

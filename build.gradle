@@ -1,7 +1,7 @@
 apply plugin: "com.github.ben-manes.versions"
 
 buildscript {
-    ext.compileSdkVersion = 27
+    ext.compileSdkVersion = 28
     ext.buildToolsVersion = '26.0.2'
     ext.minSdkVersion = 16
     ext.targetSdkVersion = 27
@@ -15,6 +15,10 @@ buildscript {
     ext.supportLibraryVersion = '27.1.1'
     ext.androidKtxVersion = '0.3'
     ext.androidArchVersion = '1.1.1'
+    ext.androidArchRoomVersion = '1.1.0'
+
+    ext.facebookStethoVersion = '1.5.0'
+
     ext.materialDimensVersion = '1.4'
     ext.bottomNavigationVersion = '2.0.4'
 
@@ -61,6 +65,16 @@ allprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
             jvmTarget = "1.8"
+            freeCompilerArgs += "-Xjvm-default=enable"
+        }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile)
+            .matching { it.name.matches("compile\\w*ReleaseKotlin") }.all {
+        kotlinOptions {
+            freeCompilerArgs += "-Xno-param-assertions"
+            freeCompilerArgs += "-Xno-call-assertions"
+            freeCompilerArgs += "-Xno-receiver-assertions"
         }
     }
 

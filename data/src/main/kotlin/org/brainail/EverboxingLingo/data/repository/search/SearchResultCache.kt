@@ -8,6 +8,8 @@ interface SearchResultCache {
     fun clearSearchResults(): Completable
     fun saveSearchResults(searchResults: List<SearchResultEntity>): Completable
     fun getSearchResults(query: String): Flowable<List<SearchResultEntity>>
-    fun isCached(): Boolean
-    fun isExpired(): Boolean
+    @JvmDefault
+    fun isCached(): Boolean = false
+    @JvmDefault
+    fun isExpired(): Boolean = true
 }

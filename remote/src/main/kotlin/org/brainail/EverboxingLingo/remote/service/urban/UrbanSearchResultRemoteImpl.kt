@@ -1,4 +1,4 @@
-package org.brainail.EverboxingLingo.remote
+package org.brainail.EverboxingLingo.remote.service.urban
 
 import io.reactivex.Single
 import org.brainail.EverboxingLingo.data.model.SearchResultEntity
@@ -11,6 +11,7 @@ class UrbanSearchResultRemoteImpl @Inject constructor(
         private val entityMapper: UrbanSearchResultRemoteMapper) : SearchResultRemote {
 
     override fun getSearchResults(query: String): Single<List<SearchResultEntity>> {
-        TODO("No-impl")
+        return urbanService.getSearchResults(query)
+                .map { it.list.map { entityMapper.mapFromRemote(it) } }
     }
 }

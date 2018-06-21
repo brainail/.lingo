@@ -10,10 +10,12 @@ import javax.inject.Inject
  */
 class SearchResultDataMapper @Inject constructor(): Mapper<SearchResultEntity, SearchResult> {
     override fun mapFromEntity(input: SearchResultEntity): SearchResult {
-        TODO("No-impl")
+        return SearchResult(input.id, input.definitionId,
+                input.word, input.definition, input.example, input.link)
     }
 
     override fun mapToEntity(input: SearchResult): SearchResultEntity {
-        TODO("No-impl")
+        return SearchResultEntity(input.definitionId,
+                input.word, input.definition, input.example, input.link, input.id)
     }
 }

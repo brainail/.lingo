@@ -1,24 +1,9 @@
 package org.brainail.EverboxingLingo.remote.model
 
-/**
- * ```
- * {"results":[...]}
- * ```
- */
-data class UrbanSearchResultResponse(val results: List<UrbanSuggestionRemoteEntity>)
-
-/**
- * ```
- * {
- *      "id":"...",
- *      "word":"...",
- *      "definition":"...",
- *      "example":"..."
- * }
- * ```
- */
+data class UrbanSearchResultsResponse(val list: List<UrbanSearchResultRemoteEntity>)
 data class UrbanSearchResultRemoteEntity(
-        val id: String,
+        val defid: String,
+        val permalink: String,
         val word: String,
         val definition: String,
         val example: String)
