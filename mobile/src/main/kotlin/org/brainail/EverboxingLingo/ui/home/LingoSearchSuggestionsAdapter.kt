@@ -13,15 +13,17 @@ import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.ui.home.LingoSearchSuggestionsAdapter.SuggestionViewHolder
 import org.brainail.EverboxingLingo.util.extensions.inflate
 
-class LingoSearchSuggestionsAdapter(private val suggestionClickListener: SuggestionClickListener)
+class LingoSearchSuggestionsAdapter(private val suggestionClickListener: SuggestionClickListener? = null)
     : ListAdapter<SuggestionModel, SuggestionViewHolder>(diffCallback) {
+
+    private val listenersDelegate = ListenersDelegate()
 
     interface SuggestionClickListener {
         fun onSuggestionClick(item: SuggestionModel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionViewHolder {
-        return SuggestionViewHolder(parent.inflate(R.layout.item_suggestion))
+        return SuggestionViewHolder(parent.inflate(R.layout.item_suggestion), listenersDelegate)
     }
 
     // TODO: enter anim
@@ -29,7 +31,9 @@ class LingoSearchSuggestionsAdapter(private val suggestionClickListener: Suggest
         holder.bindTo(getItem(position))
     }
 
-    inner class SuggestionViewHolder(override val containerView: View)
+    class SuggestionViewHolder(
+            override val containerView: View,
+            private val suggestionClickListener: SuggestionClickListener)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         private lateinit var suggestionItem: SuggestionModel
@@ -40,6 +44,12 @@ class LingoSearchSuggestionsAdapter(private val suggestionClickListener: Suggest
             suggestionItemDescription.text = item.description
             suggestionItemDescription.isVisible = !item.description.isEmpty()
             itemView.setOnClickListener { suggestionClickListener.onSuggestionClick(suggestionItem) }
+        }
+    }
+
+    inner class ListenersDelegate : LingoSearchSuggestionsAdapter.SuggestionClickListener {
+        override fun onSuggestionClick(item: SuggestionModel) {
+            suggestionClickListener?.onSuggestionClick(item)
         }
     }
 

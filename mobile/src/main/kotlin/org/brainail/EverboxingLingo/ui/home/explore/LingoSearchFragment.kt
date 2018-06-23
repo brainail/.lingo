@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_lingo_search.*
 import org.brainail.EverboxingLingo.R
-import org.brainail.EverboxingLingo.model.SearchResultModel
 import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.ui.base.ParcelableViewModelAwareFragment
 import org.brainail.EverboxingLingo.ui.home.search.SearchViewModel
@@ -40,12 +39,8 @@ class LingoSearchFragment :
         searchViewModel.suggestionsStartedLoading()
     }
 
-    private val presentSearchResultsObserver = Observer<List<SearchResultModel>> {
-        searchViewModel.searchResultsPrepared(it!!)
-    }
-
-    private val startSearchResultsLoadingObserver = Observer<Void> {
-        searchViewModel.searchResultsStartedLoading()
+    private val viewStateObserver = Observer<LingoSearchFragmentViewState> {
+        renderViewState(it!!)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,11 +64,24 @@ class LingoSearchFragment :
         searchViewModel.searchSuggestions().reObserve(this, searchSuggestionsObserver)
         viewModel.presentSuggestions().reObserve(this, presentSuggestionsObserver)
         viewModel.startSuggestionsLoading().reObserve(this, startSuggestionsLoadingObserver)
-        viewModel.presentSearchResults().reObserve(this, presentSearchResultsObserver)
-        viewModel.startSearchResultsLoading().reObserve(this, startSearchResultsLoadingObserver)
+        viewModel.viewState().reObserve(this, viewStateObserver)
 
         // TODO("https://medium.com/google-developers/android-data-binding-recyclerview-db7c40d9f0e4")
         searchResultsRecyclerView.adapter = LingoSearchResultsAdapter()
+
+        swipeRefreshView.isEnabled = false
+        swipeRefreshView.setColorSchemeResources(
+                R.color.material_pink_500,
+                R.color.material_indigo_500,
+                R.color.material_lime_500)
+    }
+
+    private fun renderViewState(viewState: LingoSearchFragmentViewState) {
+        // items
+        (searchResultsRecyclerView.adapter as LingoSearchResultsAdapter).submitList(viewState.displayedSearchResults)
+
+        // refresh
+        swipeRefreshView.isRefreshing = viewState.isLoadingSearchResults
     }
 
     override fun viewModelType() = LingoSearchFragmentViewModel::class.java

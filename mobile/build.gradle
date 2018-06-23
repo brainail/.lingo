@@ -62,7 +62,8 @@ dependencies {
 
     implementation "org.jetbrains.anko:anko-common:$ankoCommonVersion"
     implementation "com.dmitrymalkovich.android:material-design-dimens:$materialDimensVersion"
-    kapt "com.android.databinding:compiler:$gradlePluginVersion" // TODO: need?
+
+    kapt "com.android.databinding:compiler:$gradlePluginVersion"
 
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
@@ -72,9 +73,6 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
-
-    implementation "nz.bradcampbell:paperparcel:$paperparcelVersion"
-    kapt "nz.bradcampbell:paperparcel-compiler:$paperparcelVersion"
 
     implementation "com.ashokvarma.android:bottom-navigation-bar:$bottomNavigationVersion"
 

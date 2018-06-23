@@ -9,17 +9,11 @@
     android:fitsSystemWindows="true"
     android:focusableInTouchMode="true">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshView"
+    <FrameLayout
+        android:id="@+id/containerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <FrameLayout
-            android:id="@+id/containerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarView"
@@ -54,7 +48,7 @@
         android:id="@+id/bottomNavigationBarView"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        app:bnbBackgroundStyle="background_style_ripple"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom"
+        app:bnbBackgroundStyle="background_style_ripple"/>
 </android.support.design.widget.CoordinatorLayout>
 

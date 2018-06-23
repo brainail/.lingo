@@ -2,6 +2,7 @@ package org.brainail.EverboxingLingo.ui.home.explore
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import org.brainail.EverboxingLingo.app.Constants
@@ -12,9 +13,11 @@ import org.brainail.EverboxingLingo.domain.usecase.FindSearchResultsUseCase
 import org.brainail.EverboxingLingo.domain.usecase.FindSuggestionsUseCase
 import org.brainail.EverboxingLingo.mapper.SearchResultModelMapper
 import org.brainail.EverboxingLingo.mapper.SuggestionModelMapper
-import org.brainail.EverboxingLingo.model.SearchResultModel
 import org.brainail.EverboxingLingo.model.SuggestionModel
+import org.brainail.EverboxingLingo.ui.base.PartialViewStateChange
 import org.brainail.EverboxingLingo.ui.base.RxAwareViewModel
+import org.brainail.EverboxingLingo.ui.home.explore.LingoSearchFragmentViewState.SearchResultsPrepared
+import org.brainail.EverboxingLingo.ui.home.explore.LingoSearchFragmentViewState.SearchResultsStartedLoading
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
 import org.brainail.EverboxingLingo.util.extensions.seamlessLoading
 import java.util.concurrent.TimeUnit
@@ -26,6 +29,8 @@ class LingoSearchFragmentViewModel @Inject constructor(
         private val suggestionModelMapper: SuggestionModelMapper,
         private val searchResultModelMapper: SearchResultModelMapper,
         private val appExecutors: AppExecutors) : RxAwareViewModel() {
+
+    private val viewState = MutableLiveData<LingoSearchFragmentViewState>()
 
     private val searchSuggestionsSubject: PublishSubject<String> by lazy {
         val subject = PublishSubject.create<String>()
@@ -41,17 +46,15 @@ class LingoSearchFragmentViewModel @Inject constructor(
 
     private val presentSuggestions = SingleEventLiveData<List<SuggestionModel>>()
     private val startSuggestionsLoading = SingleEventLiveData<Void>()
-    private val presentSearchResults = SingleEventLiveData<List<SearchResultModel>>()
-    private val startSearchResultsLoading = SingleEventLiveData<Void>()
 
     fun presentSuggestions(): LiveData<List<SuggestionModel>> = presentSuggestions
     fun startSuggestionsLoading(): LiveData<Void> = startSuggestionsLoading
-    fun presentSearchResults(): LiveData<List<SearchResultModel>> = presentSearchResults
-    fun startSearchResultsLoading(): LiveData<Void> = startSearchResultsLoading
+    fun viewState(): LiveData<LingoSearchFragmentViewState> = viewState
 
     init {
         initSuggestions()
         initResults()
+        viewState.value = LingoSearchFragmentViewState.INITIAL
     }
 
     fun searchSuggestions(query: String) {
@@ -88,14 +91,20 @@ class LingoSearchFragmentViewModel @Inject constructor(
                 .switchMap { findResults(it) }
                 .map { it.map { searchResultModelMapper.mapToModel(it) } }
                 .observeOn(appExecutors.mainScheduler)
-                .subscribe { presentSearchResults.value = it }
+                .subscribe { applyChanges(SearchResultsPrepared(it)) }
     }
 
     private fun findResults(query: String): Observable<List<SearchResult>> {
         return findSearchResultsUseCase.execute(query)
                 .seamlessLoading()
                 .toObservable()
-                .doOnSubscribe { startSearchResultsLoading.call() }
+                .doOnSubscribe { applyChanges(SearchResultsStartedLoading) }
                 .subscribeOn(appExecutors.mainScheduler) // for doOnSubscribe
+    }
+
+    private fun applyChanges(partialViewStateChange: PartialViewStateChange<LingoSearchFragmentViewState>)
+            : LingoSearchFragmentViewState {
+        viewState.value = partialViewStateChange.applyTo(viewState = viewState.value!!)
+        return viewState.value!!
     }
 }

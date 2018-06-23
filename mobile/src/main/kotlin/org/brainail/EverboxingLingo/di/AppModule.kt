@@ -8,6 +8,7 @@ import dagger.Provides
 import org.brainail.EverboxingLingo.app.App
 import org.brainail.EverboxingLingo.app.initializers.AppInitializers
 import org.brainail.EverboxingLingo.app.initializers.AppLifecycleInitializer
+import org.brainail.EverboxingLingo.app.initializers.DataBindingInitializer
 import org.brainail.EverboxingLingo.app.initializers.LoggerInitializer
 import org.brainail.EverboxingLingo.app.initializers.StethoInitializer
 import org.brainail.EverboxingLingo.domain.event.EventBus
@@ -49,6 +50,7 @@ class AppModule {
     fun provideAppInitializers(
             appLifecycleInitializer: AppLifecycleInitializer,
             loggerInitializer: LoggerInitializer,
-            stethoInitializer: StethoInitializer) =
-            AppInitializers(appLifecycleInitializer, loggerInitializer, stethoInitializer)
+            stethoInitializer: StethoInitializer,
+            dataBindingInitializer: DataBindingInitializer) =
+            AppInitializers(appLifecycleInitializer, loggerInitializer, stethoInitializer, dataBindingInitializer)
 }

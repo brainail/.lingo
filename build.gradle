@@ -7,11 +7,11 @@ buildscript {
     ext.targetSdkVersion = 27
 
     ext.gradlePluginVersion = '3.0.1'
-    ext.kotlinVersion = '1.2.41'
+    ext.kotlinVersion = '1.2.50'
 
     ext.playServicesVersion = '11.0.0'
 
-    ext.constraintLayoutVersion = '1.1.0'
+    ext.constraintLayoutVersion = '1.1.2'
     ext.supportLibraryVersion = '27.1.1'
     ext.androidKtxVersion = '0.3'
     ext.androidArchVersion = '1.1.1'
@@ -35,8 +35,6 @@ buildscript {
     ext.retrofitVersion = '2.4.0'
 
     ext.daggerVersion = '2.15'
-
-    ext.paperparcelVersion = '2.0.1'
 
     ext.ankoCommonVersion = '0.9.1'
 

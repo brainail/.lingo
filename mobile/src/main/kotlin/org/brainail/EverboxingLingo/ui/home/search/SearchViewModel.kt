@@ -2,20 +2,18 @@ package org.brainail.EverboxingLingo.ui.home.search
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import org.brainail.EverboxingLingo.model.SearchResultModel
 import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
+import org.brainail.EverboxingLingo.ui.base.PartialViewStateChange
 import org.brainail.EverboxingLingo.ui.base.RxAwareViewModel
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.ClearIconClicked
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.NavigationIconClickedInFocus
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.RequestFocusGain
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SearchResultsPrepared
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SearchResultsStartedLoading
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SubmitQuery
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SuggestionsPrepared
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.SuggestionsStartedLoading
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.TextToSpeechResultSuccess
-import org.brainail.EverboxingLingo.ui.home.search.PartialViewStateChanges.UpdateQuery
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.ClearIconClicked
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.NavigationIconClickedInFocus
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.RequestFocusGain
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.SubmitQuery
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.SuggestionsPrepared
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.SuggestionsStartedLoading
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.TextToSpeechResultSuccess
+import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.UpdateQuery
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
 
 abstract class SearchViewModel : RxAwareViewModel() {
@@ -44,14 +42,6 @@ abstract class SearchViewModel : RxAwareViewModel() {
         applyChanges(SuggestionsPrepared(suggestions))
     }
 
-    fun searchResultsStartedLoading() {
-        applyChanges(SearchResultsStartedLoading)
-    }
-
-    fun searchResultsPrepared(searchResults: List<SearchResultModel>) {
-        applyChanges(SearchResultsPrepared(searchResults))
-    }
-
     fun updateQuery(query: String) {
         applyChanges(UpdateQuery(query)).takeIf { it.isInFocus }?.run {
             searchSuggestions.value = query.trim()
@@ -72,7 +62,7 @@ abstract class SearchViewModel : RxAwareViewModel() {
     fun navigationIconClicked() {
         when (searchViewState.value!!.isInFocus) {
             true -> applyChanges(NavigationIconClickedInFocus)
-            else -> searchNavigation.value = SearchNavigationItem.DRAWER
+            else -> searchNavigation.value = SearchViewModel.SearchNavigationItem.DRAWER
         }
     }
 
@@ -81,7 +71,7 @@ abstract class SearchViewModel : RxAwareViewModel() {
     }
 
     fun textToSpeechIconClicked() {
-        searchNavigation.value = SearchNavigationItem.TEXT_TO_SPEECH
+        searchNavigation.value = SearchViewModel.SearchNavigationItem.TEXT_TO_SPEECH
     }
 
     fun handleTextToSpeechResult(result: TextToSpeechResult) {
@@ -90,8 +80,8 @@ abstract class SearchViewModel : RxAwareViewModel() {
         }
     }
 
-    private fun applyChanges(partialViewStateChanges: PartialViewStateChanges): SearchViewState {
-        searchViewState.value = partialViewStateChanges.applyTo(searchViewState.value!!)
+    private fun applyChanges(partialViewStateChange: PartialViewStateChange<SearchViewState>): SearchViewState {
+        searchViewState.value = partialViewStateChange.applyTo(searchViewState.value!!)
         return searchViewState.value!!
     }
 }

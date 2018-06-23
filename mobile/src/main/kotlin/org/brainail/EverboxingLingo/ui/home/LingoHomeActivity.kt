@@ -82,7 +82,8 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         (floatingSearchView.adapter as LingoSearchSuggestionsAdapter).submitList(viewState.displayedSuggestions)
 
         // scroll behavior
-        floatingSearchView.post { // post it to get rid of flickering effect
+        floatingSearchView.post {
+            // post it to get rid of flickering effect
             val toolbarUnderlayLp = toolbarUnderlay.layoutParams as AppBarLayout.LayoutParams
             val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_SNAP or SCROLL_FLAG_ENTER_ALWAYS)
             toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply {
@@ -94,9 +95,6 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         // bottom navigation
         bottomNavigationBarView.isAutoHideEnabled = !viewState.isInFocus
         bottomNavigationBarView.takeIf { viewState.isInFocus }?.show()
-
-        // refresh
-        swipeRefreshView.isRefreshing = viewState.isLoadingSearchResults
     }
 
     private fun initNavigation() {
@@ -112,8 +110,10 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
                         .setActiveColor(ContextCompat.getColor(this, R.color.tab_history)))
                 .initialise()
 
-        bottomNavigationBarView.setTabSelectedListener(object: BottomNavigationBar.OnTabSelectedListener {
-            override fun onTabUnselected(position: Int) { /* No-impl */ }
+        bottomNavigationBarView.setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
+            override fun onTabUnselected(position: Int) {
+                /* No-impl */
+            }
 
             override fun onTabReselected(position: Int) {
                 selectTab(position)
@@ -157,12 +157,6 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
             })
             adapter = LingoSearchSuggestionsAdapter(this@LingoHomeActivity)
         }
-
-        swipeRefreshView.isEnabled = false
-        swipeRefreshView.setColorSchemeResources(
-                R.color.material_pink_500,
-                R.color.material_indigo_500,
-                R.color.material_lime_500)
     }
 
     override fun onSuggestionClick(item: SuggestionModel) {
