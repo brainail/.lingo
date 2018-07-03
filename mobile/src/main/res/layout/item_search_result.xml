@@ -20,9 +20,11 @@
         android:focusable="true"
         android:onClick="@{() -> searchResultClickListener.onSearchResultClick(searchResult)}"
         app:cardCornerRadius="1dp"
-        app:cardElevation="4dp"
+        android:layout_marginLeft="-5dp"
+        android:layout_marginRight="-5dp"
         app:cardUseCompatPadding="true"
-        app:contentPadding="8dp">
+        app:cardElevation="4dp"
+        app:contentPadding="16dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -32,6 +34,7 @@
                 android:id="@+id/searchResultWord"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_alternates_bold"
                 android:maxLines="2"
                 android:text="@{searchResult.word}"
                 android:textSize="@dimen/material_typography_title"
@@ -46,9 +49,11 @@
                 android:id="@+id/searchResultDefinition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_alternates"
                 android:maxLines="4"
+                android:ellipsize="end"
                 android:text="@{searchResult.definition}"
-                android:textSize="@dimen/material_typography_subheading"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

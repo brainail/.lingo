@@ -10,10 +10,10 @@ import javax.inject.Inject
  */
 class SuggestionDataMapper @Inject constructor(): Mapper<SuggestionEntity, Suggestion> {
     override fun mapFromEntity(input: SuggestionEntity): Suggestion {
-        return Suggestion(input.word, input.description)
+        return Suggestion(input.word, input.description, input.isRecent, input.id)
     }
 
     override fun mapToEntity(input: Suggestion): SuggestionEntity {
-        return SuggestionEntity(input.word, input.description)
+        return SuggestionEntity(input.word, input.description, input.isRecent, input.id)
     }
 }

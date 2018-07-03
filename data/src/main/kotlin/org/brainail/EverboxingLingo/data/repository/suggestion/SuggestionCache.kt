@@ -1,13 +1,14 @@
 package org.brainail.EverboxingLingo.data.repository.suggestion
 
 import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.Flowable
 import org.brainail.EverboxingLingo.data.model.SuggestionEntity
 
 interface SuggestionCache {
     fun clearSuggestions(): Completable
     fun saveSuggestions(suggestions: List<SuggestionEntity>): Completable
-    fun getSuggestions(query: String): Single<List<SuggestionEntity>>
+    fun getSuggestions(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SuggestionEntity>>
+    fun getRecentSuggestions(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SuggestionEntity>>
     @JvmDefault
     fun isCached(): Boolean = false
     @JvmDefault

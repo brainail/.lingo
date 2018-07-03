@@ -8,10 +8,10 @@ class SuggestionCacheMapper @Inject constructor()
     : Mapper<SuggestionCacheEntity, SuggestionEntity> {
 
     override fun mapFromCache(input: SuggestionCacheEntity): SuggestionEntity {
-        TODO("No-impl")
+        return SuggestionEntity(input.word, input.description, input.isRecent, input.id)
     }
 
     override fun mapToCache(input: SuggestionEntity): SuggestionCacheEntity {
-        TODO("No-impl")
+        return SuggestionCacheEntity(input.id, input.word, input.description, input.isRecent)
     }
 }

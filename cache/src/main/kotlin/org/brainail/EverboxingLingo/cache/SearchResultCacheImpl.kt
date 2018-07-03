@@ -11,24 +11,24 @@ import javax.inject.Singleton
 
 @Singleton
 class SearchResultCacheImpl @Inject constructor(
-        private val searchResultsDao: SearchResultDao,
+        private val searchResultDao: SearchResultDao,
         private val entityMapper: SearchResultCacheMapper) : SearchResultCache {
 
     override fun clearSearchResults(): Completable {
         return Completable.defer {
-            searchResultsDao.deleteAll()
+            searchResultDao.deleteAll()
             Completable.complete()
         }
     }
 
     override fun saveSearchResults(searchResults: List<SearchResultEntity>): Completable {
         return Completable.defer {
-            searchResultsDao.insert(searchResults.map { entityMapper.mapToCache(it) })
+            searchResultDao.insert(searchResults.map { entityMapper.mapToCache(it) })
             Completable.complete()
         }
     }
 
     override fun getSearchResults(query: String): Flowable<List<SearchResultEntity>> {
-        return searchResultsDao.getSearchResults(query).map { it.map { entityMapper.mapFromCache(it) } }
+        return searchResultDao.getSearchResults(query).map { it.map { entityMapper.mapFromCache(it) } }
     }
 }

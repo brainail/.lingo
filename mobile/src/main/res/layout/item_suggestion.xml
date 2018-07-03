@@ -11,7 +11,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/searchIcon"
+        android:id="@+id/suggestionItemIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@null"
@@ -37,7 +37,7 @@
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toTopOf="@id/suggestionItemDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/searchIcon"
+        app:layout_constraintStart_toEndOf="@id/suggestionItemIcon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Definition of word"/>
 
@@ -55,7 +55,7 @@
         app:layout_constraintWidth_percent="0.7"
         android:textSize="@dimen/material_component_lists_two_line_secondary_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/searchIcon"
+        app:layout_constraintStart_toEndOf="@id/suggestionItemIcon"
         app:layout_constraintTop_toBottomOf="@id/suggestionItemText"
         tools:text="Description of word really long long, ish ish ish, maybe"/>
 </android.support.constraint.ConstraintLayout>

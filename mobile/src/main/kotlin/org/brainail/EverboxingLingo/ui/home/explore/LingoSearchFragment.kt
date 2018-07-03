@@ -23,7 +23,7 @@ class LingoSearchFragment :
 
     private lateinit var searchViewModel: SearchViewModel
 
-    private val searchResultsObserver = Observer<String> { it ->
+    private val searchResultsObserver = Observer<SuggestionModel> { it ->
         viewModel.searchResults(it!!)
     }
 

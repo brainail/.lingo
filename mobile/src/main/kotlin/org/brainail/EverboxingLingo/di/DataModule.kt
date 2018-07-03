@@ -11,6 +11,7 @@ import org.brainail.EverboxingLingo.cache.SuggestionCacheImpl
 import org.brainail.EverboxingLingo.cache.db.LingoDatabase
 import org.brainail.EverboxingLingo.cache.db.LingoDatabaseFactory
 import org.brainail.EverboxingLingo.cache.db.dao.SearchResultDao
+import org.brainail.EverboxingLingo.cache.db.dao.SuggestionDao
 import org.brainail.EverboxingLingo.cache.mapper.SearchResultCacheMapper
 import org.brainail.EverboxingLingo.cache.mapper.SuggestionCacheMapper
 import org.brainail.EverboxingLingo.data.mapper.SearchResultDataMapper
@@ -62,8 +63,9 @@ class DataModule {
     @Provides
     @Singleton
     fun provideSuggestionCache(
+            suggestionDao: SuggestionDao,
             entityMapper: SuggestionCacheMapper): SuggestionCache {
-        return SuggestionCacheImpl(entityMapper)
+        return SuggestionCacheImpl(suggestionDao, entityMapper)
     }
 
     @Provides
@@ -106,6 +108,10 @@ class DataModule {
     @Provides
     @Singleton
     fun provideSearchResultDao(lingoDatabase: LingoDatabase) = lingoDatabase.searchResultDao()
+
+    @Provides
+    @Singleton
+    fun provideSuggestionDao(lingoDatabase: LingoDatabase) = lingoDatabase.suggestionDao()
 
     @Provides
     @Singleton

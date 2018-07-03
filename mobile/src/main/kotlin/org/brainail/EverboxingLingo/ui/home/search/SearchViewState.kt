@@ -1,22 +1,19 @@
 package org.brainail.EverboxingLingo.ui.home.search
 
-import org.brainail.EverboxingLingo.model.SearchResultModel
 import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.ui.base.PartialViewStateChange
-import org.brainail.EverboxingLingo.util.extensions.EMPTY_TEXT
 
 data class SearchViewState(
         val isInFocus: Boolean = false,
-        val displayedText: String = EMPTY_TEXT,
+        val displayedText: String = "",
         val isClearAvailable: Boolean = false,
         val cursorPosition: CursorPosition = CursorPosition.KEEP,
         val isTextToSpeechAvailable: Boolean = false,
         val isLogoDisplayed: Boolean = false,
         private val isLoadingSuggestions: Boolean = false,
         val isLoadingSearchResults: Boolean = false,
-        val displayedSuggestions: List<SuggestionModel> = emptyList(),
-        val displayedSearchResults: List<SearchResultModel> = emptyList()) {
+        val displayedSuggestions: List<SuggestionModel> = emptyList()) {
 
     val displayLoading = isInFocus && isLoadingSuggestions
 
@@ -25,7 +22,7 @@ data class SearchViewState(
             SearchViewState(
                     isInFocus = false,
                     isLogoDisplayed = true,
-                    displayedText = EMPTY_TEXT,
+                    displayedText = "",
                     isClearAvailable = false,
                     isTextToSpeechAvailable = true,
                     cursorPosition = CursorPosition.KEEP,
@@ -98,7 +95,7 @@ data class SearchViewState(
     object ClearIconClicked : PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
-                    displayedText = EMPTY_TEXT,
+                    displayedText = "",
                     cursorPosition = SearchViewState.CursorPosition.KEEP)
         }
     }

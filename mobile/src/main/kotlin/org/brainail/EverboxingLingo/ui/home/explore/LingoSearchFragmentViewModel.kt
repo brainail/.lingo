@@ -3,14 +3,19 @@ package org.brainail.EverboxingLingo.ui.home.explore
 import android.annotation.SuppressLint
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import org.brainail.EverboxingLingo.app.Constants
 import org.brainail.EverboxingLingo.domain.executor.AppExecutors
 import org.brainail.EverboxingLingo.domain.model.SearchResult
 import org.brainail.EverboxingLingo.domain.model.Suggestion
+import org.brainail.EverboxingLingo.domain.usecase.FindRecentSuggestionsUseCase
 import org.brainail.EverboxingLingo.domain.usecase.FindSearchResultsUseCase
 import org.brainail.EverboxingLingo.domain.usecase.FindSuggestionsUseCase
+import org.brainail.EverboxingLingo.domain.usecase.SaveRecentSuggestionUseCase
 import org.brainail.EverboxingLingo.mapper.SearchResultModelMapper
 import org.brainail.EverboxingLingo.mapper.SuggestionModelMapper
 import org.brainail.EverboxingLingo.model.SuggestionModel
@@ -25,7 +30,9 @@ import javax.inject.Inject
 
 class LingoSearchFragmentViewModel @Inject constructor(
         private val findSuggestionsUseCase: FindSuggestionsUseCase,
+        private val findRecentSuggestionsUseCase: FindRecentSuggestionsUseCase,
         private val findSearchResultsUseCase: FindSearchResultsUseCase,
+        private val saveRecentSuggestionUseCase: SaveRecentSuggestionUseCase,
         private val suggestionModelMapper: SuggestionModelMapper,
         private val searchResultModelMapper: SearchResultModelMapper,
         private val appExecutors: AppExecutors) : RxAwareViewModel() {
@@ -38,8 +45,8 @@ class LingoSearchFragmentViewModel @Inject constructor(
         subject
     }
 
-    private val searchResultsSubject: PublishSubject<String> by lazy {
-        val subject = PublishSubject.create<String>()
+    private val searchResultsSubject: PublishSubject<SuggestionModel> by lazy {
+        val subject = PublishSubject.create<SuggestionModel>()
         bindObservable(subject)
         subject
     }
@@ -61,14 +68,14 @@ class LingoSearchFragmentViewModel @Inject constructor(
         searchSuggestionsSubject.onNext(query)
     }
 
-    fun searchResults(query: String) {
-        searchResultsSubject.onNext(query)
+    fun searchResults(suggestion: SuggestionModel) {
+        searchResultsSubject.onNext(suggestion)
     }
 
     @SuppressLint("CheckResult")
     private fun initSuggestions() {
         searchSuggestionsSubject
-                .debounce(Constants.DEBOUNCE_REQUEST_MILLIS, TimeUnit.MILLISECONDS)
+                .debounce(Constants.DEBOUNCE_SEARCH_REQUEST_MILLIS, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .switchMap { findSuggestions(it) }
                 .map { it.map { suggestionModelMapper.mapToModel(it) } }
@@ -77,7 +84,11 @@ class LingoSearchFragmentViewModel @Inject constructor(
     }
 
     private fun findSuggestions(query: String): Observable<List<Suggestion>> {
-        return findSuggestionsUseCase.execute(query)
+        val suggestions: Flowable<List<Suggestion>> = Flowable.combineLatest(
+                findRecentSuggestionsUseCase.execute(query),
+                findSuggestionsUseCase.execute(query),
+                BiFunction { recent, remote -> recent + remote })
+        return suggestions
                 .toObservable()
                 .doOnSubscribe { startSuggestionsLoading.call() }
                 .subscribeOn(appExecutors.mainScheduler) // for doOnSubscribe
@@ -86,9 +97,10 @@ class LingoSearchFragmentViewModel @Inject constructor(
     @SuppressLint("CheckResult")
     private fun initResults() {
         searchResultsSubject
-                .debounce(Constants.DEBOUNCE_REQUEST_MILLIS, TimeUnit.MILLISECONDS)
+                .debounce(Constants.DEBOUNCE_SEARCH_REQUEST_MILLIS, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
-                .switchMap { findResults(it) }
+                .doOnNext { saveRecentSuggestion(it).subscribe() }
+                .switchMap { findResults(it.word.toString()) }
                 .map { it.map { searchResultModelMapper.mapToModel(it) } }
                 .observeOn(appExecutors.mainScheduler)
                 .subscribe { applyChanges(SearchResultsPrepared(it)) }
@@ -100,6 +112,10 @@ class LingoSearchFragmentViewModel @Inject constructor(
                 .toObservable()
                 .doOnSubscribe { applyChanges(SearchResultsStartedLoading) }
                 .subscribeOn(appExecutors.mainScheduler) // for doOnSubscribe
+    }
+
+    private fun saveRecentSuggestion(suggestion: SuggestionModel): Completable {
+        return saveRecentSuggestionUseCase.execute(suggestionModelMapper.mapFromModel(suggestion))
     }
 
     private fun applyChanges(partialViewStateChange: PartialViewStateChange<LingoSearchFragmentViewState>)

@@ -1,5 +1,6 @@
 package org.brainail.EverboxingLingo.ui.home
 
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -40,6 +41,12 @@ class LingoSearchSuggestionsAdapter(private val suggestionClickListener: Suggest
 
         fun bindTo(item: SuggestionModel) {
             suggestionItem = item
+
+            suggestionItemIcon.setImageDrawable(when (item.isRecent) {
+                true -> AppCompatResources.getDrawable(itemView.context, R.drawable.ic_history_black_24dp)
+                else -> AppCompatResources.getDrawable(itemView.context, R.drawable.ic_search_black_24dp)
+            })
+
             suggestionItemText.text = item.word
             suggestionItemDescription.text = item.description
             suggestionItemDescription.isVisible = !item.description.isEmpty()
@@ -56,7 +63,7 @@ class LingoSearchSuggestionsAdapter(private val suggestionClickListener: Suggest
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<SuggestionModel>() {
             override fun areItemsTheSame(oldItem: SuggestionModel, newItem: SuggestionModel): Boolean =
-                    false
+                    oldItem.id == newItem.id
 
             override fun areContentsTheSame(oldItem: SuggestionModel, newItem: SuggestionModel): Boolean =
                     oldItem == newItem

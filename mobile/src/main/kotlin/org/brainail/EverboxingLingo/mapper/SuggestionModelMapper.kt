@@ -12,6 +12,10 @@ class SuggestionModelMapper @Inject constructor(
         val highlightedWord: CharSequence = input.highlights?.let {
             resultHighlighter.makeHighlighted(input.word, it)
         } ?: input.word
-        return SuggestionModel(highlightedWord, input.description.trim())
+        return SuggestionModel(highlightedWord, input.description, input.isRecent, input.id)
+    }
+
+    override fun mapFromModel(input: SuggestionModel): Suggestion {
+        return Suggestion(input.word.toString(), input.description, input.isRecent, input.id)
     }
 }

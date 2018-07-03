@@ -25,14 +25,14 @@ abstract class SearchViewModel : RxAwareViewModel() {
     protected val searchViewState = MutableLiveData<SearchViewState>()
     protected val searchNavigation = SingleEventLiveData<SearchNavigationItem>()
     private val searchSuggestions = SingleEventLiveData<String>()
-    private val searchResults = SingleEventLiveData<String>()
+    private val searchResults = SingleEventLiveData<SuggestionModel>()
 
     init {
         searchViewState.value = SearchViewState.INITIAL
     }
 
     fun searchSuggestions(): LiveData<String> = searchSuggestions
-    fun searchResults(): LiveData<String> = searchResults
+    fun searchResults(): LiveData<SuggestionModel> = searchResults
 
     fun suggestionsStartedLoading() {
         applyChanges(SuggestionsStartedLoading)
@@ -50,7 +50,12 @@ abstract class SearchViewModel : RxAwareViewModel() {
 
     fun submitQuery(query: String) {
         applyChanges(SubmitQuery(query))
-        searchResults.value = query.trim()
+        searchResults.value = SuggestionModel(query)
+    }
+
+    fun submitQuery(suggestion: SuggestionModel) {
+        applyChanges(SubmitQuery(suggestion.word.toString()))
+        searchResults.value = suggestion
     }
 
     fun requestFocusGain(isInFocus: Boolean) {
