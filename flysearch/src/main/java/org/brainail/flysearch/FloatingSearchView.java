@@ -20,6 +20,7 @@ import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.MarginLayoutParamsCompat;
@@ -42,7 +43,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -52,7 +52,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FloatingSearchView extends FrameLayout {
+public class FloatingSearchView extends ConstraintLayout {
     
     private static final int DEFAULT_BACKGROUND_COLOR = 0x90000000;
     private static final int DEFAULT_CONTENT_COLOR = 0xfff0f0f0;

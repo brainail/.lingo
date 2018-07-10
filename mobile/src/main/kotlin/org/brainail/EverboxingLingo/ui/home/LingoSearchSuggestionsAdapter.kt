@@ -43,7 +43,7 @@ class LingoSearchSuggestionsAdapter(private val suggestionClickListener: Suggest
             suggestionItem = item
 
             suggestionItemIcon.setImageDrawable(when (item.isRecent) {
-                true -> AppCompatResources.getDrawable(itemView.context, R.drawable.ic_history_black_24dp)
+                true -> AppCompatResources.getDrawable(itemView.context, R.drawable.ic_history_control_24dp)
                 else -> AppCompatResources.getDrawable(itemView.context, R.drawable.ic_search_black_24dp)
             })
 
