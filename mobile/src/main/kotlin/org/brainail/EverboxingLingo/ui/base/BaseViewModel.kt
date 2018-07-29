@@ -10,15 +10,19 @@ abstract class BaseViewModel : ViewModel() {
         get() = saveState()
 
     private var isCleared = false
+    private var restoreStateCount = 0
 
     init {
         @Suppress("LeakingThis")
         L.d("constructor(): $this")
     }
 
+    @CallSuper
     open fun initState(viewModelSavedState: ViewModelSavedState?) {
-        // No-op
+        ++ restoreStateCount
     }
+
+    protected fun isFirstRestore() = 1 == restoreStateCount
 
     @CallSuper
     open fun saveState() = ViewModelSavedState()

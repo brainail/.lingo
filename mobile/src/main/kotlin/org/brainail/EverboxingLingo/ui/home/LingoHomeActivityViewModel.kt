@@ -29,16 +29,32 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
     override fun initState(viewModelSavedState: ViewModelSavedState?) {
         super.initState(viewModelSavedState)
 
-        // restore navigation
+        initNavigationState(viewModelSavedState)
+        initDisplayedTextState(viewModelSavedState)
+    }
+
+    private fun initNavigationState(viewModelSavedState: ViewModelSavedState?) {
         val savedNavigation = viewModelSavedState
-                ?.get<String>(KEY_NAVIGATION_TAB_STATE)
-                ?: NavigationTabItem.EXPLORE.name
+                ?.get<String>(KEY_NAVIGATION_TAB_STATE) ?: NavigationTabItem.EXPLORE.name
         navigationTab.value = NavigationTabItem.valueOf(savedNavigation)
+    }
+
+    private fun initDisplayedTextState(viewModelSavedState: ViewModelSavedState?) {
+        viewModelSavedState?.also {
+            it.takeIf { isFirstRestore() }?.run {
+                val displayedText = get<String>(KEY_DISPLAYED_TEXT_STATE) ?: ""
+                updateQuery(displayedText)
+                submitQuerySilently(displayedText)
+            }
+        } ?: run {
+            submitQuerySilently("")
+        }
     }
 
     override fun saveState(): ViewModelSavedState {
         val saveState = super.saveState()
         navigationTab.value?.let { saveState.put(KEY_NAVIGATION_TAB_STATE, it.name) }
+        searchViewState.value?.let { saveState.put(KEY_DISPLAYED_TEXT_STATE, it.displayedText) }
         return saveState
     }
 
@@ -70,5 +86,6 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
 
     private companion object {
         const val KEY_NAVIGATION_TAB_STATE = "navigation_tab_state"
+        const val KEY_DISPLAYED_TEXT_STATE = "displayed_text_state"
     }
 }

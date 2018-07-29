@@ -98,8 +98,13 @@ class LingoSearchFragmentViewModel @Inject constructor(
     private fun initResults() {
         searchResultsSubject
                 .debounce(Constants.DEBOUNCE_SEARCH_REQUEST_MILLIS, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .doOnNext { saveRecentSuggestion(it).subscribe() }
+                .distinctUntilChanged { cur, next ->
+                    cur.word == next.word && cur.isSilent == next.isSilent
+                }
+                .doOnNext {
+                    it.takeIf { it.word.isNotBlank() && !it.isSilent }
+                            ?.run { saveRecentSuggestion(it).subscribe() }
+                }
                 .switchMap { findResults(it.word.toString()) }
                 .map { it.map { searchResultModelMapper.mapToModel(it) } }
                 .observeOn(appExecutors.mainScheduler)

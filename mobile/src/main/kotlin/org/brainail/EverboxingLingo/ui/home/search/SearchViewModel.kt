@@ -49,13 +49,17 @@ abstract class SearchViewModel : RxAwareViewModel() {
     }
 
     fun submitQuery(query: String) {
-        applyChanges(SubmitQuery(query))
-        searchResults.value = SuggestionModel(query)
+        applyChanges(SubmitQuery(query.trim()))
+        searchResults.value = SuggestionModel(query.trim())
     }
 
     fun submitQuery(suggestion: SuggestionModel) {
         applyChanges(SubmitQuery(suggestion.word.toString()))
         searchResults.value = suggestion
+    }
+
+    protected fun submitQuerySilently(query: String) {
+        searchResults.value = SuggestionModel(query.trim(), isSilent = true)
     }
 
     fun requestFocusGain(isInFocus: Boolean) {

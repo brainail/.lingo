@@ -12,7 +12,6 @@ data class SearchViewState(
         val isTextToSpeechAvailable: Boolean = false,
         val isLogoDisplayed: Boolean = false,
         private val isLoadingSuggestions: Boolean = false,
-        val isLoadingSearchResults: Boolean = false,
         val displayedSuggestions: List<SuggestionModel> = emptyList()) {
 
     val displayLoading = isInFocus && isLoadingSuggestions
@@ -26,7 +25,6 @@ data class SearchViewState(
                     isClearAvailable = false,
                     isTextToSpeechAvailable = true,
                     cursorPosition = CursorPosition.KEEP,
-                    isLoadingSearchResults = false,
                     isLoadingSuggestions = false)
         }
     }
