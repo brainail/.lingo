@@ -19,7 +19,6 @@ buildscript {
 
     ext.facebookStethoVersion = '1.5.0'
 
-    ext.materialDimensVersion = '1.4'
     ext.bottomNavigationVersion = '2.0.4'
 
     ext.rxJavaVersion = '2.1.1'

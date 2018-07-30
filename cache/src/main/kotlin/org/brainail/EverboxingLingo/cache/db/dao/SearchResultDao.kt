@@ -7,7 +7,7 @@ import org.brainail.EverboxingLingo.cache.model.SearchResultCacheEntity
 
 @Dao
 abstract class SearchResultDao : BaseDao<SearchResultCacheEntity> {
-    @Query("select * from search_results where word like :query || '%'")
+    @Query("select * from search_results where word like :query || '%' order by sr_id desc")
     abstract fun getSearchResults(query: String): Flowable<List<SearchResultCacheEntity>>
 
     @Query("delete from search_results")

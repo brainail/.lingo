@@ -61,7 +61,6 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:$androidArchVersion"
 
     implementation "org.jetbrains.anko:anko-common:$ankoCommonVersion"
-    implementation "com.dmitrymalkovich.android:material-design-dimens:$materialDimensVersion"
 
     kapt "com.android.databinding:compiler:$gradlePluginVersion"
 

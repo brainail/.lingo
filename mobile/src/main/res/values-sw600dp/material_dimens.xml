@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- default colors and dimens per material design guidelines (last update: may 2016 release) -->
+    <!-- layout -->
+    <!-- metrics & keylines -->
+    <!-- https://www.google.com/design/spec/layout/metrics-keylines.html#metrics-keylines-keylines-spacing -->
+    <dimen name="material_layout_keylines_screen_edge_margin">24dp</dimen>
+    <dimen name="material_layout_keylines_content_left_margin_from_screen_edge">80dp</dimen>
+    <dimen name="material_layout_keylines_horizontal_mobile_margin">24dp</dimen>
+</resources>
