@@ -8,11 +8,12 @@ import androidx.core.text.set
 import androidx.core.text.toSpannable
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.util.extensions.compareCaselessTo
+import org.brainail.EverboxingLingo.util.extensions.lazyFast
 import javax.inject.Inject
 
 class ElasticSearchHighlighter @Inject constructor(private val context: Context) {
 
-    private val highlightColor: Int by lazy {
+    private val highlightColor: Int by lazyFast {
         ContextCompat.getColor(context, R.color.elastic_search_highlighter)
     }
 

@@ -1,16 +1,16 @@
 package org.brainail.EverboxingLingo.ui.base
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
-@SuppressLint("ParcelCreator")
 @Parcelize
 class ViewModelSavedState(private val values: Bundle = Bundle()): Parcelable {
     fun put(key: String, value: Any): ViewModelSavedState {
         when (value) {
             is String -> values.putString(key, value)
+            is Int -> values.putInt(key, value)
+            is Long -> values.putLong(key, value)
         }
         return this
     }

@@ -24,6 +24,7 @@ import org.brainail.EverboxingLingo.ui.base.RxAwareViewModel
 import org.brainail.EverboxingLingo.ui.home.explore.LingoSearchFragmentViewState.SearchResultsPrepared
 import org.brainail.EverboxingLingo.ui.home.explore.LingoSearchFragmentViewState.SearchResultsStartedLoading
 import org.brainail.EverboxingLingo.util.SingleEventLiveData
+import org.brainail.EverboxingLingo.util.extensions.lazyFast
 import org.brainail.EverboxingLingo.util.extensions.seamlessLoading
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -39,13 +40,13 @@ class LingoSearchFragmentViewModel @Inject constructor(
 
     private val viewState = MutableLiveData<LingoSearchFragmentViewState>()
 
-    private val searchSuggestionsSubject: PublishSubject<String> by lazy {
+    private val searchSuggestionsSubject: PublishSubject<String> by lazyFast {
         val subject = PublishSubject.create<String>()
         bindObservable(subject)
         subject
     }
 
-    private val searchResultsSubject: PublishSubject<SuggestionModel> by lazy {
+    private val searchResultsSubject: PublishSubject<SuggestionModel> by lazyFast {
         val subject = PublishSubject.create<SuggestionModel>()
         bindObservable(subject)
         subject

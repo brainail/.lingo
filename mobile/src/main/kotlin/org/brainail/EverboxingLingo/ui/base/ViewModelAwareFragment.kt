@@ -1,34 +1,35 @@
 package org.brainail.EverboxingLingo.ui.base
 
 import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import org.brainail.EverboxingLingo.util.extensions.lazyFast
 import javax.inject.Inject
 
 abstract class ViewModelAwareFragment<VM : BaseViewModel> : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    protected lateinit var viewModel: VM
+    private val viewModels: Array<BaseViewModel>? by lazyFast { createPrimaryViewModels() }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(viewModelType())
-        viewModel.initState(getViewModelStateFromBundle(savedInstanceState))
+        viewModels?.forEach {
+            it.initState(getViewModelStateFromBundle(savedInstanceState, it::class.java))
+        }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveViewModelStateToBundle(outState, viewModel.stateToSave)
+    abstract fun createPrimaryViewModels(): Array<BaseViewModel>?
+
+    private fun getViewModelStateFromBundle(bundle: Bundle?, type: Class<out BaseViewModel>): ViewModelSavedState? {
+        return bundle?.getParcelable(KEY_VIEW_MODEL_STATE + "_" + type.name)
     }
 
-    protected open fun getViewModelStateFromBundle(bundle: Bundle?): ViewModelSavedState? {
-        return null
+    private fun saveViewModelStateToBundle(
+            bundle: Bundle, state: ViewModelSavedState?, type: Class<out BaseViewModel>) {
+        state?.let { bundle.putParcelable(KEY_VIEW_MODEL_STATE + "_" + type.name, state) }
     }
 
-    protected open fun saveViewModelStateToBundle(bundle: Bundle, state: ViewModelSavedState?) {
-        // No-op
+    private companion object {
+        const val KEY_VIEW_MODEL_STATE = "fragment_view_model_state"
     }
-
-    abstract fun viewModelType(): Class<VM>
 }

@@ -1,39 +1,47 @@
 package org.brainail.EverboxingLingo.ui.base
 
 import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.LayoutRes
+import org.brainail.EverboxingLingo.util.extensions.lazyFast
 import javax.inject.Inject
 
-abstract class ViewModelAwareActivity<VM : BaseViewModel> : BaseActivity() {
+abstract class ViewModelAwareActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    protected lateinit var viewModel: VM
+    private val viewModels: Array<BaseViewModel>? by lazyFast { createPrimaryViewModels() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutResId())
+        setContentView(getLayoutResourceId())
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(viewModelType())
-        viewModel.initState(getViewModelStateFromBundle(savedInstanceState))
+        viewModels?.forEach {
+            it.initState(getViewModelStateFromBundle(savedInstanceState, it::class.java))
+        }
     }
 
+    abstract fun createPrimaryViewModels(): Array<BaseViewModel>?
+
     @LayoutRes
-    abstract fun layoutResId(): Int
+    abstract fun getLayoutResourceId(): Int
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        saveViewModelStateToBundle(outState, viewModel.stateToSave)
+        viewModels?.forEach {
+            saveViewModelStateToBundle(outState, it.stateToSave, it::class.java)
+        }
     }
 
-    protected open fun getViewModelStateFromBundle(bundle: Bundle?): ViewModelSavedState? {
-        return null
+    private fun getViewModelStateFromBundle(bundle: Bundle?, type: Class<out BaseViewModel>): ViewModelSavedState? {
+        return bundle?.getParcelable(KEY_VIEW_MODEL_STATE + "_" + type.name)
     }
 
-    protected open fun saveViewModelStateToBundle(bundle: Bundle, state: ViewModelSavedState?) {
-        // No-op
+    private fun saveViewModelStateToBundle(
+            bundle: Bundle, state: ViewModelSavedState?, type: Class<out BaseViewModel>) {
+        state?.let { bundle.putParcelable(KEY_VIEW_MODEL_STATE + "_" + type.name, state) }
     }
 
-    abstract fun viewModelType(): Class<VM>
+    private companion object {
+        const val KEY_VIEW_MODEL_STATE = "activity_view_model_state"
+    }
 }

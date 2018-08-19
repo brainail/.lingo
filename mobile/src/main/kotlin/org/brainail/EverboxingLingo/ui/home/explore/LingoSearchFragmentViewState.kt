@@ -2,13 +2,14 @@ package org.brainail.EverboxingLingo.ui.home.explore
 
 import org.brainail.EverboxingLingo.model.SearchResultModel
 import org.brainail.EverboxingLingo.ui.base.PartialViewStateChange
+import org.brainail.EverboxingLingo.util.extensions.lazyFast
 
 data class LingoSearchFragmentViewState(
         val isLoadingSearchResults: Boolean = false,
         val displayedSearchResults: List<SearchResultModel> = emptyList()) {
 
     companion object {
-        val INITIAL by lazy {
+        val INITIAL by lazyFast {
             LingoSearchFragmentViewState(
                     isLoadingSearchResults = false)
         }

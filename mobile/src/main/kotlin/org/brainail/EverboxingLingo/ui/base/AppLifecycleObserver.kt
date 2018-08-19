@@ -36,5 +36,4 @@ class AppLifecycleObserver(private val globalBus: EventBus<GlobalEvents>) : Life
         L.v("onStop")
         isOnForeground = false
     }
-
 }

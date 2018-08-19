@@ -3,6 +3,7 @@ package org.brainail.EverboxingLingo.ui.home.search
 import org.brainail.EverboxingLingo.model.SuggestionModel
 import org.brainail.EverboxingLingo.model.TextToSpeechResult
 import org.brainail.EverboxingLingo.ui.base.PartialViewStateChange
+import org.brainail.EverboxingLingo.util.extensions.lazyFast
 
 data class SearchViewState(
         val isInFocus: Boolean = false,
@@ -17,7 +18,7 @@ data class SearchViewState(
     val displayLoading = isInFocus && isLoadingSuggestions
 
     companion object {
-        val INITIAL by lazy {
+        val INITIAL by lazyFast {
             SearchViewState(
                     isInFocus = false,
                     isLogoDisplayed = true,

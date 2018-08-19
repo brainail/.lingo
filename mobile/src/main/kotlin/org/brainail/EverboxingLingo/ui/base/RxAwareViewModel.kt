@@ -38,5 +38,4 @@ abstract class RxAwareViewModel : BaseViewModel() {
         super.clear()
         disposables.clear()
     }
-
 }

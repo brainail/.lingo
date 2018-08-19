@@ -17,7 +17,8 @@ import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.EverboxingLingo.R
 import org.brainail.EverboxingLingo.mapper.TextToSpeechResultMapper
 import org.brainail.EverboxingLingo.model.SuggestionModel
-import org.brainail.EverboxingLingo.ui.base.ParcelableViewModelAwareActivity
+import org.brainail.EverboxingLingo.ui.base.BaseViewModel
+import org.brainail.EverboxingLingo.ui.base.ViewModelAwareActivity
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationItem
 import org.brainail.EverboxingLingo.ui.home.LingoHomeActivityViewModel.NavigationTabItem
@@ -27,16 +28,20 @@ import org.brainail.EverboxingLingo.ui.home.search.SearchViewModel.SearchNavigat
 import org.brainail.EverboxingLingo.ui.home.search.SearchViewState
 import org.brainail.EverboxingLingo.ui.home.search.SearchViewState.CursorPosition
 import org.brainail.EverboxingLingo.util.TextWatcherAdapter
+import org.brainail.EverboxingLingo.util.extensions.checkAllMatched
+import org.brainail.EverboxingLingo.util.extensions.getViewModel
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
 import javax.inject.Inject
 
-class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityViewModel>(), SuggestionClickListener {
+class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     @Inject
     lateinit var navigator: LingoHomeActivityNavigator
 
     @Inject
     internal lateinit var textToSpeechResultMapper: TextToSpeechResultMapper
+
+    private lateinit var screenViewModel: LingoHomeActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +51,15 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         initViewState()
     }
 
-    override fun layoutResId() = R.layout.activity_lingo_home
+    override fun createPrimaryViewModels(): Array<BaseViewModel>? {
+        screenViewModel = getViewModel(viewModelFactory)
+        return arrayOf(screenViewModel)
+    }
+
+    override fun getLayoutResourceId() = R.layout.activity_lingo_home
 
     private fun initViewState() {
-        viewModel.searchViewState().observe(this, Observer { renderSearchViewState(it!!) })
+        screenViewModel.searchViewState().observe(this, Observer { renderSearchViewState(it!!) })
     }
 
     private fun renderSearchViewState(viewState: SearchViewState) {
@@ -111,48 +121,40 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
                 .initialise()
 
         bottomNavigationBarView.setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
-            override fun onTabUnselected(position: Int) {
-                /* No-impl */
-            }
-
-            override fun onTabReselected(position: Int) {
-                selectTab(position)
-            }
-
-            override fun onTabSelected(position: Int) {
-                selectTab(position)
-            }
+            override fun onTabUnselected(position: Int) = Unit
+            override fun onTabReselected(position: Int) = selectTab(position)
+            override fun onTabSelected(position: Int) = selectTab(position)
 
             private fun selectTab(position: Int) {
                 when (position) {
-                    0 -> viewModel.navigateTabTo(NavigationTabItem.EXPLORE)
-                    1 -> viewModel.navigateTabTo(NavigationTabItem.FAVOURITE)
-                    2 -> viewModel.navigateTabTo(NavigationTabItem.HISTORY)
+                    0 -> screenViewModel.navigateTabTo(NavigationTabItem.EXPLORE)
+                    1 -> screenViewModel.navigateTabTo(NavigationTabItem.FAVOURITE)
+                    2 -> screenViewModel.navigateTabTo(NavigationTabItem.HISTORY)
                 }
             }
         })
 
-        viewModel.navigation().observe(this, Observer { navigateTo(it!!) })
-        viewModel.navigationTab().observe(this, Observer { navigateTabTo(it!!) })
-        viewModel.searchNavigation().observe(this, Observer { navigateTo(it!!) })
+        screenViewModel.navigation().observe(this, Observer { navigateTo(it!!) })
+        screenViewModel.navigationTab().observe(this, Observer { navigateTabTo(it!!) })
+        screenViewModel.searchNavigation().observe(this, Observer { navigateTo(it!!) })
     }
 
     private fun initSearch() {
         floatingSearchView.apply {
             icon = DrawerArrowDrawable(this@LingoHomeActivity)
-            setOnIconClickListener { viewModel.navigationIconClicked() }
-            setOnSearchListener { query -> viewModel.submitQuery(query.toString()) }
-            setOnSearchFocusChangedListener { viewModel.requestFocusGain(it) }
+            setOnIconClickListener { screenViewModel.navigationIconClicked() }
+            setOnSearchListener { query -> screenViewModel.submitQuery(query.toString()) }
+            setOnSearchFocusChangedListener { screenViewModel.requestFocusGain(it) }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.menu_clear -> viewModel.clearIconClicked()
-                    R.id.menu_tts -> viewModel.textToSpeechIconClicked()
+                    R.id.menu_clear -> screenViewModel.clearIconClicked()
+                    R.id.menu_tts -> screenViewModel.textToSpeechIconClicked()
                 }
                 true
             }
             addTextChangedListener(object : TextWatcherAdapter() {
                 override fun afterTextChanged(query: Editable) {
-                    viewModel.updateQuery(query.toString())
+                    screenViewModel.updateQuery(query.toString())
                 }
             })
             adapter = LingoSearchSuggestionsAdapter(this@LingoHomeActivity)
@@ -161,7 +163,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
 
     override fun onSuggestionClick(item: SuggestionModel) {
         L.i("onSuggestionClick: $item")
-        viewModel.suggestionClicked(item)
+        screenViewModel.suggestionClicked(item)
     }
 
     private fun navigateTo(navigationItem: NavigationItem) {
@@ -169,7 +171,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         when (navigationItem) {
             NavigationItem.BACKWARD -> navigator.goBack()
             NavigationItem.SCROLL_TO_TOP -> navigator.scrollToTop()
-        }
+        }.checkAllMatched
     }
 
     private fun navigateTabTo(navigationTabItem: LingoHomeActivityViewModel.NavigationTabItem) {
@@ -187,7 +189,7 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
                 navigator.showExploreSubScreen()
                 bottomNavigationBarView.selectTab(2, false)
             }
-        }
+        }.checkAllMatched
     }
 
     private fun navigateTo(navigationItem: SearchViewModel.SearchNavigationItem) {
@@ -195,11 +197,11 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
         when (navigationItem) {
             SearchNavigationItem.DRAWER -> toast("open Drawer please")
             SearchNavigationItem.TEXT_TO_SPEECH -> navigator.showTextToSpeech("What are you looking for?")
-        }
+        }.checkAllMatched
     }
 
     override fun onBackPressed() {
-        viewModel.navigateTo(NavigationItem.BACKWARD)
+        screenViewModel.navigateTo(NavigationItem.BACKWARD)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -207,10 +209,8 @@ class LingoHomeActivity : ParcelableViewModelAwareActivity<LingoHomeActivityView
 
         when (requestCode) {
             REQ_CODE_SPEECH_INPUT -> {
-                viewModel.handleTextToSpeechResult(textToSpeechResultMapper.transform(resultCode, data))
+                screenViewModel.handleTextToSpeechResult(textToSpeechResultMapper.transform(resultCode, data))
             }
         }
     }
-
-    override fun viewModelType() = LingoHomeActivityViewModel::class.java
 }

@@ -21,7 +21,6 @@ class LingoSearchResultsAdapter(private val searchResultClickListener: SearchRes
         return SearchResultViewHolder(binding, listenersDelegate)
     }
 
-    // TODO: enter anim
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
         holder.bindTo(getItem(position))
     }

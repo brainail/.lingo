@@ -27,7 +27,6 @@ class LingoSearchSuggestionsAdapter(private val suggestionClickListener: Suggest
         return SuggestionViewHolder(parent.inflate(R.layout.item_suggestion), listenersDelegate)
     }
 
-    // TODO: enter anim
     override fun onBindViewHolder(holder: SuggestionViewHolder, position: Int) {
         holder.bindTo(getItem(position))
     }
