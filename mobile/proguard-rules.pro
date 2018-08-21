@@ -226,17 +226,6 @@
   @com.google.api.client.util.Key <fields>;
 }
 
-### ButterKnife
-# -keep class butterknife.** { *; }
-# -dontwarn butterknife.internal.**
-# -keep class **$$ViewInjector { *; }
-# -keepclasseswithmembernames class * {
-#     @butterknife.* <fields>;
-# }
-# -keepclasseswithmembernames class * {
-#     @butterknife.* <methods>;
-# }
-
 ### The support library contains references to newer platform versions.
 ### Don't warn about those in case this app is linking against an older
 ### platform version.  We know about them, and they are safe.
@@ -250,12 +239,6 @@
 -keep class com.crashlytics.android.**
 -dontwarn com.crashlytics.**
 
-### Some stuff, we don't use it
-# -dontwarn javax.xml.**
-# -dontwarn javax.xml.stream.events.**
-# -dontwarn org.w3c.dom.bootstrap.DOMImplementationRegistry
-# -dontwarn java.awt.Desktop
-
 ### Kotlin
 -dontwarn org.w3c.dom.events.**
 -dontwarn kotlin.**
@@ -266,63 +249,12 @@
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
 }
 
-### Proguard configuration for Jackson 2.x (fasterxml package instead of codehaus package)
-# -keep class com.fasterxml.jackson.databind.ObjectMapper {
-#     public <methods>;
-#     protected <methods>;
-# }
-# -keep class com.fasterxml.jackson.databind.ObjectWriter {
-#     public ** writeValueAsString(**);
-# }
-# -keepnames class com.fasterxml.jackson.** { *; }
-# -keepnames interface com.fasterxml.jackson.** { *; }
-# -dontwarn com.fasterxml.jackson.**
-
-### Support design
+### Support/AndroidX
 -keep public class android.support.design.R$* { *; }
-# -keep class android.support.design.** { *; }
-# -keep interface android.support.design.** { *; }
 # Support design > CoordinatorLayout resolves the behaviors of its child components with reflection.
--keep public class * extends android.support.design.widget.CoordinatorLayout$Behavior { *; }
-
-### Support v7
-# -keep class android.support.v7.widget.** { *; }
-# -keep interface android.support.v7.widget.** { *; }
-# -keep public class android.support.v7.internal.widget.** { *; }
-# -keep public class android.support.v7.internal.view.menu.** { *; }
-# -keep class android.support.v7.app.** { *; }
-# -keep interface android.support.v7.app.** { *; }
-# -keep class android.support.v7.appcompat.** { *; }
-# -keep class android.support.v7.view.** { *; }
-# -keep interface android.support.v7.view.** { *; }
-
-### Keep the support v4 library
-# -keep class android.support.v4.app.** { *; }
-# -keep interface android.support.v4.app.** { *; }
-# -keep class android.support.v4.widget.** { *; }
-# -keep interface android.support.v4.widget.** { *; }
-# -keep class android.support.v4.view.** { *; }
-# -keep interface android.support.v4.view.** { *; }
-# -keep class android.support.v4.internal.view.** { *; }
-# -keep interface android.support.v4.internal.view.** { *; }
-# -keep public class * extends android.support.v4.view.ActionProvider { *; }
-
-### Keep drawable.* to fix problems with animated vector drawable
--keep class android.support.graphics.drawable.** { *; }
-
-### International Components for Unicode
-# -keep class com.ibm.icu.**
-# -keep interface com.ibm.icu.**
-
-### About library
-# -keep class .R
-# -keep class **.R$* {
-#     <fields>;
-# }
-
-### LeakCanary
-# -keep class org.eclipse.mat.** { *; }
-# -keep class com.squareup.leakcanary.** { *; }
+-keep public class * extends androidx.coordinatorlayout.widget.CoordinatorLayout$Behavior { *; }
+# Keep drawable.* to fix problems with animated vector drawable
+-keep class androidx.core.graphics.drawable.** { *; }
 
 ### JsBridge
 # Keeping Javascript interfaces
@@ -331,19 +263,18 @@
     @android.webkit.JavascriptInterface <methods>;
 }
 
-### Stetho
-# -keep class com.facebook.stetho.** { *; }
-
-### Retrofit 2.X
--dontwarn retrofit2.**
--keepattributes Signature
--keepattributes Exceptions
-
 ### OkHttp 3.X
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn javax.annotation.**
 -dontwarn org.conscrypt.**
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+### Retrofit
+-dontnote retrofit2.**
+
+### LeakCanary
+# -keep class org.eclipse.mat.** { *; }
+# -keep class com.squareup.leakcanary.** { *; }
 
 

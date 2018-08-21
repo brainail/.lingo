@@ -13,23 +13,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.MenuRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.MarginLayoutParamsCompat;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Xml;
@@ -52,6 +35,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.MenuRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.ActionMenuView;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.MarginLayoutParamsCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class FloatingSearchView extends ConstraintLayout {
     
     private static final int DEFAULT_BACKGROUND_COLOR = 0x90000000;
@@ -68,7 +68,7 @@ public class FloatingSearchView extends ConstraintLayout {
     private static final Interpolator ACCELERATE = new AccelerateInterpolator(2f);
     
     @NonNull
-    private final AdapterDataObserver mAdapterObserver = new AdapterDataObserver() {
+    private final RecyclerView.AdapterDataObserver mAdapterObserver = new RecyclerView.AdapterDataObserver() {
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             onChanged();
@@ -583,8 +583,8 @@ public class FloatingSearchView extends ConstraintLayout {
     
     @SuppressLint("RestrictedApi")
     private static Drawable unwrap(Drawable icon) {
-        if (icon instanceof android.support.v7.graphics.drawable.DrawableWrapper) {
-            return ((android.support.v7.graphics.drawable.DrawableWrapper) icon).getWrappedDrawable();
+        if (icon instanceof androidx.appcompat.graphics.drawable.DrawableWrapper) {
+            return ((androidx.appcompat.graphics.drawable.DrawableWrapper) icon).getWrappedDrawable();
         } else if (Build.VERSION.SDK_INT >= 23 && icon instanceof android.graphics.drawable.DrawableWrapper) {
             return ((android.graphics.drawable.DrawableWrapper) icon).getDrawable();
         } else {
@@ -592,7 +592,7 @@ public class FloatingSearchView extends ConstraintLayout {
         }
     }
     
-    private static class FlyRecyclerView extends android.support.v7.widget.RecyclerView {
+    private static class FlyRecyclerView extends RecyclerView {
         public FlyRecyclerView(Context context) {
             super(context);
         }

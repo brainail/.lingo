@@ -2,20 +2,18 @@ apply plugin: "com.github.ben-manes.versions"
 
 buildscript {
     ext.compileSdkVersion = 28
-    ext.buildToolsVersion = '26.0.2'
     ext.minSdkVersion = 16
-    ext.targetSdkVersion = 27
+    ext.targetSdkVersion = 28
 
-    ext.gradlePluginVersion = '3.0.1'
-    ext.kotlinVersion = '1.2.50'
-
-    ext.playServicesVersion = '11.0.0'
+    ext.gradlePluginVersion = '3.3.0-alpha06'
+    ext.kotlinVersion = '1.2.61'
 
     ext.constraintLayoutVersion = '1.1.2'
-    ext.supportLibraryVersion = '27.1.1'
-    ext.androidKtxVersion = '0.3'
-    ext.androidArchVersion = '1.1.1'
-    ext.androidArchRoomVersion = '1.1.0'
+    ext.materialVersion = '1.0.0-rc01'
+    ext.supportLibraryVersion = '1.0.0-rc01'
+    ext.androidKtxVersion = '1.0.0-rc01'
+    ext.androidArchVersion = '2.0.0-rc01'
+    ext.androidArchRoomVersion = '2.0.0-rc01'
 
     ext.facebookStethoVersion = '1.5.0'
 
@@ -30,16 +28,16 @@ buildscript {
 
     ext.gsonVersion = '2.8.1'
 
-    ext.okHttpVersion = '3.10.0'
+    ext.okHttpVersion = '3.11.0'
     ext.retrofitVersion = '2.4.0'
 
-    ext.daggerVersion = '2.15'
+    ext.daggerVersion = '2.16'
 
     ext.ankoCommonVersion = '0.9.1'
 
     ext.gradleVersionsPluginVersion = '0.17.0'
 
-    ext.multiDexVersion = '1.0.3'
+    ext.multiDexVersion = '2.0.0'
 
     repositories {
         google()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_height="64dp"
             android:background="@null"
             app:layout_scrollFlags="scroll|snap|enterAlways"/>
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <org.brainail.flysearch.FloatingSearchView
         android:id="@+id/floatingSearchView"
@@ -40,7 +40,7 @@
         app:fsv_contentBackgroundColor="@color/material_light_white"
         app:fsv_cornerRadius="1dp"
         app:fsv_menu="@menu/menu_lingo_search"
-        app:layout_behavior="org.brainail.EverboxingLingo.util.SearchViewBehavior"
+        app:layout_behavior="org.brainail.everboxing.lingo.util.SearchViewBehavior"
         app:logo="@drawable/ic_search_logo"
         app:theme="@style/floatingSearchView"/>
 
@@ -50,5 +50,5 @@
         android:layout_height="56dp"
         android:layout_gravity="bottom"
         app:bnbBackgroundStyle="background_style_ripple"/>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

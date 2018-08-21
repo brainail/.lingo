@@ -2,13 +2,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="android.support.constraint.ConstraintLayout"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
     <include layout="@layout/search_height_balancer"/>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/fsv_search_card"
         app:cardElevation="2dp"
         app:cardCornerRadius="1dp"
@@ -62,5 +62,5 @@
                     android:visibility="gone"/>
             </FrameLayout>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </merge>
