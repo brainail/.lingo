@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menu_explore"
+        android:icon="@drawable/ic_translate_outline_24dp"
+        android:title="@string/tab_explore"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"/>
+    <item
+        android:id="@+id/menu_history"
+        android:icon="@drawable/ic_history_outline_24dp"
+        android:title="@string/tab_history"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"/>
+    <item
+        android:id="@+id/menu_favorite"
+        android:icon="@drawable/ic_favorite_outline_24dp"
+        android:title="@string/tab_favourite"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"/>
+</menu>

@@ -3,12 +3,8 @@ package org.brainail.everboxing.lingo.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import com.ashokvarma.bottomnavigation.BottomNavigationBar
-import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
@@ -29,6 +25,7 @@ import org.brainail.everboxing.lingo.ui.home.search.SearchViewState
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState.CursorPosition
 import org.brainail.everboxing.lingo.util.TextWatcherAdapter
 import org.brainail.everboxing.lingo.util.extensions.checkAllMatched
+import org.brainail.everboxing.lingo.util.extensions.consume
 import org.brainail.everboxing.lingo.util.extensions.getViewModel
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
@@ -103,36 +100,20 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         }
 
         // bottom navigation
-        bottomNavigationBarView.isAutoHideEnabled = !viewState.isInFocus
-        bottomNavigationBarView.takeIf { viewState.isInFocus }?.show()
+        bottomAppBarView.hideOnScroll = !viewState.isInFocus
+        bottomAppBarView.takeIf { viewState.isInFocus }?.show()
     }
 
     private fun initNavigation() {
-        bottomNavigationBarView
-                .addItem(BottomNavigationItem(
-                        AppCompatResources.getDrawable(this, R.drawable.ic_translate_24dp), R.string.tab_explore)
-                        .setActiveColor(ContextCompat.getColor(this, R.color.tab_explore)))
-                .addItem(BottomNavigationItem(
-                        AppCompatResources.getDrawable(this, R.drawable.ic_favorite_24dp), R.string.tab_favourite)
-                        .setActiveColor(ContextCompat.getColor(this, R.color.tab_favorite)))
-                .addItem(BottomNavigationItem(
-                        AppCompatResources.getDrawable(this, R.drawable.ic_history_24dp), R.string.tab_history)
-                        .setActiveColor(ContextCompat.getColor(this, R.color.tab_history)))
-                .initialise()
-
-        bottomNavigationBarView.setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
-            override fun onTabUnselected(position: Int) = Unit
-            override fun onTabReselected(position: Int) = selectTab(position)
-            override fun onTabSelected(position: Int) = selectTab(position)
-
-            private fun selectTab(position: Int) {
-                when (position) {
-                    0 -> screenViewModel.navigateTabTo(NavigationTabItem.EXPLORE)
-                    1 -> screenViewModel.navigateTabTo(NavigationTabItem.FAVOURITE)
-                    2 -> screenViewModel.navigateTabTo(NavigationTabItem.HISTORY)
-                }
+        bottomAppBarView.replaceMenu(R.menu.menu_home_bottom_bar)
+        bottomAppBarView.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_explore -> consume { screenViewModel.navigateTabTo(NavigationTabItem.EXPLORE) }
+                R.id.menu_favorite -> consume { screenViewModel.navigateTabTo(NavigationTabItem.FAVOURITE) }
+                R.id.menu_history -> consume { screenViewModel.navigateTabTo(NavigationTabItem.HISTORY) }
+                else -> false
             }
-        })
+        }
 
         screenViewModel.navigation().observe(this, Observer { navigateTo(it!!) })
         screenViewModel.navigationTab().observe(this, Observer { navigateTabTo(it!!) })
@@ -147,10 +128,10 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
             setOnSearchFocusChangedListener { screenViewModel.requestFocusGain(it) }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.menu_clear -> screenViewModel.clearIconClicked()
-                    R.id.menu_tts -> screenViewModel.textToSpeechIconClicked()
+                    R.id.menu_clear -> consume { screenViewModel.clearIconClicked() }
+                    R.id.menu_tts -> consume { screenViewModel.textToSpeechIconClicked() }
+                    else -> false
                 }
-                true
             }
             addTextChangedListener(object : TextWatcherAdapter() {
                 override fun afterTextChanged(query: Editable) {
@@ -179,17 +160,38 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         when (navigationTabItem) {
             NavigationTabItem.EXPLORE -> {
                 navigator.showExploreSubScreen()
-                bottomNavigationBarView.selectTab(0, false)
+                selectMenuItem(R.id.menu_explore)
             }
             NavigationTabItem.FAVOURITE -> {
                 navigator.showExploreSubScreen()
-                bottomNavigationBarView.selectTab(1, false)
+                selectMenuItem(R.id.menu_favorite)
             }
             NavigationTabItem.HISTORY -> {
                 navigator.showExploreSubScreen()
-                bottomNavigationBarView.selectTab(2, false)
+                selectMenuItem(R.id.menu_history)
             }
         }.checkAllMatched
+    }
+
+    private fun selectMenuItem(menuItemId: Int) {
+        val menu = bottomAppBarView.menu
+        when (menuItemId) {
+            R.id.menu_explore -> {
+                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_translate_24dp)
+                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_favorite_outline_24dp)
+                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_history_outline_24dp)
+            }
+            R.id.menu_favorite -> {
+                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_translate_outline_24dp)
+                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_favorite_24dp)
+                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_history_outline_24dp)
+            }
+            R.id.menu_history -> {
+                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_translate_outline_24dp)
+                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_favorite_outline_24dp)
+                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_history_24dp)
+            }
+        }
     }
 
     private fun navigateTo(navigationItem: SearchViewModel.SearchNavigationItem) {

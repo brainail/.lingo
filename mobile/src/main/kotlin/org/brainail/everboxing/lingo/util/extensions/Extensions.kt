@@ -13,4 +13,8 @@ fun <T> lazyFast(operation: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE) 
 val <T> T.checkAllMatched: T
     get() = this
 
+inline fun consume(f: () -> Unit): Boolean {
+    f()
+    return true
+}
 

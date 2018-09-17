@@ -39,16 +39,29 @@
         android:paddingTop="4dp"
         app:fsv_contentBackgroundColor="@color/material_light_white"
         app:fsv_cornerRadius="1dp"
-        app:fsv_menu="@menu/menu_lingo_search"
+        app:fsv_menu="@menu/menu_home_search"
         app:layout_behavior="org.brainail.everboxing.lingo.util.SearchViewBehavior"
         app:logo="@drawable/ic_search_logo"
-        app:theme="@style/floatingSearchView"/>
+        app:theme="@style/AppWidget.FloatingSearchView"/>
 
-    <com.ashokvarma.bottomnavigation.BottomNavigationBar
-        android:id="@+id/bottomNavigationBarView"
+    <org.brainail.everboxing.lingo.widget.AppCompatBottomAppBar
+        android:id="@+id/bottomAppBarView"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:bnbBackgroundStyle="background_style_ripple"/>
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        app:backgroundTint="?attr/colorPrimary"
+        app:fabAlignmentMode="end"
+        app:fabCradleMargin="4dp"
+        app:fabCradleRoundedCornerRadius="4dp"
+        app:hideOnScroll="true"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tint="@color/material_light_white"
+        app:layout_anchor="@id/bottomAppBarView"
+        app:srcCompat="@drawable/ic_search_black_24dp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
