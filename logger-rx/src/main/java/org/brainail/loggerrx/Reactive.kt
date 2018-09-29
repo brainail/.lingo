@@ -1,4 +1,4 @@
-package org.brainail.logger_rx
+package org.brainail.loggerrx
 
 import io.reactivex.Single
 import org.brainail.logger.L

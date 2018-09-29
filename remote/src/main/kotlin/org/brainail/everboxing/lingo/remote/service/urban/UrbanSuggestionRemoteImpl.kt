@@ -4,7 +4,7 @@ import io.reactivex.Single
 import org.brainail.everboxing.lingo.data.model.SuggestionEntity
 import org.brainail.everboxing.lingo.data.repository.suggestion.SuggestionRemote
 import org.brainail.everboxing.lingo.remote.mapper.UrbanSuggestionRemoteMapper
-import org.brainail.logger_rx.logEvents
+import org.brainail.loggerrx.logEvents
 import javax.inject.Inject
 
 class UrbanSuggestionRemoteImpl @Inject constructor(

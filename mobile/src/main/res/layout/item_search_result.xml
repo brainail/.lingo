@@ -1,30 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="searchResult"
             type="org.brainail.everboxing.lingo.model.SearchResultModel"/>
+
         <variable
             name="searchResultClickListener"
             type="org.brainail.everboxing.lingo.ui.home.explore.LingoSearchResultsAdapter.SearchResultClickListener"/>
     </data>
 
     <androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="@{() -> searchResultClickListener.onSearchResultClick(searchResult)}"
-        app:cardCornerRadius="1dp"
         android:layout_marginLeft="-5dp"
         android:layout_marginRight="-5dp"
-        app:cardUseCompatPadding="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?selectableItemBackground"
+        android:onClick="@{() -> searchResultClickListener.onSearchResultClick(searchResult)}"
+        android:stateListAnimator="@animator/animator_elevation_12dp"
+        app:cardCornerRadius="1dp"
         app:cardElevation="4dp"
-        app:contentPadding="16dp">
+        app:cardUseCompatPadding="true"
+        app:contentPadding="16dp"
+        tools:ignore="UnusedAttribute">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -34,7 +38,7 @@
                 android:id="@+id/searchResultWord"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_alternates_bold"
+                android:fontFamily="@font/work_sans_bold"
                 android:maxLines="2"
                 android:text="@{searchResult.word}"
                 android:textSize="@dimen/material_typography_title"
@@ -49,9 +53,9 @@
                 android:id="@+id/searchResultDefinition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_alternates"
-                android:maxLines="4"
                 android:ellipsize="end"
+                android:fontFamily="@font/work_sans"
+                android:maxLines="4"
                 android:text="@{searchResult.definition}"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"

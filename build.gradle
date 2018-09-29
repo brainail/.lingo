@@ -2,23 +2,23 @@ apply plugin: "com.github.ben-manes.versions"
 
 buildscript {
     ext.compileSdkVersion = 28
-    ext.minSdkVersion = 16
+    ext.minSdkVersion = 21
     ext.targetSdkVersion = 28
 
-    ext.gradlePluginVersion = '3.3.0-alpha10'
-    ext.kotlinVersion = '1.2.61'
+    ext.gradlePluginVersion = '3.3.0-alpha12'
+    ext.kotlinVersion = '1.2.70'
 
     ext.constraintLayoutVersion = '1.1.3'
-    ext.materialVersion = '1.0.0-rc02'
-    ext.supportLibraryVersion = '1.0.0-rc02'
-    ext.androidKtxVersion = '1.0.0-rc02'
-    ext.androidArchVersion = '2.0.0-rc01'
+    ext.materialVersion = '1.0.0'
+    ext.supportLibraryVersion = '1.0.0'
+    ext.androidKtxVersion = '1.0.0'
+    ext.androidArchVersion = '2.0.0'
     ext.androidArchRoomVersion = '2.0.0-rc01'
 
     ext.facebookStethoVersion = '1.5.0'
 
     ext.rxJavaVersion = '2.1.1'
-    ext.rxAndroidVersion = '2.0.2'
+    ext.rxAndroidVersion = '2.1.0'
     ext.rxKotlinVersion = '2.1.0'
 
     ext.javaxAnnotationVersion = '1.0'
