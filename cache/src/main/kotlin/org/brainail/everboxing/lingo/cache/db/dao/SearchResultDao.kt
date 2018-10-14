@@ -12,4 +12,11 @@ abstract class SearchResultDao : BaseDao<SearchResultCacheEntity> {
 
     @Query("delete from search_results")
     abstract fun deleteAll()
+
+    @Query("update search_results set favorite = 1 - favorite where sr_id = :id")
+    abstract fun favoriteSearchResult(id: Int)
+
+    @Query("delete from search_results where sr_id = :id")
+    abstract fun forgetSearchResult(id: Int)
+
 }

@@ -12,9 +12,11 @@ import org.brainail.everboxing.lingo.app.Constants
 import org.brainail.everboxing.lingo.domain.executor.AppExecutors
 import org.brainail.everboxing.lingo.domain.model.SearchResult
 import org.brainail.everboxing.lingo.domain.model.Suggestion
+import org.brainail.everboxing.lingo.domain.usecase.FavoriteSearchResultUseCase
 import org.brainail.everboxing.lingo.domain.usecase.FindRecentSuggestionsUseCase
 import org.brainail.everboxing.lingo.domain.usecase.FindSearchResultsUseCase
 import org.brainail.everboxing.lingo.domain.usecase.FindSuggestionsUseCase
+import org.brainail.everboxing.lingo.domain.usecase.ForgetSearchResultUseCase
 import org.brainail.everboxing.lingo.domain.usecase.SaveRecentSuggestionUseCase
 import org.brainail.everboxing.lingo.mapper.SearchResultModelMapper
 import org.brainail.everboxing.lingo.mapper.SuggestionModelMapper
@@ -34,6 +36,8 @@ class LingoSearchFragmentViewModel @Inject constructor(
         private val findRecentSuggestionsUseCase: FindRecentSuggestionsUseCase,
         private val findSearchResultsUseCase: FindSearchResultsUseCase,
         private val saveRecentSuggestionUseCase: SaveRecentSuggestionUseCase,
+        private val favoriteSearchResultUseCase: FavoriteSearchResultUseCase,
+        private val forgetSearchResultUseCase: ForgetSearchResultUseCase,
         private val suggestionModelMapper: SuggestionModelMapper,
         private val searchResultModelMapper: SearchResultModelMapper,
         private val appExecutors: AppExecutors) : RxAwareViewModel() {
@@ -73,6 +77,18 @@ class LingoSearchFragmentViewModel @Inject constructor(
         searchResultsSubject.onNext(suggestion)
     }
 
+    fun forgetResultAt(position: Int) {
+        val item = viewState.value!!.displayedSearchResults.getOrNull(position) ?: return
+        applyChanges(LingoSearchFragmentViewState.ForgetSearchResult(item)) // optimistic update
+        bindCompletable(forgetSearchResultUseCase.execute(item.id)).subscribe()
+    }
+
+    fun favoriteResultAt(position: Int) {
+        val item = viewState.value!!.displayedSearchResults.getOrNull(position) ?: return
+        applyChanges(LingoSearchFragmentViewState.FavoriteSearchResult(item)) // optimistic update
+        bindCompletable(favoriteSearchResultUseCase.execute(item.id)).subscribe()
+    }
+
     @SuppressLint("CheckResult")
     private fun initSuggestions() {
         searchSuggestionsSubject
@@ -88,7 +104,7 @@ class LingoSearchFragmentViewModel @Inject constructor(
         val suggestions: Flowable<List<Suggestion>> = Flowable.combineLatest(
                 findRecentSuggestionsUseCase.execute(query),
                 findSuggestionsUseCase.execute(query),
-                BiFunction { recent, remote -> recent + remote })
+                BiFunction { recent, other -> recent + other })
         return suggestions
                 .toObservable()
                 .doOnSubscribe { startSuggestionsLoading.call() }
@@ -100,12 +116,9 @@ class LingoSearchFragmentViewModel @Inject constructor(
         searchResultsSubject
                 .debounce(Constants.DEBOUNCE_SEARCH_REQUEST_MILLIS, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged { cur, next ->
-                    cur.word == next.word && cur.isSilent == next.isSilent
-                }
-                .doOnNext {
-                    it.takeIf { it.word.isNotBlank() && !it.isSilent }
-                            ?.run { saveRecentSuggestion(it).subscribe() }
-                }
+                    cur.word == next.word && cur.isSilent == next.isSilent }
+                .doOnNext { it.takeIf { it.word.isNotBlank() && !it.isSilent }
+                        ?.let { saveRecentSuggestion(it).subscribe() } }
                 .switchMap { findResults(it.word.toString()) }
                 .map { it.map { searchResultModelMapper.mapToModel(it) } }
                 .observeOn(appExecutors.mainScheduler)

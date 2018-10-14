@@ -6,4 +6,5 @@ data class SearchResultEntity(
         val definition: String = "",
         val example: String = "",
         val link: String = "",
-        val id: Int = 0)
+        val id: Int = 0,
+        val favorite: Boolean = false)

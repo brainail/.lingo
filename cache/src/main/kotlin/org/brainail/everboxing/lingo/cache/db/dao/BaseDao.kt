@@ -16,7 +16,7 @@ interface BaseDao<T> {
     @Insert(onConflict = REPLACE)
     fun insertOrRecreate(obj: List<T>)
     @Update(onConflict = REPLACE)
-    fun update(obj: T): Int
+    fun updateOrRecreate(obj: T): Int
     @Delete
     fun delete(obj: T)
 }

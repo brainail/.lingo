@@ -21,4 +21,6 @@ data class SearchResultCacheEntity(
         @ColumnInfo(name = "example")
         val example: String,
         @ColumnInfo(name = "link")
-        val link: String)
+        val link: String,
+        @ColumnInfo(name = "favorite")
+        val favorite: Boolean)

@@ -35,8 +35,8 @@ object UrbanServiceFactory {
         return OkHttpClient.Builder().apply {
             addInterceptor(httpLoggingInterceptor)
             networkInterceptors.forEach { addNetworkInterceptor(it) }
-            connectTimeout(120, TimeUnit.SECONDS)
-            readTimeout(120, TimeUnit.SECONDS)
+            connectTimeout(15, TimeUnit.SECONDS)
+            readTimeout(15, TimeUnit.SECONDS)
         }.build()
     }
 
@@ -49,7 +49,7 @@ object UrbanServiceFactory {
     }
 
     private fun makeLoggingInterceptor(isDebug: Boolean): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor({message -> L.d(message)}).apply {
+        return HttpLoggingInterceptor { L.d(it) }.apply {
             level = when {
                 isDebug -> HttpLoggingInterceptor.Level.BASIC
                 else -> HttpLoggingInterceptor.Level.NONE

@@ -6,4 +6,5 @@ data class SearchResult(
         val word: String,
         val definition: String,
         val example: String,
-        val link: String)
+        val link: String,
+        val favorite: Boolean)

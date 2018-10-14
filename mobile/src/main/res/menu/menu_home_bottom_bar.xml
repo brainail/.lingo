@@ -6,19 +6,19 @@
 
     <item
         android:id="@+id/menu_explore"
-        android:icon="@drawable/ic_translate_outline_24dp"
+        android:icon="@drawable/ic_twotone_view_agenda_24dp"
         android:title="@string/tab_explore"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_history"
-        android:icon="@drawable/ic_history_outline_24dp"
+        android:icon="@drawable/ic_twotone_watch_later_24dp"
         android:title="@string/tab_history"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_favorite"
-        android:icon="@drawable/ic_favorite_outline_24dp"
+        android:icon="@drawable/ic_twotone_favorite_24dp"
         android:title="@string/tab_favourite"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>

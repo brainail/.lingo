@@ -37,6 +37,14 @@ class SearchResultRepositoryImpl @Inject constructor(
                 .map { it.map { searchResultMapper.mapFromEntity(it) } }
     }
 
+    override fun favoriteSearchResult(id: Int): Completable {
+        return dataSourceFactory.obtainCacheDataSource().favoriteSearchResult(id)
+    }
+
+    override fun forgetSearchResult(id: Int): Completable {
+        return dataSourceFactory.obtainCacheDataSource().forgetSearchResult(id)
+    }
+
     private fun saveSearchResultEntities(searchResults: List<SearchResultEntity>): Completable {
         return dataSourceFactory.obtainCacheDataSource().saveSearchResults(searchResults)
     }

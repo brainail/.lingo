@@ -45,7 +45,7 @@ data class SearchViewState(
         }
     }
 
-    data class SuggestionsPrepared(private val suggestions: List<SuggestionModel>) :
+    class SuggestionsPrepared(private val suggestions: List<SuggestionModel>) :
             PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
@@ -54,7 +54,7 @@ data class SearchViewState(
         }
     }
 
-    data class UpdateQuery(private val query: String) : PartialViewStateChange<SearchViewState> {
+    class UpdateQuery(private val query: String) : PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                     displayedText = query,
@@ -64,7 +64,7 @@ data class SearchViewState(
         }
     }
 
-    data class SubmitQuery(private val query: String) : PartialViewStateChange<SearchViewState> {
+    class SubmitQuery(private val query: String) : PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                     isInFocus = false,
@@ -73,7 +73,7 @@ data class SearchViewState(
         }
     }
 
-    data class RequestFocusGain(private val isInFocus: Boolean) : PartialViewStateChange<SearchViewState> {
+    class RequestFocusGain(private val isInFocus: Boolean) : PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                     isInFocus = isInFocus,
@@ -99,7 +99,7 @@ data class SearchViewState(
         }
     }
 
-    data class TextToSpeechResultSuccess(private val result: TextToSpeechResult.Successful) :
+    class TextToSpeechResultSuccess(private val result: TextToSpeechResult.Successful) :
             PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(

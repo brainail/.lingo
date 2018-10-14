@@ -8,4 +8,6 @@ interface SearchResultDataSource {
     fun clearSearchResults(): Completable
     fun saveSearchResults(searchResults: List<SearchResultEntity>): Completable
     fun getSearchResults(query: String): Flowable<List<SearchResultEntity>>
+    fun favoriteSearchResult(id: Int): Completable
+    fun forgetSearchResult(id: Int): Completable
 }

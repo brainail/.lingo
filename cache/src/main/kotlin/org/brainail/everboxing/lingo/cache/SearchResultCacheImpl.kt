@@ -31,4 +31,18 @@ class SearchResultCacheImpl @Inject constructor(
     override fun getSearchResults(query: String): Flowable<List<SearchResultEntity>> {
         return searchResultDao.getSearchResults(query).map { it.map { entityMapper.mapFromCache(it) } }
     }
+
+    override fun favoriteSearchResult(id: Int): Completable {
+        return Completable.defer {
+            searchResultDao.favoriteSearchResult(id)
+            Completable.complete()
+        }
+    }
+
+    override fun forgetSearchResult(id: Int): Completable {
+        return Completable.defer {
+            searchResultDao.forgetSearchResult(id)
+            Completable.complete()
+        }
+    }
 }

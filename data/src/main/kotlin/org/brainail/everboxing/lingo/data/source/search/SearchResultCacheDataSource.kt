@@ -21,4 +21,12 @@ class SearchResultCacheDataSource @Inject constructor(
     override fun getSearchResults(query: String): Flowable<List<SearchResultEntity>> {
         return searchResultCache.getSearchResults(query)
     }
+
+    override fun favoriteSearchResult(id: Int): Completable {
+        return searchResultCache.favoriteSearchResult(id)
+    }
+
+    override fun forgetSearchResult(id: Int): Completable {
+        return searchResultCache.forgetSearchResult(id)
+    }
 }

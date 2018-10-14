@@ -177,19 +177,19 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         val menu = bottomAppBarView.menu
         when (menuItemId) {
             R.id.menu_explore -> {
-                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_translate_24dp)
-                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_favorite_outline_24dp)
-                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_history_outline_24dp)
+                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_baseline_view_agenda_24dp)
+                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_twotone_favorite_24dp)
+                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_twotone_watch_later_24dp)
             }
             R.id.menu_favorite -> {
-                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_translate_outline_24dp)
-                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_favorite_24dp)
-                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_history_outline_24dp)
+                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_twotone_view_agenda_24dp)
+                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_baseline_favorite_24dp)
+                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_twotone_watch_later_24dp)
             }
             R.id.menu_history -> {
-                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_translate_outline_24dp)
-                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_favorite_outline_24dp)
-                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_history_24dp)
+                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_twotone_view_agenda_24dp)
+                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_twotone_favorite_24dp)
+                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_baseline_watch_later_24dp)
             }
         }
     }

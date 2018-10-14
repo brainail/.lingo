@@ -16,7 +16,6 @@ import org.brainail.everboxing.lingo.cache.mapper.SearchResultCacheMapper
 import org.brainail.everboxing.lingo.cache.mapper.SuggestionCacheMapper
 import org.brainail.everboxing.lingo.data.mapper.SearchResultDataMapper
 import org.brainail.everboxing.lingo.data.mapper.SuggestionDataMapper
-import org.brainail.everboxing.lingo.data.repository.UserRepositoryImpl
 import org.brainail.everboxing.lingo.data.repository.search.SearchResultCache
 import org.brainail.everboxing.lingo.data.repository.search.SearchResultRemote
 import org.brainail.everboxing.lingo.data.repository.search.SearchResultRepositoryImpl
@@ -24,13 +23,11 @@ import org.brainail.everboxing.lingo.data.repository.suggestion.SuggestionCache
 import org.brainail.everboxing.lingo.data.repository.suggestion.SuggestionRemote
 import org.brainail.everboxing.lingo.data.repository.suggestion.SuggestionsRepositoryImpl
 import org.brainail.everboxing.lingo.data.settings.UserSettingsImpl
-import org.brainail.everboxing.lingo.data.source.UserPrefDataSource
 import org.brainail.everboxing.lingo.data.source.search.SearchResultDataSourceFactory
 import org.brainail.everboxing.lingo.data.source.suggestion.SuggestionsDataSourceFactory
 import org.brainail.everboxing.lingo.domain.executor.AppExecutors
 import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
 import org.brainail.everboxing.lingo.domain.repository.SuggestionsRepository
-import org.brainail.everboxing.lingo.domain.repository.UserRepository
 import org.brainail.everboxing.lingo.domain.settings.UserSettings
 import org.brainail.everboxing.lingo.remote.mapper.UrbanSearchResultRemoteMapper
 import org.brainail.everboxing.lingo.remote.mapper.UrbanSuggestionRemoteMapper
@@ -42,11 +39,6 @@ import javax.inject.Singleton
 
 @Module
 class DataModule {
-    @Provides
-    @Singleton
-    fun provideUserRepository(userPrefDataSource: UserPrefDataSource): UserRepository =
-            UserRepositoryImpl(userPrefDataSource)
-
     @Provides
     @Singleton
     fun provideAppPreferences(sharedPreferences: SharedPreferences): UserSettings = UserSettingsImpl(sharedPreferences)

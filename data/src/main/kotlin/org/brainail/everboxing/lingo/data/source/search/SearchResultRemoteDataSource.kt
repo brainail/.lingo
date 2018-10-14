@@ -21,4 +21,12 @@ class SearchResultRemoteDataSource @Inject constructor(
     override fun getSearchResults(query: String): Flowable<List<SearchResultEntity>> {
         return searchResultRemote.getSearchResults(query).toFlowable()
     }
+
+    override fun favoriteSearchResult(id: Int): Completable {
+        throw UnsupportedOperationException()
+    }
+
+    override fun forgetSearchResult(id: Int): Completable {
+        throw UnsupportedOperationException()
+    }
 }

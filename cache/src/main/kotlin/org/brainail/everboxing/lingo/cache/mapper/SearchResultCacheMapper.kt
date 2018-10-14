@@ -11,11 +11,11 @@ class SearchResultCacheMapper @Inject constructor()
 
     override fun mapFromCache(input: SearchResultCacheEntity): SearchResultEntity {
         return SearchResultEntity(input.definitionId,
-                input.word, input.definition, input.example, input.link, input.id)
+                input.word, input.definition, input.example, input.link, input.id, input.favorite)
     }
 
     override fun mapToCache(input: SearchResultEntity): SearchResultCacheEntity {
         return SearchResultCacheEntity(input.id, input.definitionId,
-                input.word, input.definition, input.example, input.link)
+                input.word, input.definition, input.example, input.link, input.favorite)
     }
 }
