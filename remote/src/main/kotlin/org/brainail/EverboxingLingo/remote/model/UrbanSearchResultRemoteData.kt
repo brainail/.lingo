@@ -1,9 +1,0 @@
-package org.brainail.EverboxingLingo.remote.model
-
-data class UrbanSearchResultsResponse(val list: List<UrbanSearchResultRemoteEntity>)
-data class UrbanSearchResultRemoteEntity(
-        val defid: String,
-        val permalink: String,
-        val word: String,
-        val definition: String,
-        val example: String)

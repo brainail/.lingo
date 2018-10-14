@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_height="64dp"
             android:background="@null"
             app:layout_scrollFlags="scroll|snap|enterAlways"/>
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <org.brainail.flysearch.FloatingSearchView
         android:id="@+id/floatingSearchView"
@@ -39,16 +39,29 @@
         android:paddingTop="4dp"
         app:fsv_contentBackgroundColor="@color/material_light_white"
         app:fsv_cornerRadius="1dp"
-        app:fsv_menu="@menu/menu_lingo_search"
-        app:layout_behavior="org.brainail.EverboxingLingo.util.SearchViewBehavior"
+        app:fsv_menu="@menu/menu_home_search"
+        app:layout_behavior="org.brainail.everboxing.lingo.util.SearchViewBehavior"
         app:logo="@drawable/ic_search_logo"
-        app:theme="@style/floatingSearchView"/>
+        app:theme="@style/AppWidget.FloatingSearchView"/>
 
-    <com.ashokvarma.bottomnavigation.BottomNavigationBar
-        android:id="@+id/bottomNavigationBarView"
+    <org.brainail.everboxing.lingo.widget.AppCompatBottomAppBar
+        android:id="@+id/bottomAppBarView"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:bnbBackgroundStyle="background_style_ripple"/>
-</android.support.design.widget.CoordinatorLayout>
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        app:backgroundTint="?attr/colorPrimary"
+        app:fabAlignmentMode="end"
+        app:fabCradleMargin="4dp"
+        app:fabCradleRoundedCornerRadius="4dp"
+        app:hideOnScroll="true"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tint="@color/material_light_white"
+        app:layout_anchor="@id/bottomAppBarView"
+        app:srcCompat="@drawable/ic_search_black_24dp"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

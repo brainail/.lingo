@@ -1,12 +1,14 @@
 <resources>
-    <style name="floatingSearchView">
-        <item name="editTextStyle">@style/floatingSearchViewEditTextStyle</item>
+    <style name="AppWidget"/>
+
+    <style name="AppWidget.FloatingSearchView">
+        <item name="editTextStyle">@style/AppWidget.FloatingSearchViewEditText</item>
         <item name="android:divider">#c9c9c9</item>
         <item name="android:dividerHeight">1dp</item>
         <item name="colorControlNormal">#696969</item>
     </style>
 
-    <style name="floatingSearchViewEditTextStyle" parent="Widget.AppCompat.EditText">
+    <style name="AppWidget.FloatingSearchViewEditText" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:imeOptions">actionSearch|flagNoExtractUi</item>

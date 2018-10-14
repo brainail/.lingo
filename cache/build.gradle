@@ -3,8 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion project.compileSdkVersion
-    buildToolsVersion project.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
 
     defaultConfig {
         minSdkVersion project.minSdkVersion
@@ -33,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "androidx.appcompat:appcompat:$supportLibraryVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
@@ -45,9 +44,9 @@ dependencies {
 
     implementation "com.google.code.gson:gson:$gsonVersion"
 
-    api "android.arch.persistence.room:runtime:$androidArchRoomVersion"
-    implementation "android.arch.persistence.room:rxjava2:$androidArchRoomVersion"
-    kapt "android.arch.persistence.room:compiler:$androidArchRoomVersion"
+    api "androidx.room:room-runtime:$androidArchRoomVersion"
+    implementation "androidx.room:room-rxjava2:$androidArchRoomVersion"
+    kapt "androidx.room:room-compiler:$androidArchRoomVersion"
 
     implementation project(':data')
     implementation project(':logger')

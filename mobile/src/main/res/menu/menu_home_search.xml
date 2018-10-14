@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menu_progress"
+        app:actionLayout="@layout/menu_item_progress"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"
+        android:title=""/>
+    <item
+        android:id="@+id/menu_clear"
+        android:icon="@drawable/ic_clear_control_24dp"
+        android:title="@string/menu_clear"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"/>
+    <item
+        android:id="@+id/menu_tts"
+        android:icon="@drawable/ic_mic_control_24dp"
+        android:title="@string/menu_voice"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"/>
+</menu>
