@@ -20,6 +20,13 @@ abstract class ViewModelAwareFragment : BaseFragment() {
 
     abstract fun createPrimaryViewModels(): Array<BaseViewModel>?
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModels?.forEach {
+            saveViewModelStateToBundle(outState, it.stateToSave, it::class.java)
+        }
+    }
+
     private fun getViewModelStateFromBundle(bundle: Bundle?, type: Class<out BaseViewModel>): ViewModelSavedState? {
         return bundle?.getParcelable(KEY_VIEW_MODEL_STATE + "_" + type.name)
     }

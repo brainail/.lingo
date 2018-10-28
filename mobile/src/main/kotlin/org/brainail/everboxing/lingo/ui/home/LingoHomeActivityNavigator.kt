@@ -10,10 +10,6 @@ import org.brainail.everboxing.lingo.util.ScrollablePage
 import org.brainail.everboxing.lingo.util.extensions.openFragment
 
 class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(activity) {
-    fun closeScreen() {
-        activity.supportFinishAfterTransition()
-    }
-
     fun showTextToSpeech(prompt: String) = startActivityForResult(REQ_CODE_SPEECH_INPUT) {
         Intents.TextToSpeech.showVoiceRecognizer(prompt)
     }
@@ -22,15 +18,19 @@ class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(a
             null != Intents.TextToSpeech.showVoiceRecognizer(null).resolveActivity(context.packageManager)
 
     fun showExploreSubScreen() {
-        activity.openFragment(LingoSearchFragment.FRAGMENT_TAG, R.id.containerView) {
+        activity.openFragment(LingoSearchFragment.layoutTag, R.id.containerView) {
             LingoSearchFragment.newInstance()
         }
     }
 
     fun goBack() {
         val fragment = activity.supportFragmentManager.findFragmentById(R.id.containerView)
-        if ((fragment as? NavigableBack)?.goBack() == false) {
-            closeScreen()
+        if ((fragment as? NavigableBack)?.goBack() != true) {
+            if (activity.supportFragmentManager.backStackEntryCount > 0) {
+                activity.supportFragmentManager.popBackStack()
+            } else {
+                activity.supportFinishAfterTransition()
+            }
         }
     }
 

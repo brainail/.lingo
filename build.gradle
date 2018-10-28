@@ -5,15 +5,20 @@ buildscript {
     ext.minSdkVersion = 21
     ext.targetSdkVersion = 28
 
-    ext.gradlePluginVersion = '3.3.0-alpha13'
+    ext.gradlePluginVersion = '3.3.0-beta01'
     ext.kotlinVersion = '1.2.70'
 
-    ext.constraintLayoutVersion = '1.1.3'
-    ext.materialVersion = '1.0.0'
-    ext.supportLibraryVersion = '1.0.0'
-    ext.androidKtxVersion = '1.0.0'
-    ext.androidArchVersion = '2.0.0'
+    ext.androidConstraintLayoutVersion = '1.1.3'
+    ext.androidMaterialComponentsVersion = '1.0.0'
+    ext.androidCardViewVersion = '1.0.0'
+    ext.androidAppCompatVersion = '1.0.0'
+    ext.androidRecyclerViewCompatVersion = '1.0.0'
+    ext.androidLifecycleVersion = '2.0.0'
     ext.androidArchRoomVersion = '2.0.0-rc01'
+
+    ext.androidCoreKtxVersion = '1.0.0'
+    ext.androidFragmentKtxVersion = '1.0.0'
+    ext.androidCollectionKtxVersion = '1.0.0'
 
     ext.facebookStethoVersion = '1.5.0'
 

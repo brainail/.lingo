@@ -15,9 +15,7 @@ import org.brainail.everboxing.lingo.ui.home.LingoHomeActivityViewModel
 @Module
 abstract class AppSubcomponentsModule {
     @ActivityScope
-    @ContributesAndroidInjector(modules = arrayOf(
-            LingoHomeActivitySubcomponentsModule::class,
-            LingoHomeActivityModule::class))
+    @ContributesAndroidInjector(modules = [LingoHomeActivitySubcomponentsModule::class, LingoHomeActivityModule::class])
     abstract fun contributeLingoHomeActivityInjector(): LingoHomeActivity
 
     @ActivityScope

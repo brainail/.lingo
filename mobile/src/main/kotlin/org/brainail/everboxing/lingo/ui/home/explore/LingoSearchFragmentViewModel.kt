@@ -20,6 +20,7 @@ import org.brainail.everboxing.lingo.domain.usecase.ForgetSearchResultUseCase
 import org.brainail.everboxing.lingo.domain.usecase.SaveRecentSuggestionUseCase
 import org.brainail.everboxing.lingo.mapper.SearchResultModelMapper
 import org.brainail.everboxing.lingo.mapper.SuggestionModelMapper
+import org.brainail.everboxing.lingo.model.SearchResultModel
 import org.brainail.everboxing.lingo.model.SuggestionModel
 import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
 import org.brainail.everboxing.lingo.ui.base.RxAwareViewModel
@@ -42,8 +43,6 @@ class LingoSearchFragmentViewModel @Inject constructor(
         private val searchResultModelMapper: SearchResultModelMapper,
         private val appExecutors: AppExecutors) : RxAwareViewModel() {
 
-    private val viewState = MutableLiveData<LingoSearchFragmentViewState>()
-
     private val searchSuggestionsSubject: PublishSubject<String> by lazyFast {
         val subject = PublishSubject.create<String>()
         bindObservable(subject)
@@ -56,11 +55,14 @@ class LingoSearchFragmentViewModel @Inject constructor(
         subject
     }
 
+    private val viewState = MutableLiveData<LingoSearchFragmentViewState>()
     private val presentSuggestions = SingleEventLiveData<List<SuggestionModel>>()
     private val startSuggestionsLoading = SingleEventLiveData<Void>()
+    private val navigateToSearchResultEvent = SingleEventLiveData<SearchResultModel>()
 
     fun presentSuggestions(): LiveData<List<SuggestionModel>> = presentSuggestions
     fun startSuggestionsLoading(): LiveData<Void> = startSuggestionsLoading
+    fun navigateToSearchResultEvent(): LiveData<SearchResultModel> = navigateToSearchResultEvent
     fun viewState(): LiveData<LingoSearchFragmentViewState> = viewState
 
     init {
@@ -77,16 +79,20 @@ class LingoSearchFragmentViewModel @Inject constructor(
         searchResultsSubject.onNext(suggestion)
     }
 
-    fun forgetResultAt(position: Int) {
+    fun forgetSearchResultAt(position: Int) {
         val item = viewState.value!!.displayedSearchResults.getOrNull(position) ?: return
         applyChanges(LingoSearchFragmentViewState.ForgetSearchResult(item)) // optimistic update
         bindCompletable(forgetSearchResultUseCase.execute(item.id)).subscribe()
     }
 
-    fun favoriteResultAt(position: Int) {
+    fun favoriteSearchResultAt(position: Int) {
         val item = viewState.value!!.displayedSearchResults.getOrNull(position) ?: return
         applyChanges(LingoSearchFragmentViewState.FavoriteSearchResult(item)) // optimistic update
         bindCompletable(favoriteSearchResultUseCase.execute(item.id)).subscribe()
+    }
+
+    fun searchResultClicked(item: SearchResultModel) {
+        navigateToSearchResultEvent.value = item
     }
 
     @SuppressLint("CheckResult")

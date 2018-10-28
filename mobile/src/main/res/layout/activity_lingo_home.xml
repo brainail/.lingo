@@ -62,6 +62,6 @@
         android:layout_height="wrap_content"
         android:tint="@color/material_light_white"
         app:layout_anchor="@id/bottomAppBarView"
-        app:srcCompat="@drawable/ic_search_black_24dp"/>
+        android:src="@drawable/ic_search_black_24dp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

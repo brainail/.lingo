@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
-import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
@@ -27,6 +26,7 @@ import org.brainail.everboxing.lingo.util.TextWatcherAdapter
 import org.brainail.everboxing.lingo.util.extensions.checkAllMatched
 import org.brainail.everboxing.lingo.util.extensions.consume
 import org.brainail.everboxing.lingo.util.extensions.getViewModel
+import org.brainail.everboxing.lingo.util.extensions.observeNonNull
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
 import javax.inject.Inject
@@ -56,7 +56,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     override fun getLayoutResourceId() = R.layout.activity_lingo_home
 
     private fun initViewState() {
-        screenViewModel.searchViewState().observe(this, Observer { renderSearchViewState(it!!) })
+        screenViewModel.searchViewState().observeNonNull(this) { renderSearchViewState(it) }
     }
 
     private fun renderSearchViewState(viewState: SearchViewState) {
@@ -115,9 +115,9 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
             }
         }
 
-        screenViewModel.navigation().observe(this, Observer { navigateTo(it!!) })
-        screenViewModel.navigationTab().observe(this, Observer { navigateTabTo(it!!) })
-        screenViewModel.searchNavigation().observe(this, Observer { navigateTo(it!!) })
+        screenViewModel.navigation().observeNonNull(this) { navigateTo(it) }
+        screenViewModel.navigationTab().observeNonNull(this) { navigateTabTo(it) }
+        screenViewModel.searchNavigation().observeNonNull(this) { navigateTo(it) }
     }
 
     private fun initSearch() {

@@ -42,16 +42,17 @@ android {
 }
 
 dependencies {
-    implementation "com.google.android.material:material:$materialVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-    implementation "androidx.cardview:cardview:$supportLibraryVersion"
-
-    implementation "androidx.core:core-ktx:$androidKtxVersion"
+    implementation "com.google.android.material:material:$androidMaterialComponentsVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$androidConstraintLayoutVersion"
+    implementation "androidx.cardview:cardview:$androidCardViewVersion"
+    implementation "androidx.core:core-ktx:$androidCoreKtxVersion"
+    implementation "androidx.fragment:fragment-ktx:$androidFragmentKtxVersion"
+    implementation "androidx.collection:collection-ktx:$androidCollectionKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$androidLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$androidLifecycleVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-
-    implementation "androidx.lifecycle:lifecycle-extensions:$androidArchVersion"
-    kapt "androidx.lifecycle:lifecycle-compiler:$androidArchVersion"
 
     implementation "org.jetbrains.anko:anko-common:$ankoCommonVersion"
 

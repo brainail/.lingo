@@ -18,3 +18,11 @@ inline fun consume(f: () -> Unit): Boolean {
     return true
 }
 
+inline fun safeTry(block: () -> Unit) {
+    try {
+        block()
+    } catch (error: Throwable) {
+        // do nothing
+    }
+}
+

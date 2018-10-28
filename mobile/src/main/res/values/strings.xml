@@ -2,6 +2,8 @@
     <string name="app_name">Lingo</string>
 
     <string name="menu_clear">Clear</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_share">Share</string>
     <string name="menu_voice">Voice</string>
     <string name="menu_search">Search…</string>
     <string name="menu_loading">Loading…</string>
