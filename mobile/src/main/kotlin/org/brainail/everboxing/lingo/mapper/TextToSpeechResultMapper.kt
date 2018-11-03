@@ -5,7 +5,7 @@ import android.speech.RecognizerIntent
 import androidx.appcompat.app.AppCompatActivity
 import org.brainail.everboxing.lingo.model.TextToSpeechResult
 
-internal class TextToSpeechResultMapper {
+class TextToSpeechResultMapper {
     fun transform(activityResultCode: Int, activityResultData: Intent?): TextToSpeechResult = when (activityResultCode) {
         AppCompatActivity.RESULT_OK -> activityResultData?.run {
             TextToSpeechResult.Successful(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])

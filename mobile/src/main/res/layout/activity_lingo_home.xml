@@ -57,7 +57,7 @@
         app:hideOnScroll="true"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButtonView"
+        android:id="@id/homeActionButtonView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:tint="@color/material_light_white"

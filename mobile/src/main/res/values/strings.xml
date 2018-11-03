@@ -11,4 +11,6 @@
     <string name="tab_explore">Explore</string>
     <string name="tab_favourite">Favourite</string>
     <string name="tab_history">History</string>
+
+    <string name="home_text_to_speech_prompt">What are you looking for?</string>
 </resources>

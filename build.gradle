@@ -5,8 +5,8 @@ buildscript {
     ext.minSdkVersion = 21
     ext.targetSdkVersion = 28
 
-    ext.gradlePluginVersion = '3.3.0-beta01'
-    ext.kotlinVersion = '1.2.70'
+    ext.gradlePluginVersion = '3.3.0-beta02'
+    ext.kotlinVersion = '1.3.0'
 
     ext.androidConstraintLayoutVersion = '1.1.3'
     ext.androidMaterialComponentsVersion = '1.0.0'

@@ -1,5 +1,6 @@
 package org.brainail.everboxing.lingo.ui.home
 
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.navigator.Intents
@@ -10,8 +11,8 @@ import org.brainail.everboxing.lingo.util.ScrollablePage
 import org.brainail.everboxing.lingo.util.extensions.openFragment
 
 class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(activity) {
-    fun showTextToSpeech(prompt: String) = startActivityForResult(REQ_CODE_SPEECH_INPUT) {
-        Intents.TextToSpeech.showVoiceRecognizer(prompt)
+    fun showTextToSpeech(@StringRes promptId: Int) = startActivityForResult(REQ_CODE_SPEECH_INPUT) {
+        Intents.TextToSpeech.showVoiceRecognizer(activity.getString(promptId))
     }
 
     fun canShowTextToSpeech() =

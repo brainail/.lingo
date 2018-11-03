@@ -26,6 +26,7 @@ import org.brainail.everboxing.lingo.util.TextWatcherAdapter
 import org.brainail.everboxing.lingo.util.extensions.checkAllMatched
 import org.brainail.everboxing.lingo.util.extensions.consume
 import org.brainail.everboxing.lingo.util.extensions.getViewModel
+import org.brainail.everboxing.lingo.util.extensions.lazyFast
 import org.brainail.everboxing.lingo.util.extensions.observeNonNull
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
@@ -34,29 +35,37 @@ import javax.inject.Inject
 class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     @Inject
     lateinit var navigator: LingoHomeActivityNavigator
-
     @Inject
-    internal lateinit var textToSpeechResultMapper: TextToSpeechResultMapper
+    lateinit var actor: LingoHomeActivityActor
+    @Inject
+    lateinit var textToSpeechResultMapper: TextToSpeechResultMapper
 
-    private lateinit var screenViewModel: LingoHomeActivityViewModel
+    private val screenViewModel by lazyFast { getViewModel<LingoHomeActivityViewModel>(viewModelFactory) }
+
+    private val viewRenderer by lazyFast {
+        LingoHomeActivityViewRenderer(this, appBarView, bottomAppBarView, homeActionButtonView)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initNavigation()
-        initSearch()
-        initViewState()
+        initBottomAppBar()
+        initSearchView()
+        initSearchViewState()
+        initViewRenderer()
     }
 
-    override fun createPrimaryViewModels(): Array<BaseViewModel>? {
-        screenViewModel = getViewModel(viewModelFactory)
-        return arrayOf(screenViewModel)
-    }
+    override fun createPrimaryViewModels(): Array<BaseViewModel>? = arrayOf(screenViewModel)
 
     override fun getLayoutResourceId() = R.layout.activity_lingo_home
 
-    private fun initViewState() {
+    private fun initSearchViewState() {
         screenViewModel.searchViewState().observeNonNull(this) { renderSearchViewState(it) }
+    }
+
+    private fun initViewRenderer() {
+        viewRenderer.init()
     }
 
     private fun renderSearchViewState(viewState: SearchViewState) {
@@ -104,23 +113,32 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         bottomAppBarView.takeIf { viewState.isInFocus }?.show()
     }
 
-    private fun initNavigation() {
+    private fun initBottomAppBar() {
         bottomAppBarView.replaceMenu(R.menu.menu_home_bottom_bar)
         bottomAppBarView.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.menu_explore -> consume { screenViewModel.navigateTabTo(NavigationTabItem.EXPLORE) }
-                R.id.menu_favorite -> consume { screenViewModel.navigateTabTo(NavigationTabItem.FAVOURITE) }
-                R.id.menu_history -> consume { screenViewModel.navigateTabTo(NavigationTabItem.HISTORY) }
-                else -> false
+                R.id.menu_home_explore -> consume { screenViewModel.navigateTabTo(NavigationTabItem.EXPLORE) }
+                R.id.menu_home_favorite -> consume { screenViewModel.navigateTabTo(NavigationTabItem.FAVOURITE) }
+                R.id.menu_home_history -> consume { screenViewModel.navigateTabTo(NavigationTabItem.HISTORY) }
+                else -> actor.handleMenuItemClick(item.itemId)
             }
         }
 
+        homeActionButtonView.setOnClickListener {
+            when (homeActionButtonView.id) {
+                R.id.homeActionButtonView -> screenViewModel.actionButtonClicked()
+                else -> actor.handleViewClick(homeActionButtonView.id)
+            }
+        }
+    }
+
+    private fun initNavigation() {
         screenViewModel.navigation().observeNonNull(this) { navigateTo(it) }
         screenViewModel.navigationTab().observeNonNull(this) { navigateTabTo(it) }
         screenViewModel.searchNavigation().observeNonNull(this) { navigateTo(it) }
     }
 
-    private fun initSearch() {
+    private fun initSearchView() {
         floatingSearchView.apply {
             icon = DrawerArrowDrawable(this@LingoHomeActivity)
             setOnIconClickListener { screenViewModel.navigationIconClicked() }
@@ -160,45 +178,24 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         when (navigationTabItem) {
             NavigationTabItem.EXPLORE -> {
                 navigator.showExploreSubScreen()
-                selectMenuItem(R.id.menu_explore)
+                viewRenderer.selectHomeMenuItem(R.id.menu_home_explore)
             }
             NavigationTabItem.FAVOURITE -> {
                 navigator.showExploreSubScreen()
-                selectMenuItem(R.id.menu_favorite)
+                viewRenderer.selectHomeMenuItem(R.id.menu_home_favorite)
             }
             NavigationTabItem.HISTORY -> {
                 navigator.showExploreSubScreen()
-                selectMenuItem(R.id.menu_history)
+                viewRenderer.selectHomeMenuItem(R.id.menu_home_history)
             }
         }.checkAllMatched
-    }
-
-    private fun selectMenuItem(menuItemId: Int) {
-        val menu = bottomAppBarView.menu
-        when (menuItemId) {
-            R.id.menu_explore -> {
-                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_baseline_view_agenda_24dp)
-                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_twotone_favorite_24dp)
-                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_twotone_watch_later_24dp)
-            }
-            R.id.menu_favorite -> {
-                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_twotone_view_agenda_24dp)
-                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_baseline_favorite_24dp)
-                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_twotone_watch_later_24dp)
-            }
-            R.id.menu_history -> {
-                menu.findItem(R.id.menu_explore)?.setIcon(R.drawable.ic_twotone_view_agenda_24dp)
-                menu.findItem(R.id.menu_favorite)?.setIcon(R.drawable.ic_twotone_favorite_24dp)
-                menu.findItem(R.id.menu_history)?.setIcon(R.drawable.ic_baseline_watch_later_24dp)
-            }
-        }
     }
 
     private fun navigateTo(navigationItem: SearchViewModel.SearchNavigationItem) {
         L.v("navigateTo: navigationItem = $navigationItem")
         when (navigationItem) {
             SearchNavigationItem.DRAWER -> toast("open Drawer please")
-            SearchNavigationItem.TEXT_TO_SPEECH -> navigator.showTextToSpeech("What are you looking for?")
+            SearchNavigationItem.TEXT_TO_SPEECH -> navigator.showTextToSpeech(R.string.home_text_to_speech_prompt)
         }.checkAllMatched
     }
 

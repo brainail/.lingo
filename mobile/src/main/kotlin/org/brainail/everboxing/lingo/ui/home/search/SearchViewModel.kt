@@ -89,7 +89,7 @@ abstract class SearchViewModel : RxAwareViewModel() {
         }
     }
 
-    private fun applyChanges(partialViewStateChange: PartialViewStateChange<SearchViewState>): SearchViewState {
+    protected fun applyChanges(partialViewStateChange: PartialViewStateChange<SearchViewState>): SearchViewState {
         searchViewState.value = partialViewStateChange.applyTo(searchViewState.value!!)
         return searchViewState.value!!
     }

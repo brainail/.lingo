@@ -80,6 +80,14 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
         navigation.value = navigationItem
     }
 
+    fun actionButtonClicked() {
+        val viewState = searchViewState.value!!
+        when (viewState.isInFocus) {
+            true -> submitQuery(viewState.displayedText)
+            else -> applyChanges(SearchViewState.RequestFocusGain(true))
+        }
+    }
+
     fun suggestionClicked(suggestion: SuggestionModel) {
         submitQuery(suggestion.word.toString())
     }
