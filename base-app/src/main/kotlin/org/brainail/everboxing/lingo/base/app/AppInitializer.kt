@@ -1,4 +1,4 @@
-package org.brainail.everboxing.lingo.app.initializers
+package org.brainail.everboxing.lingo.base.app
 
 import android.app.Application
 

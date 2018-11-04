@@ -15,6 +15,7 @@ buildscript {
     ext.androidRecyclerViewCompatVersion = '1.0.0'
     ext.androidLifecycleVersion = '2.0.0'
     ext.androidArchRoomVersion = '2.0.0-rc01'
+    ext.androidWorkManager = '1.0.0-alpha10'
 
     ext.androidCoreKtxVersion = '1.0.0'
     ext.androidFragmentKtxVersion = '1.0.0'

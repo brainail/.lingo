@@ -13,7 +13,7 @@ class FindSearchResultsUseCase @Inject constructor(
     fun execute(query: String): Flowable<List<SearchResult>> {
         return searchResultRepository.getSearchResults(query)
                 .onErrorReturn { emptyList() }
-                .filter { it.isNotEmpty() }
+                .map { it.filter { it.word.isNotBlank() } }
                 .compose(appExecutors.applyFlowableBackgroundSchedulers())
     }
 }

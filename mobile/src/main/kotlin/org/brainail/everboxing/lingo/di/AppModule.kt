@@ -11,8 +11,10 @@ import org.brainail.everboxing.lingo.app.initializers.AppLifecycleInitializer
 import org.brainail.everboxing.lingo.app.initializers.DataBindingInitializer
 import org.brainail.everboxing.lingo.app.initializers.LoggerInitializer
 import org.brainail.everboxing.lingo.app.initializers.StethoInitializer
+import org.brainail.everboxing.lingo.base.SyncTasks
 import org.brainail.everboxing.lingo.domain.event.EventBus
 import org.brainail.everboxing.lingo.domain.event.GlobalEvents
+import org.brainail.everboxing.lingo.tasks.initializers.PreinstalledUrbanDataInitializer
 import org.brainail.everboxing.lingo.ui.base.AppLifecycleObserver
 import org.brainail.everboxing.lingo.util.AndroidLogTree
 import org.brainail.everboxing.lingo.util.log.EventBusLogger
@@ -47,10 +49,17 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun providePreinstalledUrbanDataInitializer(synTasks: SyncTasks)
+            = PreinstalledUrbanDataInitializer("preinstalled_popular_words", synTasks)
+
+    @Provides
+    @Singleton
     fun provideAppInitializers(
             appLifecycleInitializer: AppLifecycleInitializer,
             loggerInitializer: LoggerInitializer,
             stethoInitializer: StethoInitializer,
-            dataBindingInitializer: DataBindingInitializer) =
-            AppInitializers(appLifecycleInitializer, loggerInitializer, stethoInitializer, dataBindingInitializer)
+            dataBindingInitializer: DataBindingInitializer,
+            preinstalledUrbanDataInitializer: PreinstalledUrbanDataInitializer) =
+            AppInitializers(appLifecycleInitializer, loggerInitializer,
+                    stethoInitializer, dataBindingInitializer, preinstalledUrbanDataInitializer)
 }

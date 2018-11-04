@@ -48,6 +48,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$androidCoreKtxVersion"
     implementation "androidx.fragment:fragment-ktx:$androidFragmentKtxVersion"
     implementation "androidx.collection:collection-ktx:$androidCollectionKtxVersion"
+    implementation "android.arch.work:work-runtime-ktx:$androidWorkManager"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$androidLifecycleVersion"
     kapt "androidx.lifecycle:lifecycle-compiler:$androidLifecycleVersion"
@@ -68,6 +69,9 @@ dependencies {
     implementation "com.facebook.stetho:stetho:$facebookStethoVersion"
     implementation "com.facebook.stetho:stetho-okhttp3:$facebookStethoVersion"
 
+    implementation project(':base')
+    implementation project(':base-app')
+    implementation project(':tasks')
     implementation project(':domain')
     implementation project(':data')
     implementation project(':cache')

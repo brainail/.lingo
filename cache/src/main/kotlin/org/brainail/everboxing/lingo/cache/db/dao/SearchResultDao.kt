@@ -18,5 +18,4 @@ abstract class SearchResultDao : BaseDao<SearchResultCacheEntity> {
 
     @Query("delete from search_results where sr_id = :id")
     abstract fun forgetSearchResult(id: Int)
-
 }
