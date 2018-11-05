@@ -9,17 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_lingo_search.*
 import org.brainail.everboxing.lingo.R
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.model.SearchResultModel
 import org.brainail.everboxing.lingo.ui.base.BaseViewModel
 import org.brainail.everboxing.lingo.ui.base.ViewModelAwareFragment
 import org.brainail.everboxing.lingo.ui.home.explore.LingoSearchResultsAdapter.SearchResultClickListener
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
-import org.brainail.everboxing.lingo.util.NavigableBack
 import org.brainail.everboxing.lingo.util.ScrollablePage
 import org.brainail.everboxing.lingo.util.extensions.getActivityViewModel
 import org.brainail.everboxing.lingo.util.extensions.getViewModel
 import org.brainail.everboxing.lingo.util.extensions.inflate
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
 import org.brainail.everboxing.lingo.util.extensions.observeK
 import org.brainail.everboxing.lingo.util.extensions.observeNonNull
 import org.brainail.everboxing.lingo.util.ui.SwipeToActionCallback
@@ -33,7 +32,7 @@ class LingoSearchFragment :
         ScrollablePage, SearchResultClickListener {
 
     private lateinit var searchViewModel: SearchViewModel
-    private lateinit var screenViewModel: LingoSearchFragmentViewModel
+    private val screenViewModel by lazyFast { getViewModel<LingoSearchFragmentViewModel>(viewModelFactory) }
 
     private lateinit var searchResultsAdapter: LingoSearchResultsAdapter
     private lateinit var searchResultsItemTouchHelper: ItemTouchHelper
@@ -45,10 +44,7 @@ class LingoSearchFragment :
         return container?.inflate(R.layout.fragment_lingo_search)
     }
 
-    override fun createPrimaryViewModels(): Array<BaseViewModel>? {
-        screenViewModel = getViewModel(viewModelFactory)
-        return arrayOf(screenViewModel)
-    }
+    override fun createPrimaryViewModels(): Array<BaseViewModel>? = arrayOf(screenViewModel)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -78,15 +74,14 @@ class LingoSearchFragment :
         searchResultsAdapter = LingoSearchResultsAdapter(this)
         searchResultsRecyclerView.adapter = searchResultsAdapter
 
-        searchResultsItemTouchHelper = ItemTouchHelper(object : SwipeToActionCallback(
-                requireActivity(),
+        searchResultsItemTouchHelper = ItemTouchHelper(object : SwipeToActionCallback(requireActivity(),
                 IconInfo(R.drawable.ic_twotone_favorite_black_24dp, R.color.colorAccent),
                 IconInfo(R.drawable.ic_twotone_delete_black_24dp, R.color.colorPrimarySecondary)) {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = when (direction) {
                 ItemTouchHelper.LEFT -> screenViewModel.forgetSearchResultAt(viewHolder.adapterPosition)
                 ItemTouchHelper.RIGHT -> screenViewModel.favoriteSearchResultAt(viewHolder.adapterPosition)
-                else -> { /* no-impl */ }
+                else -> Unit
             }
         })
         searchResultsItemTouchHelper.attachToRecyclerView(searchResultsRecyclerView)

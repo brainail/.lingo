@@ -16,8 +16,7 @@ class LingoHomeActivityModule {
 
     @Provides
     @ActivityScope
-    fun provideLingoHomeActivityActor(activity: LingoHomeActivity) =
-            LingoHomeActivityActor(activity)
+    fun provideLingoHomeActivityActor(activity: LingoHomeActivity) = LingoHomeActivityActor(activity)
 
     @Provides
     @ActivityScope

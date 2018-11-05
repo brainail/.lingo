@@ -1,8 +1,8 @@
 package org.brainail.everboxing.lingo.ui.home.explore
 
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.model.SearchResultModel
 import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
 
 data class LingoSearchFragmentViewState(
         val isLoadingSearchResults: Boolean = false,

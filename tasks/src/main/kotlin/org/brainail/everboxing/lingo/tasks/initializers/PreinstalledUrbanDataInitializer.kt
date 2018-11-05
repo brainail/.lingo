@@ -1,7 +1,7 @@
 package org.brainail.everboxing.lingo.tasks.initializers
 
 import android.app.Application
-import org.brainail.everboxing.lingo.base.SyncTasks
+import org.brainail.everboxing.lingo.base.tasks.SyncTasks
 import org.brainail.everboxing.lingo.base.app.AppInitializer
 
 class PreinstalledUrbanDataInitializer(

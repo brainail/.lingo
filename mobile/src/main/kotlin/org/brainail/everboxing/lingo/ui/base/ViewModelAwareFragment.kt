@@ -2,7 +2,7 @@ package org.brainail.everboxing.lingo.ui.base
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import javax.inject.Inject
 
 abstract class ViewModelAwareFragment : BaseFragment() {

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.bottomappbar.BottomAppBar
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
+import org.brainail.everboxing.lingo.base.util.lazyFast
 
 class AppCompatBottomAppBar : BottomAppBar {
 

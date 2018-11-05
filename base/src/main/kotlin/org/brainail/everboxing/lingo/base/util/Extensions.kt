@@ -1,4 +1,4 @@
-package org.brainail.everboxing.lingo.util.extensions
+package org.brainail.everboxing.lingo.base.util
 
 /**
  * Implementation of lazy that is not thread safe.

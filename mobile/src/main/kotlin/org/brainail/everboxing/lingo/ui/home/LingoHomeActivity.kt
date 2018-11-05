@@ -2,7 +2,6 @@ package org.brainail.everboxing.lingo.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
@@ -10,6 +9,9 @@ import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
 import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.everboxing.lingo.R
+import org.brainail.everboxing.lingo.base.util.checkAllMatched
+import org.brainail.everboxing.lingo.base.util.consume
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.mapper.TextToSpeechResultMapper
 import org.brainail.everboxing.lingo.model.SuggestionModel
 import org.brainail.everboxing.lingo.ui.base.BaseViewModel
@@ -22,12 +24,9 @@ import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel.SearchNavigationItem
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState.CursorPosition
-import org.brainail.everboxing.lingo.util.TextWatcherAdapter
-import org.brainail.everboxing.lingo.util.extensions.checkAllMatched
-import org.brainail.everboxing.lingo.util.extensions.consume
 import org.brainail.everboxing.lingo.util.extensions.getViewModel
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
 import org.brainail.everboxing.lingo.util.extensions.observeNonNull
+import org.brainail.everboxing.lingo.util.extensions.setAfterTextChangedListener
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
 import javax.inject.Inject
@@ -48,7 +47,6 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initNavigation()
         initBottomAppBar()
         initSearchView()
@@ -60,12 +58,10 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
 
     override fun getLayoutResourceId() = R.layout.activity_lingo_home
 
+    private fun initViewRenderer() = viewRenderer.init()
+
     private fun initSearchViewState() {
         screenViewModel.searchViewState().observeNonNull(this) { renderSearchViewState(it) }
-    }
-
-    private fun initViewRenderer() {
-        viewRenderer.init()
     }
 
     private fun renderSearchViewState(viewState: SearchViewState) {
@@ -98,6 +94,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         (floatingSearchView.adapter as LingoSearchSuggestionsAdapter).submitList(viewState.displayedSuggestions)
 
         // scroll behavior
+        appBarView.takeIf { viewState.isInFocus }?.setExpanded(true)
         floatingSearchView.post {
             // post it to get rid of flickering effect
             val toolbarUnderlayLp = toolbarUnderlay.layoutParams as AppBarLayout.LayoutParams
@@ -151,11 +148,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
                     else -> false
                 }
             }
-            addTextChangedListener(object : TextWatcherAdapter() {
-                override fun afterTextChanged(query: Editable) {
-                    screenViewModel.updateQuery(query.toString())
-                }
-            })
+            setAfterTextChangedListener { screenViewModel.updateQuery(it.toString()) }
             adapter = LingoSearchSuggestionsAdapter(this@LingoHomeActivity)
         }
     }

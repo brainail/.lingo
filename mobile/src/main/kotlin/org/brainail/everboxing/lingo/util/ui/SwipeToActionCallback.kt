@@ -10,9 +10,9 @@ import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback
 import androidx.recyclerview.widget.RecyclerView
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.util.extensions.color
 import org.brainail.everboxing.lingo.util.extensions.drawable
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
 
 abstract class SwipeToActionCallback(
         context: Context, iconLeftInfo: IconInfo? = null, iconRightInfo: IconInfo? = null)

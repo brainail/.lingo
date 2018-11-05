@@ -9,6 +9,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import org.brainail.everboxing.lingo.app.Constants
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.domain.executor.AppExecutors
 import org.brainail.everboxing.lingo.domain.model.SearchResult
 import org.brainail.everboxing.lingo.domain.model.Suggestion
@@ -27,7 +28,6 @@ import org.brainail.everboxing.lingo.ui.base.RxAwareViewModel
 import org.brainail.everboxing.lingo.ui.home.explore.LingoSearchFragmentViewState.SearchResultsPrepared
 import org.brainail.everboxing.lingo.ui.home.explore.LingoSearchFragmentViewState.SearchResultsStartedLoading
 import org.brainail.everboxing.lingo.util.SingleEventLiveData
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
 import org.brainail.everboxing.lingo.util.extensions.seamlessLoading
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
