@@ -25,14 +25,14 @@ import org.brainail.everboxing.lingo.model.SearchResultModel
 import org.brainail.everboxing.lingo.model.SuggestionModel
 import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
 import org.brainail.everboxing.lingo.ui.base.RxAwareViewModel
-import org.brainail.everboxing.lingo.ui.home.explore.LingoSearchFragmentViewState.SearchResultsPrepared
-import org.brainail.everboxing.lingo.ui.home.explore.LingoSearchFragmentViewState.SearchResultsStartedLoading
+import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentViewState.SearchResultsPrepared
+import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentViewState.SearchResultsStartedLoading
 import org.brainail.everboxing.lingo.util.SingleEventLiveData
 import org.brainail.everboxing.lingo.util.extensions.seamlessLoading
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class LingoSearchFragmentViewModel @Inject constructor(
+class ExploreFragmentViewModel @Inject constructor(
         private val findSuggestionsUseCase: FindSuggestionsUseCase,
         private val findRecentSuggestionsUseCase: FindRecentSuggestionsUseCase,
         private val findSearchResultsUseCase: FindSearchResultsUseCase,
@@ -55,7 +55,7 @@ class LingoSearchFragmentViewModel @Inject constructor(
         subject
     }
 
-    private val viewState = MutableLiveData<LingoSearchFragmentViewState>()
+    private val viewState = MutableLiveData<ExploreFragmentViewState>()
     private val presentSuggestions = SingleEventLiveData<List<SuggestionModel>>()
     private val startSuggestionsLoading = SingleEventLiveData<Void>()
     private val navigateToSearchResultEvent = SingleEventLiveData<SearchResultModel>()
@@ -63,12 +63,12 @@ class LingoSearchFragmentViewModel @Inject constructor(
     fun presentSuggestions(): LiveData<List<SuggestionModel>> = presentSuggestions
     fun startSuggestionsLoading(): LiveData<Void> = startSuggestionsLoading
     fun navigateToSearchResultEvent(): LiveData<SearchResultModel> = navigateToSearchResultEvent
-    fun viewState(): LiveData<LingoSearchFragmentViewState> = viewState
+    fun viewState(): LiveData<ExploreFragmentViewState> = viewState
 
     init {
         initSuggestions()
         initResults()
-        viewState.value = LingoSearchFragmentViewState.INITIAL
+        viewState.value = ExploreFragmentViewState.INITIAL
     }
 
     fun searchSuggestions(query: String) {
@@ -81,13 +81,13 @@ class LingoSearchFragmentViewModel @Inject constructor(
 
     fun forgetSearchResultAt(position: Int) {
         val item = viewState.value!!.displayedSearchResults.getOrNull(position) ?: return
-        applyChanges(LingoSearchFragmentViewState.ForgetSearchResult(item)) // optimistic update
+        applyChanges(ExploreFragmentViewState.ForgetSearchResult(item)) // optimistic update
         bindCompletable(forgetSearchResultUseCase.execute(item.id)).subscribe()
     }
 
     fun favoriteSearchResultAt(position: Int) {
         val item = viewState.value!!.displayedSearchResults.getOrNull(position) ?: return
-        applyChanges(LingoSearchFragmentViewState.FavoriteSearchResult(item)) // optimistic update
+        applyChanges(ExploreFragmentViewState.FavoriteSearchResult(item)) // optimistic update
         bindCompletable(favoriteSearchResultUseCase.execute(item.id)).subscribe()
     }
 
@@ -143,8 +143,8 @@ class LingoSearchFragmentViewModel @Inject constructor(
         return saveRecentSuggestionUseCase.execute(suggestionModelMapper.mapFromModel(suggestion))
     }
 
-    private fun applyChanges(partialViewStateChange: PartialViewStateChange<LingoSearchFragmentViewState>)
-            : LingoSearchFragmentViewState {
+    private fun applyChanges(partialViewStateChange: PartialViewStateChange<ExploreFragmentViewState>)
+            : ExploreFragmentViewState {
         viewState.value = partialViewStateChange.applyTo(viewState = viewState.value!!)
         return viewState.value!!
     }

@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation "android.arch.work:work-runtime-ktx:$androidWorkManager"
+    implementation "android.arch.work:work-runtime-ktx:$androidWorkManagerVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 

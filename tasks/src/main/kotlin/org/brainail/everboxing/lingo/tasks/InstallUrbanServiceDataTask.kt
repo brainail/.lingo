@@ -31,7 +31,7 @@ class InstallUrbanServiceDataTask(context: Context, workerParams: WorkerParamete
         private const val PARAM_PATH_TO_DATA = "path-to-data"
 
         @JvmStatic
-        val workerTag: String by lazyFast { InstallUrbanServiceDataTask::class.java.simpleName }
+        val workerTag: String by lazyFast { "${InstallUrbanServiceDataTask::class.java.simpleName}.WorkerTag" }
 
         @JvmStatic
         fun makeInputData(pathToData: String) = Data.Builder()

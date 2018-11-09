@@ -2,6 +2,7 @@ package org.brainail.everboxing.lingo.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
@@ -19,7 +20,8 @@ import org.brainail.everboxing.lingo.ui.base.ViewModelAwareActivity
 import org.brainail.everboxing.lingo.ui.home.LingoHomeActivityNavigator.Companion.REQ_CODE_SPEECH_INPUT
 import org.brainail.everboxing.lingo.ui.home.LingoHomeActivityViewModel.NavigationItem
 import org.brainail.everboxing.lingo.ui.home.LingoHomeActivityViewModel.NavigationTabItem
-import org.brainail.everboxing.lingo.ui.home.LingoSearchSuggestionsAdapter.SuggestionClickListener
+import org.brainail.everboxing.lingo.ui.home.search.SearchSuggestionsAdapter
+import org.brainail.everboxing.lingo.ui.home.search.SearchSuggestionsAdapter.SuggestionClickListener
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel.SearchNavigationItem
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState
@@ -42,7 +44,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     private val screenViewModel by lazyFast { getViewModel<LingoHomeActivityViewModel>(viewModelFactory) }
 
     private val viewRenderer by lazyFast {
-        LingoHomeActivityViewRenderer(this, appBarView, bottomAppBarView, homeActionButtonView)
+        LingoHomeActivityViewRenderer(this, appBarView, bottomAppBarView, homeActionButtonView, Handler())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +93,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
                 viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech()
 
         // items
-        (floatingSearchView.adapter as LingoSearchSuggestionsAdapter).submitList(viewState.displayedSuggestions)
+        (floatingSearchView.adapter as SearchSuggestionsAdapter).submitList(viewState.displayedSuggestions)
 
         // scroll behavior
         appBarView.takeIf { viewState.isInFocus }?.setExpanded(true)
@@ -111,7 +113,6 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     }
 
     private fun initBottomAppBar() {
-        bottomAppBarView.replaceMenu(R.menu.menu_home_bottom_bar)
         bottomAppBarView.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_home_explore -> consume { screenViewModel.navigateTabTo(NavigationTabItem.EXPLORE) }
@@ -149,7 +150,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
                 }
             }
             setAfterTextChangedListener { screenViewModel.updateQuery(it.toString()) }
-            adapter = LingoSearchSuggestionsAdapter(this@LingoHomeActivity)
+            adapter = SearchSuggestionsAdapter(this@LingoHomeActivity)
         }
     }
 
@@ -170,15 +171,15 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         L.v("navigateTabTo: navigationTabItem = $navigationTabItem")
         when (navigationTabItem) {
             NavigationTabItem.EXPLORE -> {
-                navigator.showExploreSubScreen()
+                navigator.showExplorePage()
                 viewRenderer.selectHomeMenuItem(R.id.menu_home_explore)
             }
             NavigationTabItem.FAVOURITE -> {
-                navigator.showExploreSubScreen()
+                navigator.showExplorePage()
                 viewRenderer.selectHomeMenuItem(R.id.menu_home_favorite)
             }
             NavigationTabItem.HISTORY -> {
-                navigator.showExploreSubScreen()
+                navigator.showExplorePage()
                 viewRenderer.selectHomeMenuItem(R.id.menu_home_history)
             }
         }.checkAllMatched

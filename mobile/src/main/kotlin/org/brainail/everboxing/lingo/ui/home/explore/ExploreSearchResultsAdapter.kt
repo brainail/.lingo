@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import org.brainail.everboxing.lingo.databinding.ItemSearchResultBinding
 import org.brainail.everboxing.lingo.model.SearchResultModel
 
-class LingoSearchResultsAdapter(private val searchResultClickListener: SearchResultClickListener? = null)
-    : ListAdapter<SearchResultModel, SearchResultViewHolder>(diffCallback) {
+class ExploreSearchResultsAdapter(private val searchResultClickListener: SearchResultClickListener? = null)
+    : ListAdapter<SearchResultModel, ExploreSearchResultViewHolder>(diffCallback) {
 
     private val listenersDelegate = ListenersDelegate()
 
@@ -16,12 +16,12 @@ class LingoSearchResultsAdapter(private val searchResultClickListener: SearchRes
         fun onSearchResultClick(item: SearchResultModel)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExploreSearchResultViewHolder {
         val binding = ItemSearchResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SearchResultViewHolder(binding, listenersDelegate)
+        return ExploreSearchResultViewHolder(binding, listenersDelegate)
     }
 
-    override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ExploreSearchResultViewHolder, position: Int) {
         holder.bindTo(getItem(position))
     }
 

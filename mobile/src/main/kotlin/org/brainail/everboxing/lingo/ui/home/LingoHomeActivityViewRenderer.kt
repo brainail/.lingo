@@ -6,33 +6,40 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.brainail.everboxing.lingo.R
-import org.brainail.everboxing.lingo.ui.home.details.LingoSearchResultDetailsFragment
-import org.brainail.everboxing.lingo.ui.home.explore.LingoSearchFragment
 import org.brainail.everboxing.lingo.widget.AppCompatBottomAppBar
 
 class LingoHomeActivityViewRenderer(
         private val activity: AppCompatActivity,
         private val appBarLayout: AppBarLayout,
         private val bottomAppBar: AppCompatBottomAppBar,
-        private val actionButton: FloatingActionButton): LifecycleObserver {
+        private val actionButton: FloatingActionButton,
+        private val uiExecutor: Handler): LifecycleObserver {
 
-    private val renderPageSwitchingAction = {
-        val fragment = activity.supportFragmentManager.findFragmentById(R.id.containerView)
-        renderPageSwitching(fragment?.tag)
+    private val alignFabCenterAction = {
+        if (bottomAppBar.fabAlignmentMode != BottomAppBar.FAB_ALIGNMENT_MODE_CENTER) { // avoid blinking
+            bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+        }
     }
 
-    init {
-        activity.lifecycle.addObserver(this)
+    private val alignFabEndAction = {
+        if (bottomAppBar.fabAlignmentMode != BottomAppBar.FAB_ALIGNMENT_MODE_END) { // avoid blinking
+            bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
+        }
+    }
+
+    private val renderPageSwitchingAction = { _: NavController, navDestination: NavDestination ->
+        renderPageSwitching(navDestination.id)
     }
 
     fun init() {
-        if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)) {
-            start()
-        }
+        activity.lifecycle.addObserver(this)
     }
 
     fun selectHomeMenuItem(@IdRes menuItemId: Int) {
@@ -67,46 +74,50 @@ class LingoHomeActivityViewRenderer(
     }
 
     private fun startListenToBackStack() {
-        val fragmentManager = activity.supportFragmentManager
-        fragmentManager.removeOnBackStackChangedListener(renderPageSwitchingAction)
-        fragmentManager.addOnBackStackChangedListener(renderPageSwitchingAction)
-        if (fragmentManager.backStackEntryCount > 0) {
-            val topIndex = fragmentManager.backStackEntryCount - 1
-            renderPageSwitching(fragmentManager.getBackStackEntryAt(topIndex).name)
-        }
+        val navController = activity.findNavController(R.id.lingoHomeNavigationFragment)
+        navController.removeOnNavigatedListener(renderPageSwitchingAction)
+        navController.addOnNavigatedListener(renderPageSwitchingAction)
     }
 
     private fun stopListenToBackStack() {
-        activity.supportFragmentManager.removeOnBackStackChangedListener(renderPageSwitchingAction)
+        val navController = activity.findNavController(R.id.lingoHomeNavigationFragment)
+        navController.removeOnNavigatedListener(renderPageSwitchingAction)
     }
 
-    private fun renderPageSwitching(fragmentTag: String?) {
-        // enable mode
-        when (fragmentTag) {
-            LingoSearchResultDetailsFragment.layoutTag -> enableSearchResultDetailsPageMode()
+    private fun renderPageSwitching(@IdRes fragmentDestinationId: Int?) {
+        when (fragmentDestinationId) {
+            R.id.wordDetailsPageDestination -> enableWordDetailsPageMode()
             else -> enableLingoHomePageMode()
         }
-
-        // render menu
-        when (fragmentTag) {
-            LingoSearchFragment.layoutTag -> selectHomeMenuItem(R.id.menu_home_explore)
+        when (fragmentDestinationId) {
+            R.id.explorePageDestination -> selectHomeMenuItem(R.id.menu_home_explore)
         }
     }
 
-    private fun enableSearchResultDetailsPageMode() {
+    private fun enableWordDetailsPageMode() {
         appBarLayout.setExpanded(false)
+        if (null == bottomAppBar.menu.findItem(R.id.menu_details_share)) { // avoid blinking
+            bottomAppBar.replaceMenu(R.menu.menu_details_bottom_bar)
+        }
         bottomAppBar.show()
-        bottomAppBar.replaceMenu(R.menu.menu_details_bottom_bar)
-        Handler().postDelayed({ bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER }, 200)
+        scheduleAlignActionButtonAction(alignFabCenterAction)
         actionButton.id = R.id.detailsActionButtonView
         actionButton.setImageResource(R.drawable.ic_twotone_favorite_24dp)
     }
 
     private fun enableLingoHomePageMode() {
         appBarLayout.setExpanded(true)
-        bottomAppBar.replaceMenu(R.menu.menu_home_bottom_bar)
-        Handler().postDelayed({ bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END }, 200)
+        if (null == bottomAppBar.menu.findItem(R.id.menu_home_explore)) { // avoid blinking
+            bottomAppBar.replaceMenu(R.menu.menu_home_bottom_bar)
+        }
+        scheduleAlignActionButtonAction(alignFabEndAction)
         actionButton.id = R.id.homeActionButtonView
         actionButton.setImageResource(R.drawable.ic_search_black_24dp)
+    }
+
+    private fun scheduleAlignActionButtonAction(action: () -> Unit) {
+        uiExecutor.removeCallbacks(alignFabCenterAction)
+        uiExecutor.removeCallbacks(alignFabEndAction)
+        uiExecutor.postDelayed(action, 200)
     }
 }

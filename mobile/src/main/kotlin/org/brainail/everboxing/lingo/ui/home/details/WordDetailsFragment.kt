@@ -5,17 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import kotlinx.android.synthetic.main.fragment_search_result_details.*
+import kotlinx.android.synthetic.main.fragment_word_details.*
 import org.brainail.everboxing.lingo.R
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.model.SearchResultModel
 import org.brainail.everboxing.lingo.ui.base.BaseViewModel
 import org.brainail.everboxing.lingo.ui.base.ViewModelAwareFragment
 import org.brainail.everboxing.lingo.util.MenuItemClickHandler
 import org.brainail.everboxing.lingo.util.ViewClickHandler
-import org.brainail.everboxing.lingo.base.util.lazyFast
 
 
-class LingoSearchResultDetailsFragment
+class WordDetailsFragment
     : ViewModelAwareFragment(), MenuItemClickHandler, ViewClickHandler {
 
     override fun createPrimaryViewModels(): Array<BaseViewModel>? {
@@ -23,15 +23,15 @@ class LingoSearchResultDetailsFragment
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_search_result_details, container, false)
+        return inflater.inflate(R.layout.fragment_word_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val item = arguments?.getParcelable<SearchResultModel>(PARAM_ITEM)
-        searchResultWord.text = item?.word
-        searchResultDefinition.text = item?.definition
-        searchResultExamples.text = item?.example
+        val detailsArgs = WordDetailsFragmentArgs.fromBundle(arguments)
+        searchResultWord.text = detailsArgs.wordItem.word
+        searchResultDefinition.text = detailsArgs.wordItem.definition
+        searchResultExamples.text = detailsArgs.wordItem.example
     }
 
     override fun handleMenuItemClick(menuId: Int): Boolean {
@@ -46,12 +46,12 @@ class LingoSearchResultDetailsFragment
         private const val PARAM_ITEM = "item"
 
         @JvmStatic
-        val layoutTag: String by lazyFast { LingoSearchResultDetailsFragment::class.java.simpleName }
+        val layoutTag: String by lazyFast { "${WordDetailsFragment::class.java.simpleName}.FragmentTag" }
 
         @JvmStatic
         fun makeArguments(item: SearchResultModel) = bundleOf(PARAM_ITEM to item)
 
         @JvmStatic
-        fun newInstance() = LingoSearchResultDetailsFragment()
+        fun newInstance() = WordDetailsFragment()
     }
 }

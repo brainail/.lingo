@@ -5,13 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/menu_delete"
+        android:id="@+id/menu_details_delete"
         android:icon="@drawable/ic_baseline_delete_24dp"
         android:title="@string/menu_delete"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
-        android:id="@+id/menu_share"
+        android:id="@+id/menu_details_share"
         android:icon="@drawable/ic_baseline_share_24dp"
         android:title="@string/menu_share"
         app:showAsAction="ifRoom"/>

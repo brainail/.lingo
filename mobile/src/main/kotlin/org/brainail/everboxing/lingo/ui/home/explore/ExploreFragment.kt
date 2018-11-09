@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_lingo_search.*
+import kotlinx.android.synthetic.main.fragment_explore.*
 import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.model.SearchResultModel
 import org.brainail.everboxing.lingo.ui.base.BaseViewModel
 import org.brainail.everboxing.lingo.ui.base.ViewModelAwareFragment
-import org.brainail.everboxing.lingo.ui.home.explore.LingoSearchResultsAdapter.SearchResultClickListener
+import org.brainail.everboxing.lingo.ui.home.explore.ExploreSearchResultsAdapter.SearchResultClickListener
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.util.ScrollablePage
 import org.brainail.everboxing.lingo.util.extensions.getActivityViewModel
@@ -27,21 +27,21 @@ import org.brainail.everboxing.lingo.R.color.material_indigo_500 as colorIndigo5
 import org.brainail.everboxing.lingo.R.color.material_lime_500 as colorLime500
 import org.brainail.everboxing.lingo.R.color.material_pink_500 as colorPink500
 
-class LingoSearchFragment :
+class ExploreFragment :
         ViewModelAwareFragment(),
         ScrollablePage, SearchResultClickListener {
 
     private lateinit var searchViewModel: SearchViewModel
-    private val screenViewModel by lazyFast { getViewModel<LingoSearchFragmentViewModel>(viewModelFactory) }
+    private val screenViewModel by lazyFast { getViewModel<ExploreFragmentViewModel>(viewModelFactory) }
 
-    private lateinit var searchResultsAdapter: LingoSearchResultsAdapter
+    private lateinit var searchResultsAdapter: ExploreSearchResultsAdapter
     private lateinit var searchResultsItemTouchHelper: ItemTouchHelper
 
     @Inject
-    lateinit var navigator: LingoSearchFragmentNavigator
+    lateinit var navigator: ExploreFragmentNavigator
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return container?.inflate(R.layout.fragment_lingo_search)
+        return container?.inflate(R.layout.fragment_explore)
     }
 
     override fun createPrimaryViewModels(): Array<BaseViewModel>? = arrayOf(screenViewModel)
@@ -69,9 +69,9 @@ class LingoSearchFragment :
         screenViewModel.startSuggestionsLoading().observeK(viewLifecycleOwner) { searchViewModel.suggestionsStartedLoading() }
         screenViewModel.viewState().observeNonNull(viewLifecycleOwner) { renderViewState(it) }
 
-        screenViewModel.navigateToSearchResultEvent().observeNonNull(viewLifecycleOwner) { navigator.openSearchResultDetails(it) }
+        screenViewModel.navigateToSearchResultEvent().observeNonNull(viewLifecycleOwner) { navigator.openWordDetails(it) }
 
-        searchResultsAdapter = LingoSearchResultsAdapter(this)
+        searchResultsAdapter = ExploreSearchResultsAdapter(this)
         searchResultsRecyclerView.adapter = searchResultsAdapter
 
         searchResultsItemTouchHelper = ItemTouchHelper(object : SwipeToActionCallback(requireActivity(),
@@ -89,16 +89,16 @@ class LingoSearchFragment :
         swipeRefreshView.setColorSchemeResources(colorPink500, colorIndigo500, colorLime500)
     }
 
-    private fun renderViewState(viewState: LingoSearchFragmentViewState) {
+    private fun renderViewState(viewState: ExploreFragmentViewState) {
         searchResultsAdapter.submitList(viewState.displayedSearchResults)
         swipeRefreshView.isRefreshing = viewState.isLoadingSearchResults
     }
 
     companion object {
         @JvmStatic
-        val layoutTag: String by lazyFast { LingoSearchFragment::class.java.simpleName }
+        val layoutTag: String by lazyFast { "${ExploreFragment::class.java.simpleName}.FragmentTag" }
 
         @JvmStatic
-        fun newInstance() = LingoSearchFragment()
+        fun newInstance() = ExploreFragment()
     }
 }

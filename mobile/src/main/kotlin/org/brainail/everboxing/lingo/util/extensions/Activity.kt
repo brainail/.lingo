@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
-inline fun AppCompatActivity.openFragment(
+fun AppCompatActivity.openFragment(
         fragmentTag: String, containerViewId: Int, openOnTop: Boolean = false, fragmentCreator: () -> Fragment) {
     if (null == supportFragmentManager.findFragmentByTag(fragmentTag)) {
         supportFragmentManager.inTransaction {

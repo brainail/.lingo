@@ -14,11 +14,11 @@ import org.brainail.everboxing.lingo.tasks.initializers.PreinstalledUrbanDataIni
 abstract class AppInitializersModule {
     @Binds
     @IntoSet
-    abstract fun bindAppLifecycleInitializer(initializer: AppLifecycleInitializer): AppInitializer
+    abstract fun bindLoggerInitializer(initializer: LoggerInitializer): AppInitializer
 
     @Binds
     @IntoSet
-    abstract fun bindLoggerInitializer(initializer: LoggerInitializer): AppInitializer
+    abstract fun bindAppLifecycleInitializer(initializer: AppLifecycleInitializer): AppInitializer
 
     @Binds
     @IntoSet

@@ -11,9 +11,9 @@ import javax.inject.Inject
 
 class App : DaggerApplication(), HasWorkerInjector {
     @Inject
-    lateinit var appInitializers: AppInitializers
-    @Inject
     lateinit var workerInjector: DispatchingAndroidInjector<Worker>
+    @Inject
+    lateinit var appInitializers: AppInitializers
 
     override fun onCreate() {
         super.onCreate()

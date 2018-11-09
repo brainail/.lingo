@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import org.brainail.everboxing.lingo.base.tasks.SyncTasks
 import org.brainail.everboxing.lingo.domain.Constants.URBAN_POPULAR_WORDS_FILE_NAME
+import org.brainail.everboxing.lingo.domain.settings.SyncSettings
 import org.brainail.everboxing.lingo.tasks.initializers.PreinstalledUrbanDataInitializer
 import javax.inject.Singleton
 
@@ -16,6 +17,6 @@ class JobsModule {
 
     @Provides
     @Singleton
-    fun providePreinstalledUrbanDataInitializer(synTasks: SyncTasks)
-            = PreinstalledUrbanDataInitializer(URBAN_POPULAR_WORDS_FILE_NAME, synTasks)
+    fun providePreinstalledUrbanDataInitializer(syncSettings: SyncSettings, synTasks: SyncTasks)
+            = PreinstalledUrbanDataInitializer(URBAN_POPULAR_WORDS_FILE_NAME, syncSettings, synTasks)
 }

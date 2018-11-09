@@ -2,13 +2,13 @@ package org.brainail.everboxing.lingo.ui.home
 
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.navigator.Intents
 import org.brainail.everboxing.lingo.navigator.SceneNavigator
-import org.brainail.everboxing.lingo.ui.home.explore.LingoSearchFragment
 import org.brainail.everboxing.lingo.util.NavigableBack
 import org.brainail.everboxing.lingo.util.ScrollablePage
-import org.brainail.everboxing.lingo.util.extensions.openFragment
+import org.brainail.everboxing.lingo.util.extensions.getNavigationTopFragment
 
 class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(activity) {
     fun showTextToSpeech(@StringRes promptId: Int) = startActivityForResult(REQ_CODE_SPEECH_INPUT) {
@@ -18,25 +18,24 @@ class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(a
     fun canShowTextToSpeech() =
             null != Intents.TextToSpeech.showVoiceRecognizer(null).resolveActivity(context.packageManager)
 
-    fun showExploreSubScreen() {
-        activity.openFragment(LingoSearchFragment.layoutTag, R.id.containerView) {
-            LingoSearchFragment.newInstance()
+    fun showExplorePage() {
+        val navController = activity.findNavController(R.id.lingoHomeNavigationFragment)
+        if (navController.currentDestination?.id != R.id.explorePageDestination) {
+            navController.navigate(R.id.explorePageDestination)
         }
     }
 
     fun goBack() {
-        val fragment = activity.supportFragmentManager.findFragmentById(R.id.containerView)
+        val fragment = activity.getNavigationTopFragment(R.id.lingoHomeNavigationFragment)
         if ((fragment as? NavigableBack)?.goBack() != true) {
-            if (activity.supportFragmentManager.backStackEntryCount > 0) {
-                activity.supportFragmentManager.popBackStack()
-            } else {
+            if (!activity.findNavController(R.id.lingoHomeNavigationFragment).navigateUp()) {
                 activity.supportFinishAfterTransition()
             }
         }
     }
 
     fun scrollToTop() {
-        val fragment = activity.supportFragmentManager.findFragmentById(R.id.containerView)
+        val fragment = activity.getNavigationTopFragment(R.id.lingoHomeNavigationFragment)
         (fragment as? ScrollablePage)?.scrollToTop()
     }
 

@@ -12,4 +12,6 @@ class LoggerInitializer @Inject constructor(private val logTree: L.Tree) : AppIn
             L.plant(logTree)
         }
     }
+
+    override fun priority() = Int.MAX_VALUE
 }

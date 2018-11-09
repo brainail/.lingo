@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs"
 
 androidExtensions {
     experimental = true
@@ -42,19 +43,20 @@ android {
 }
 
 dependencies {
+    implementation "androidx.core:core-ktx:$androidCoreVersion"
+    implementation "androidx.fragment:fragment-ktx:$androidFragmentVersion"
+    implementation "androidx.collection:collection-ktx:$androidCollectionVersion"
     implementation "com.google.android.material:material:$androidMaterialComponentsVersion"
     implementation "androidx.constraintlayout:constraintlayout:$androidConstraintLayoutVersion"
     implementation "androidx.cardview:cardview:$androidCardViewVersion"
-    implementation "androidx.core:core-ktx:$androidCoreKtxVersion"
-    implementation "androidx.fragment:fragment-ktx:$androidFragmentKtxVersion"
-    implementation "androidx.collection:collection-ktx:$androidCollectionKtxVersion"
-    implementation "android.arch.work:work-runtime-ktx:$androidWorkManager"
+    implementation "android.arch.work:work-runtime-ktx:$androidWorkManagerVersion"
+    implementation "android.arch.navigation:navigation-fragment-ktx:$androidNavigationVersion"
+    implementation "android.arch.navigation:navigation-ui-ktx:$androidNavigationVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$androidLifecycleVersion"
     kapt "androidx.lifecycle:lifecycle-compiler:$androidLifecycleVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-
     implementation "org.jetbrains.anko:anko-common:$ankoCommonVersion"
 
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"

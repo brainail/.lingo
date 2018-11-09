@@ -28,27 +28,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
 
     override fun initState(viewModelSavedState: ViewModelSavedState?) {
         super.initState(viewModelSavedState)
-
-        initNavigationState(viewModelSavedState)
         initDisplayedTextState(viewModelSavedState)
-    }
-
-    private fun initNavigationState(viewModelSavedState: ViewModelSavedState?) {
-        val savedNavigation = viewModelSavedState
-                ?.get<String>(KEY_NAVIGATION_TAB_STATE) ?: NavigationTabItem.EXPLORE.name
-        navigationTab.value = NavigationTabItem.valueOf(savedNavigation)
-    }
-
-    private fun initDisplayedTextState(viewModelSavedState: ViewModelSavedState?) {
-        viewModelSavedState?.also {
-            it.takeIf { isFirstRestore() }?.run {
-                val displayedText = get<String>(KEY_DISPLAYED_TEXT_STATE) ?: ""
-                updateQuery(displayedText)
-                submitQuerySilently(displayedText)
-            }
-        } ?: run {
-            submitQuerySilently("")
-        }
     }
 
     override fun saveState(): ViewModelSavedState {
@@ -90,6 +70,28 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
 
     fun suggestionClicked(suggestion: SuggestionModel) {
         submitQuery(suggestion.word.toString())
+    }
+
+    private fun initDisplayedTextState(viewModelSavedState: ViewModelSavedState?) {
+        viewModelSavedState?.also {
+            it.takeIf { isFirstRestore() }?.run {
+                val displayedText = get<String>(KEY_DISPLAYED_TEXT_STATE) ?: ""
+                updateQuery(displayedText)
+                submitQuerySilently(displayedText)
+            }
+        } ?: run {
+            submitQuerySilently("")
+        }
+    }
+
+    /**
+     * [androidx.navigation.NavController] restores state on it's own. Keep for awhile.
+     */
+    @Suppress("unused")
+    private fun initNavigationState(viewModelSavedState: ViewModelSavedState?) {
+        val savedNavigation = viewModelSavedState
+                ?.get<String>(KEY_NAVIGATION_TAB_STATE) ?: NavigationTabItem.EXPLORE.name
+        navigationTab.value = NavigationTabItem.valueOf(savedNavigation)
     }
 
     private companion object {

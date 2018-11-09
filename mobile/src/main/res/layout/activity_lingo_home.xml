@@ -9,6 +9,15 @@
     android:fitsSystemWindows="true"
     android:focusableInTouchMode="true">
 
+    <fragment
+        android:id="@+id/lingoHomeNavigationFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:navGraph="@navigation/navigation_lingo_home"/>
+
     <FrameLayout
         android:id="@+id/containerView"
         android:layout_width="match_parent"
@@ -54,14 +63,16 @@
         app:fabAlignmentMode="end"
         app:fabCradleMargin="4dp"
         app:fabCradleRoundedCornerRadius="4dp"
-        app:hideOnScroll="true"/>
+        app:hideOnScroll="true"
+        tools:visibility="gone"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@id/homeActionButtonView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_search_black_24dp"
         android:tint="@color/material_light_white"
         app:layout_anchor="@id/bottomAppBarView"
-        android:src="@drawable/ic_search_black_24dp"/>
+        tools:visibility="gone"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

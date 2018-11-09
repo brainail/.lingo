@@ -9,9 +9,7 @@ import org.brainail.everboxing.lingo.app.App
 import org.brainail.everboxing.lingo.domain.event.EventBus
 import org.brainail.everboxing.lingo.domain.event.GlobalEvents
 import org.brainail.everboxing.lingo.ui.base.AppLifecycleObserver
-import org.brainail.everboxing.lingo.util.AndroidLogTree
 import org.brainail.everboxing.lingo.util.log.EventBusLogger
-import org.brainail.logger.L
 import javax.inject.Singleton
 
 @Module(includes = [AppInitializersModule::class])
@@ -23,10 +21,6 @@ class AppModule {
     @Provides
     @Singleton
     fun provideSharedPreferences(app: App): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
-
-    @Provides
-    @Singleton
-    fun provideLogTree(): L.Tree = AndroidLogTree()
 
     @Provides
     @Singleton

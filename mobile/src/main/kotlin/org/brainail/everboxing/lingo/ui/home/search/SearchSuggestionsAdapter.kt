@@ -1,4 +1,4 @@
-package org.brainail.everboxing.lingo.ui.home
+package org.brainail.everboxing.lingo.ui.home.search
 
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +11,10 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_suggestion.*
 import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.model.SuggestionModel
-import org.brainail.everboxing.lingo.ui.home.LingoSearchSuggestionsAdapter.SuggestionViewHolder
+import org.brainail.everboxing.lingo.ui.home.search.SearchSuggestionsAdapter.SuggestionViewHolder
 import org.brainail.everboxing.lingo.util.extensions.inflate
 
-class LingoSearchSuggestionsAdapter(private val suggestionClickListener: SuggestionClickListener? = null)
+class SearchSuggestionsAdapter(private val suggestionClickListener: SuggestionClickListener? = null)
     : ListAdapter<SuggestionModel, SuggestionViewHolder>(diffCallback) {
 
     private val listenersDelegate = ListenersDelegate()
@@ -53,7 +53,7 @@ class LingoSearchSuggestionsAdapter(private val suggestionClickListener: Suggest
         }
     }
 
-    inner class ListenersDelegate : LingoSearchSuggestionsAdapter.SuggestionClickListener {
+    inner class ListenersDelegate : SuggestionClickListener {
         override fun onSuggestionClick(item: SuggestionModel) {
             suggestionClickListener?.onSuggestionClick(item)
         }

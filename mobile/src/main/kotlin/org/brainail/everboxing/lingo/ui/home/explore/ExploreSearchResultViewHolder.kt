@@ -4,9 +4,9 @@ import org.brainail.everboxing.lingo.databinding.ItemSearchResultBinding
 import org.brainail.everboxing.lingo.model.SearchResultModel
 import org.brainail.everboxing.lingo.ui.base.BindingViewHolder
 
-class SearchResultViewHolder(
+class ExploreSearchResultViewHolder(
         binding: ItemSearchResultBinding,
-        searchResultClickListener: LingoSearchResultsAdapter.SearchResultClickListener)
+        searchResultClickListener: ExploreSearchResultsAdapter.SearchResultClickListener)
     : BindingViewHolder<ItemSearchResultBinding>(binding) {
 
     init {

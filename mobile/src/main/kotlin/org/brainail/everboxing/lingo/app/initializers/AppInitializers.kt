@@ -9,6 +9,6 @@ class AppInitializers @Inject constructor(
 ) : AppInitializer {
 
     override fun init(application: Application) {
-        initializers.forEach { it.init(application) }
+        initializers.toMutableList().sortedByDescending { it.priority() }.forEach { it.init(application) }
     }
 }
