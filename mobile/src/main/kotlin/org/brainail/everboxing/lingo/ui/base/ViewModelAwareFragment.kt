@@ -2,7 +2,7 @@ package org.brainail.everboxing.lingo.ui.base
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import javax.inject.Inject
 
 abstract class ViewModelAwareFragment : BaseFragment() {
@@ -19,6 +19,13 @@ abstract class ViewModelAwareFragment : BaseFragment() {
     }
 
     abstract fun createPrimaryViewModels(): Array<BaseViewModel>?
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModels?.forEach {
+            saveViewModelStateToBundle(outState, it.stateToSave, it::class.java)
+        }
+    }
 
     private fun getViewModelStateFromBundle(bundle: Bundle?, type: Class<out BaseViewModel>): ViewModelSavedState? {
         return bundle?.getParcelable(KEY_VIEW_MODEL_STATE + "_" + type.name)

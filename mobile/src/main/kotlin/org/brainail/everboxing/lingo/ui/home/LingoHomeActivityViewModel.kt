@@ -6,8 +6,10 @@ import org.brainail.everboxing.lingo.ui.base.ViewModelSavedState
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState
 import org.brainail.everboxing.lingo.util.SingleEventLiveData
+import org.brainail.everboxing.lingo.util.extensions.SharedViewModel
 import javax.inject.Inject
 
+@SharedViewModel(klazz = SearchViewModel::class)
 class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
 
     enum class NavigationItem {
@@ -28,27 +30,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
 
     override fun initState(viewModelSavedState: ViewModelSavedState?) {
         super.initState(viewModelSavedState)
-
-        initNavigationState(viewModelSavedState)
         initDisplayedTextState(viewModelSavedState)
-    }
-
-    private fun initNavigationState(viewModelSavedState: ViewModelSavedState?) {
-        val savedNavigation = viewModelSavedState
-                ?.get<String>(KEY_NAVIGATION_TAB_STATE) ?: NavigationTabItem.EXPLORE.name
-        navigationTab.value = NavigationTabItem.valueOf(savedNavigation)
-    }
-
-    private fun initDisplayedTextState(viewModelSavedState: ViewModelSavedState?) {
-        viewModelSavedState?.also {
-            it.takeIf { isFirstRestore() }?.run {
-                val displayedText = get<String>(KEY_DISPLAYED_TEXT_STATE) ?: ""
-                updateQuery(displayedText)
-                submitQuerySilently(displayedText)
-            }
-        } ?: run {
-            submitQuerySilently("")
-        }
     }
 
     override fun saveState(): ViewModelSavedState {
@@ -80,8 +62,38 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
         navigation.value = navigationItem
     }
 
+    fun actionButtonClicked() {
+        val viewState = searchViewState.value!!
+        when (viewState.isInFocus) {
+            true -> submitQuery(viewState.displayedText)
+            else -> applyChanges(SearchViewState.RequestFocusGain(true))
+        }
+    }
+
     fun suggestionClicked(suggestion: SuggestionModel) {
         submitQuery(suggestion.word.toString())
+    }
+
+    private fun initDisplayedTextState(viewModelSavedState: ViewModelSavedState?) {
+        viewModelSavedState?.also {
+            it.takeIf { isFirstRestore() }?.run {
+                val displayedText = get<String>(KEY_DISPLAYED_TEXT_STATE) ?: ""
+                updateQuery(displayedText)
+                submitQuerySilently(displayedText)
+            }
+        } ?: run {
+            submitQuerySilently("")
+        }
+    }
+
+    /**
+     * [androidx.navigation.NavController] restores state on it's own. Keep for awhile.
+     */
+    @Suppress("unused")
+    private fun initNavigationState(viewModelSavedState: ViewModelSavedState?) {
+        val savedNavigation = viewModelSavedState
+                ?.get<String>(KEY_NAVIGATION_TAB_STATE) ?: NavigationTabItem.EXPLORE.name
+        navigationTab.value = NavigationTabItem.valueOf(savedNavigation)
     }
 
     private companion object {

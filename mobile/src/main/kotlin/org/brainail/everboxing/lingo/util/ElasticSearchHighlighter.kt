@@ -7,10 +7,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.set
 import androidx.core.text.toSpannable
 import org.brainail.everboxing.lingo.R
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.util.extensions.compareCaselessTo
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
 import javax.inject.Inject
 
+/**
+ * Home-made highlighter based on __LCS__.
+ */
 class ElasticSearchHighlighter @Inject constructor(private val context: Context) {
 
     private val highlightColor: Int by lazyFast {

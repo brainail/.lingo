@@ -18,6 +18,10 @@ class AppExecutors(
         it.subscribeOn(backgroundScheduler).observeOn(mainScheduler)
     }
 
+    fun applyCompletableBackgroundSchedulers(): CompletableTransformer = CompletableTransformer {
+        it.subscribeOn(backgroundScheduler)
+    }
+
     fun <T> applySingleSchedulers(): SingleTransformer<T, T> = SingleTransformer {
         it.subscribeOn(backgroundScheduler).observeOn(mainScheduler)
     }

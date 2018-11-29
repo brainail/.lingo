@@ -1,4 +1,5 @@
 @file:JvmName("ContextUtils")
+@file:Suppress("NOTHING_TO_INLINE")
 
 package org.brainail.everboxing.lingo.util.extensions
 
@@ -8,8 +9,8 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import org.brainail.everboxing.lingo.app.App
 
-val Context.app: App
+inline val Context.app: App
     get() = applicationContext as App
 
-fun Context.drawable(@DrawableRes drawable: Int) = ContextCompat.getDrawable(this, drawable)!!
-fun Context.color(@ColorRes color: Int) = ContextCompat.getColor(this, color)
+inline fun Context.drawable(@DrawableRes drawable: Int) = ContextCompat.getDrawable(this, drawable)!!
+inline fun Context.color(@ColorRes color: Int) = ContextCompat.getColor(this, color)

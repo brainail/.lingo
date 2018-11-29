@@ -27,8 +27,8 @@ android {
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:$supportLibraryVersion"
-    implementation "androidx.recyclerview:recyclerview:$supportLibraryVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-    implementation "androidx.cardview:cardview:$supportLibraryVersion"
+    implementation "androidx.appcompat:appcompat:$androidAppCompatVersion"
+    implementation "androidx.recyclerview:recyclerview:$androidRecyclerViewCompatVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$androidConstraintLayoutVersion"
+    implementation "androidx.cardview:cardview:$androidCardViewVersion"
 }

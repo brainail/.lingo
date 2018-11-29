@@ -1,5 +1,9 @@
 package org.brainail.everboxing.lingo.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class SearchResultModel(
         val id: Int,
         val definitionId: String,
@@ -7,4 +11,4 @@ data class SearchResultModel(
         val definition: String,
         val example: String,
         val link: String,
-        val favorite: Boolean)
+        val favorite: Boolean) : Parcelable

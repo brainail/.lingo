@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs"
 
 androidExtensions {
     experimental = true
@@ -42,17 +43,21 @@ android {
 }
 
 dependencies {
-    implementation "com.google.android.material:material:$materialVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-    implementation "androidx.cardview:cardview:$supportLibraryVersion"
-
-    implementation "androidx.core:core-ktx:$androidKtxVersion"
+    implementation "androidx.core:core-ktx:$androidCoreVersion"
+    implementation "androidx.fragment:fragment-ktx:$androidFragmentVersion"
+    implementation "androidx.collection:collection-ktx:$androidCollectionVersion"
+    implementation "com.google.android.material:material:$androidMaterialComponentsVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$androidConstraintLayoutVersion"
+    implementation "androidx.cardview:cardview:$androidCardViewVersion"
+    implementation "android.arch.work:work-runtime-ktx:$androidWorkManagerVersion"
+    implementation "android.arch.navigation:navigation-fragment-ktx:$androidNavigationVersion"
+    implementation "android.arch.navigation:navigation-ui-ktx:$androidNavigationVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$androidLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$androidLifecycleVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-
-    implementation "androidx.lifecycle:lifecycle-extensions:$androidArchVersion"
-    kapt "androidx.lifecycle:lifecycle-compiler:$androidArchVersion"
-
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     implementation "org.jetbrains.anko:anko-common:$ankoCommonVersion"
 
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
@@ -67,6 +72,9 @@ dependencies {
     implementation "com.facebook.stetho:stetho:$facebookStethoVersion"
     implementation "com.facebook.stetho:stetho-okhttp3:$facebookStethoVersion"
 
+    implementation project(':base')
+    implementation project(':base-app')
+    implementation project(':tasks')
     implementation project(':domain')
     implementation project(':data')
     implementation project(':cache')

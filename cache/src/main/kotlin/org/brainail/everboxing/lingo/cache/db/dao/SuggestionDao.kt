@@ -15,12 +15,6 @@ abstract class SuggestionDao : BaseDao<SuggestionCacheEntity> {
         insertOrRecreate(recent) // move old/new to top
     }
 
-    @Query("""
-        delete from suggestions
-        where is_recent = 1
-        and sg_id not in (select sg_id from suggestions where is_recent = 1 order by sg_id desc limit :limit)""")
-    abstract fun keepRecent(limit: Int)
-
     @Query("select * from suggestions where word like :query || '%' order by sg_id desc limit :limit")
     abstract fun getSuggestions(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SuggestionCacheEntity>>
 

@@ -1,9 +1,9 @@
 package org.brainail.everboxing.lingo.ui.home.search
 
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.model.SuggestionModel
 import org.brainail.everboxing.lingo.model.TextToSpeechResult
 import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
-import org.brainail.everboxing.lingo.util.extensions.lazyFast
 
 data class SearchViewState(
         val isInFocus: Boolean = false,

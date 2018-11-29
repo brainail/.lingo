@@ -29,4 +29,8 @@ class SearchResultCacheDataSource @Inject constructor(
     override fun forgetSearchResult(id: Int): Completable {
         return searchResultCache.forgetSearchResult(id)
     }
+
+    override fun installUrbanSearchResult(pathToData: String): Completable {
+        return searchResultCache.installUrbanSearchResult(pathToData)
+    }
 }

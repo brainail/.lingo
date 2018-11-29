@@ -10,7 +10,7 @@
             type="org.brainail.everboxing.lingo.model.SearchResultModel"/>
         <variable
             name="searchResultClickListener"
-            type="org.brainail.everboxing.lingo.ui.home.explore.LingoSearchResultsAdapter.SearchResultClickListener"/>
+            type="org.brainail.everboxing.lingo.ui.home.explore.ExploreSearchResultsAdapter.SearchResultClickListener"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

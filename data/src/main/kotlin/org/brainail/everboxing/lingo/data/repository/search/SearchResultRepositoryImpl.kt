@@ -48,4 +48,8 @@ class SearchResultRepositoryImpl @Inject constructor(
     private fun saveSearchResultEntities(searchResults: List<SearchResultEntity>): Completable {
         return dataSourceFactory.obtainCacheDataSource().saveSearchResults(searchResults)
     }
+
+    override fun installUrbanSearchResult(pathToData: String): Completable {
+        return dataSourceFactory.obtainCacheDataSource().installUrbanSearchResult(pathToData)
+    }
 }

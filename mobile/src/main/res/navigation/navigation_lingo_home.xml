@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/explorePageDestination">
+
+    <fragment
+        android:id="@+id/explorePageDestination"
+        android:name="org.brainail.everboxing.lingo.ui.home.explore.ExploreFragment"
+        tools:layout="@layout/fragment_explore">
+
+        <action
+            android:id="@+id/openWordDetailsAction"
+            app:destination="@id/wordDetailsPageDestination"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/wordDetailsPageDestination"
+        android:name="org.brainail.everboxing.lingo.ui.home.details.WordDetailsFragment"
+        tools:layout="@layout/fragment_word_details">
+
+        <argument
+            android:name="wordItem"
+            app:argType="org.brainail.everboxing.lingo.model.SearchResultModel" />
+    </fragment>
+</navigation>

@@ -5,6 +5,7 @@ import dagger.Provides
 import org.brainail.everboxing.lingo.di.scope.ActivityScope
 import org.brainail.everboxing.lingo.mapper.TextToSpeechResultMapper
 import org.brainail.everboxing.lingo.ui.home.LingoHomeActivity
+import org.brainail.everboxing.lingo.ui.home.LingoHomeActivityActor
 import org.brainail.everboxing.lingo.ui.home.LingoHomeActivityNavigator
 
 @Module
@@ -15,5 +16,9 @@ class LingoHomeActivityModule {
 
     @Provides
     @ActivityScope
-    internal fun provideTextToSpeechResultMapper() = TextToSpeechResultMapper()
+    fun provideLingoHomeActivityActor(activity: LingoHomeActivity) = LingoHomeActivityActor(activity)
+
+    @Provides
+    @ActivityScope
+    fun provideTextToSpeechResultMapper() = TextToSpeechResultMapper()
 }
