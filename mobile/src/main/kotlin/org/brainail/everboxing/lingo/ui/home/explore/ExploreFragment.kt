@@ -31,14 +31,14 @@ class ExploreFragment :
         ViewModelAwareFragment(),
         ScrollablePage, SearchResultClickListener {
 
-    private lateinit var searchViewModel: SearchViewModel
+    @Inject
+    lateinit var navigator: ExploreFragmentNavigator
+
+    private val searchViewModel by lazyFast { getActivityViewModel<SearchViewModel>(viewModelFactory) }
     private val screenViewModel by lazyFast { getViewModel<ExploreFragmentViewModel>(viewModelFactory) }
 
     private lateinit var searchResultsAdapter: ExploreSearchResultsAdapter
     private lateinit var searchResultsItemTouchHelper: ItemTouchHelper
-
-    @Inject
-    lateinit var navigator: ExploreFragmentNavigator
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return container?.inflate(R.layout.fragment_explore)
@@ -61,7 +61,6 @@ class ExploreFragment :
     }
 
     private fun initSearch() {
-        searchViewModel = getActivityViewModel(viewModelFactory)
         searchViewModel.searchResults().observeNonNull(viewLifecycleOwner) { screenViewModel.searchResults(it) }
         searchViewModel.searchSuggestions().observeNonNull(viewLifecycleOwner) { screenViewModel.searchSuggestions(it) }
 

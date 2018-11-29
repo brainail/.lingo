@@ -15,22 +15,25 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.widget.AppCompatBottomAppBar
 
+/**
+ * Renders some main __UI__ components which have any complicated logic from [LingoHomeActivity]
+ */
 class LingoHomeActivityViewRenderer(
         private val activity: AppCompatActivity,
-        private val appBarLayout: AppBarLayout,
-        private val bottomAppBar: AppCompatBottomAppBar,
-        private val actionButton: FloatingActionButton,
+        private val appBarView: AppBarLayout,
+        private val bottomAppBarView: AppCompatBottomAppBar,
+        private val actionButtonView: FloatingActionButton,
         private val uiExecutor: Handler): LifecycleObserver {
 
     private val alignFabCenterAction = {
-        if (bottomAppBar.fabAlignmentMode != BottomAppBar.FAB_ALIGNMENT_MODE_CENTER) { // avoid blinking
-            bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+        if (bottomAppBarView.fabAlignmentMode != BottomAppBar.FAB_ALIGNMENT_MODE_CENTER) { // avoid blinking
+            bottomAppBarView.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
         }
     }
 
     private val alignFabEndAction = {
-        if (bottomAppBar.fabAlignmentMode != BottomAppBar.FAB_ALIGNMENT_MODE_END) { // avoid blinking
-            bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
+        if (bottomAppBarView.fabAlignmentMode != BottomAppBar.FAB_ALIGNMENT_MODE_END) { // avoid blinking
+            bottomAppBarView.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
         }
     }
 
@@ -43,7 +46,7 @@ class LingoHomeActivityViewRenderer(
     }
 
     fun selectHomeMenuItem(@IdRes menuItemId: Int) {
-        val menu = bottomAppBar.menu
+        val menu = bottomAppBarView.menu
         when (menuItemId) {
             R.id.menu_home_explore -> {
                 menu.findItem(R.id.menu_home_explore)?.setIcon(R.drawable.ic_baseline_view_agenda_24dp)
@@ -95,24 +98,24 @@ class LingoHomeActivityViewRenderer(
     }
 
     private fun enableWordDetailsPageMode() {
-        appBarLayout.setExpanded(false)
-        if (null == bottomAppBar.menu.findItem(R.id.menu_details_share)) { // avoid blinking
-            bottomAppBar.replaceMenu(R.menu.menu_details_bottom_bar)
+        appBarView.setExpanded(false)
+        if (null == bottomAppBarView.menu.findItem(R.id.menu_details_share)) { // avoid blinking
+            bottomAppBarView.replaceMenu(R.menu.menu_details_bottom_bar)
         }
-        bottomAppBar.show()
+        bottomAppBarView.show()
         scheduleAlignActionButtonAction(alignFabCenterAction)
-        actionButton.id = R.id.detailsActionButtonView
-        actionButton.setImageResource(R.drawable.ic_twotone_favorite_24dp)
+        actionButtonView.id = R.id.detailsActionButtonView
+        actionButtonView.setImageResource(R.drawable.ic_twotone_favorite_24dp)
     }
 
     private fun enableLingoHomePageMode() {
-        appBarLayout.setExpanded(true)
-        if (null == bottomAppBar.menu.findItem(R.id.menu_home_explore)) { // avoid blinking
-            bottomAppBar.replaceMenu(R.menu.menu_home_bottom_bar)
+        appBarView.setExpanded(true)
+        if (null == bottomAppBarView.menu.findItem(R.id.menu_home_explore)) { // avoid blinking
+            bottomAppBarView.replaceMenu(R.menu.menu_home_bottom_bar)
         }
         scheduleAlignActionButtonAction(alignFabEndAction)
-        actionButton.id = R.id.homeActionButtonView
-        actionButton.setImageResource(R.drawable.ic_search_black_24dp)
+        actionButtonView.id = R.id.homeActionButtonView
+        actionButtonView.setImageResource(R.drawable.ic_search_black_24dp)
     }
 
     private fun scheduleAlignActionButtonAction(action: () -> Unit) {

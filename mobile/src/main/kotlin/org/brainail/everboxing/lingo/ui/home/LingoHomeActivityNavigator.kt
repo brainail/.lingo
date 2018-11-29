@@ -1,5 +1,6 @@
 package org.brainail.everboxing.lingo.ui.home
 
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -10,13 +11,13 @@ import org.brainail.everboxing.lingo.util.NavigableBack
 import org.brainail.everboxing.lingo.util.ScrollablePage
 import org.brainail.everboxing.lingo.util.extensions.getNavigationTopFragment
 
+/**
+ * Navigates to other screens from [LingoHomeActivity]
+ */
 class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(activity) {
     fun showTextToSpeech(@StringRes promptId: Int) = startActivityForResult(REQ_CODE_SPEECH_INPUT) {
         Intents.TextToSpeech.showVoiceRecognizer(activity.getString(promptId))
     }
-
-    fun canShowTextToSpeech() =
-            null != Intents.TextToSpeech.showVoiceRecognizer(null).resolveActivity(context.packageManager)
 
     fun showExplorePage() {
         val navController = activity.findNavController(R.id.lingoHomeNavigationFragment)
@@ -41,5 +42,9 @@ class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(a
 
     companion object {
         const val REQ_CODE_SPEECH_INPUT = 100
+
+        @JvmStatic
+        fun canShowTextToSpeech(context: Context) =
+                null != Intents.TextToSpeech.showVoiceRecognizer(null).resolveActivity(context.packageManager)
     }
 }

@@ -4,10 +4,6 @@ package org.brainail.everboxing.lingo.util.extensions
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 
 fun AppCompatActivity.openFragment(
         fragmentTag: String, containerViewId: Int, openOnTop: Boolean = false, fragmentCreator: () -> Fragment) {
@@ -21,6 +17,3 @@ fun AppCompatActivity.openFragment(
         }
     }
 }
-
-inline fun <reified VM : ViewModel> FragmentActivity.getViewModel(provider: ViewModelProvider.Factory)
-        = ViewModelProviders.of(this, provider).get(VM::class.java)

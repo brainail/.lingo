@@ -7,6 +7,9 @@ import org.brainail.everboxing.lingo.util.MenuItemClickHandler
 import org.brainail.everboxing.lingo.util.ViewClickHandler
 import org.brainail.everboxing.lingo.util.extensions.getNavigationTopFragment
 
+/**
+ * Acts on different actions from [LingoHomeActivity]
+ */
 class LingoHomeActivityActor(private val activity: AppCompatActivity) {
     fun handleMenuItemClick(@IdRes menuId: Int): Boolean {
         val fragment = activity.getNavigationTopFragment(R.id.lingoHomeNavigationFragment)

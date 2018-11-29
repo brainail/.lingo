@@ -57,6 +57,7 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$androidLifecycleVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     implementation "org.jetbrains.anko:anko-common:$ankoCommonVersion"
 
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"

@@ -5,8 +5,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
-import org.brainail.everboxing.lingo.di.scope.FragmentScope
 import org.brainail.everboxing.lingo.di.ViewModelKey
+import org.brainail.everboxing.lingo.di.scope.FragmentScope
 import org.brainail.everboxing.lingo.ui.home.details.WordDetailsFragment
 import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragment
 import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentViewModel

@@ -6,8 +6,10 @@ import org.brainail.everboxing.lingo.ui.base.ViewModelSavedState
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState
 import org.brainail.everboxing.lingo.util.SingleEventLiveData
+import org.brainail.everboxing.lingo.util.extensions.SharedViewModel
 import javax.inject.Inject
 
+@SharedViewModel(klazz = SearchViewModel::class)
 class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
 
     enum class NavigationItem {

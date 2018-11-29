@@ -4,10 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
-import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
 import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.base.util.checkAllMatched
@@ -24,8 +20,6 @@ import org.brainail.everboxing.lingo.ui.home.search.SearchSuggestionsAdapter
 import org.brainail.everboxing.lingo.ui.home.search.SearchSuggestionsAdapter.SuggestionClickListener
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel.SearchNavigationItem
-import org.brainail.everboxing.lingo.ui.home.search.SearchViewState
-import org.brainail.everboxing.lingo.ui.home.search.SearchViewState.CursorPosition
 import org.brainail.everboxing.lingo.util.extensions.getViewModel
 import org.brainail.everboxing.lingo.util.extensions.observeNonNull
 import org.brainail.everboxing.lingo.util.extensions.setAfterTextChangedListener
@@ -41,10 +35,16 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     @Inject
     lateinit var textToSpeechResultMapper: TextToSpeechResultMapper
 
-    private val screenViewModel by lazyFast { getViewModel<LingoHomeActivityViewModel>(viewModelFactory) }
+    private val screenViewModel by lazyFast {
+        getViewModel<LingoHomeActivityViewModel>(viewModelFactory)
+    }
 
-    private val viewRenderer by lazyFast {
+    private val screenRenderer by lazyFast {
         LingoHomeActivityViewRenderer(this, appBarView, bottomAppBarView, homeActionButtonView, Handler())
+    }
+
+    private val searchViewStateRenderer by lazyFast {
+        LingoHomeSearchViewStateRenderer(this, floatingSearchView, appBarView, toolbarUnderlay, bottomAppBarView)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,56 +60,12 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
 
     override fun getLayoutResourceId() = R.layout.activity_lingo_home
 
-    private fun initViewRenderer() = viewRenderer.init()
+    private fun initViewRenderer() = screenRenderer.init()
 
     private fun initSearchViewState() {
-        screenViewModel.searchViewState().observeNonNull(this) { renderSearchViewState(it) }
-    }
-
-    private fun renderSearchViewState(viewState: SearchViewState) {
-        L.i("renderSearchViewState: viewState = $viewState")
-
-        // update text
-        when (viewState.displayedText.isEmpty()) {
-            true -> floatingSearchView.clearText() // use clear instead of simple set due to issues with system widget
-            else -> if (viewState.displayedText != floatingSearchView.text.toString()) {
-                floatingSearchView.text = viewState.displayedText // set only if new to get rid of recursive updates
-            }
+        screenViewModel.searchViewState().observeNonNull(this) {
+            searchViewStateRenderer.renderSearchViewState(it)
         }
-
-        // cursor
-        if (CursorPosition.END == viewState.cursorPosition) {
-            floatingSearchView.setSelection(viewState.displayedText.length)
-        }
-
-        // focus
-        floatingSearchView.isActivated = viewState.isInFocus
-
-        // icons
-        floatingSearchView.showSearchLogo(viewState.isLogoDisplayed)
-        floatingSearchView.menu.findItem(R.id.menu_clear)?.isVisible = viewState.isClearAvailable
-        floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = viewState.displayLoading
-        floatingSearchView.menu.findItem(R.id.menu_tts)?.isVisible =
-                viewState.isTextToSpeechAvailable && navigator.canShowTextToSpeech()
-
-        // items
-        (floatingSearchView.adapter as SearchSuggestionsAdapter).submitList(viewState.displayedSuggestions)
-
-        // scroll behavior
-        appBarView.takeIf { viewState.isInFocus }?.setExpanded(true)
-        floatingSearchView.post {
-            // post it to get rid of flickering effect
-            val toolbarUnderlayLp = toolbarUnderlay.layoutParams as AppBarLayout.LayoutParams
-            val newScrollFlags = if (viewState.isInFocus) 0 else (SCROLL_FLAG_SCROLL or SCROLL_FLAG_SNAP or SCROLL_FLAG_ENTER_ALWAYS)
-            toolbarUnderlayLp.takeIf { it.scrollFlags != newScrollFlags }?.apply {
-                scrollFlags = newScrollFlags
-                toolbarUnderlay.layoutParams = this // important in order to have the proper effect
-            }
-        }
-
-        // bottom navigation
-        bottomAppBarView.hideOnScroll = !viewState.isInFocus
-        bottomAppBarView.takeIf { viewState.isInFocus }?.show()
     }
 
     private fun initBottomAppBar() {
@@ -167,29 +123,29 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         }.checkAllMatched
     }
 
-    private fun navigateTabTo(navigationTabItem: LingoHomeActivityViewModel.NavigationTabItem) {
-        L.v("navigateTabTo: navigationTabItem = $navigationTabItem")
-        when (navigationTabItem) {
-            NavigationTabItem.EXPLORE -> {
-                navigator.showExplorePage()
-                viewRenderer.selectHomeMenuItem(R.id.menu_home_explore)
-            }
-            NavigationTabItem.FAVOURITE -> {
-                navigator.showExplorePage()
-                viewRenderer.selectHomeMenuItem(R.id.menu_home_favorite)
-            }
-            NavigationTabItem.HISTORY -> {
-                navigator.showExplorePage()
-                viewRenderer.selectHomeMenuItem(R.id.menu_home_history)
-            }
-        }.checkAllMatched
-    }
-
     private fun navigateTo(navigationItem: SearchViewModel.SearchNavigationItem) {
         L.v("navigateTo: navigationItem = $navigationItem")
         when (navigationItem) {
             SearchNavigationItem.DRAWER -> toast("open Drawer please")
             SearchNavigationItem.TEXT_TO_SPEECH -> navigator.showTextToSpeech(R.string.home_text_to_speech_prompt)
+        }.checkAllMatched
+    }
+
+    private fun navigateTabTo(navigationTabItem: LingoHomeActivityViewModel.NavigationTabItem) {
+        L.v("navigateTabTo: navigationTabItem = $navigationTabItem")
+        when (navigationTabItem) {
+            NavigationTabItem.EXPLORE -> {
+                navigator.showExplorePage()
+                screenRenderer.selectHomeMenuItem(R.id.menu_home_explore)
+            }
+            NavigationTabItem.FAVOURITE -> {
+                navigator.showExplorePage()
+                screenRenderer.selectHomeMenuItem(R.id.menu_home_favorite)
+            }
+            NavigationTabItem.HISTORY -> {
+                navigator.showExplorePage()
+                screenRenderer.selectHomeMenuItem(R.id.menu_home_history)
+            }
         }.checkAllMatched
     }
 
