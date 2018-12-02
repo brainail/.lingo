@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Malyshev Yegor
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.brainail.everboxing.lingo.util.ui
 
 import android.content.Context
@@ -16,10 +32,13 @@ import org.brainail.everboxing.lingo.util.extensions.color
 import org.brainail.everboxing.lingo.util.extensions.drawable
 
 abstract class SwipeToActionCallback(
-        context: Context, iconLeftInfo: IconInfo? = null, iconRightInfo: IconInfo? = null)
-    : SimpleCallback(0,
-        (if (iconLeftInfo != null) ItemTouchHelper.LEFT else 0)
-                or (if (iconRightInfo != null) ItemTouchHelper.RIGHT else 0)) {
+    context: Context,
+    iconLeftInfo: IconInfo? = null,
+    iconRightInfo: IconInfo? = null
+) : SimpleCallback(
+    0, (if (iconLeftInfo != null) ItemTouchHelper.LEFT else 0)
+        or (if (iconRightInfo != null) ItemTouchHelper.RIGHT else 0)
+) {
 
     private val iconLeft by lazyFast { iconLeftInfo?.run { context.drawable(resId) } }
     private val backgroundLeft by lazyFast { iconLeftInfo?.run { context.color(backgroundId) } ?: 0 }
@@ -42,14 +61,22 @@ abstract class SwipeToActionCallback(
     private lateinit var icon: Drawable
 
     override fun onMove(
-            recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder): Boolean {
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
         return false
     }
 
     override fun onChildDraw(
-            canvas: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float,
-            dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+        canvas: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+    ) {
 
         when {
             dX < 0 -> drawRightIcon(canvas, dX, viewHolder.itemView)

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Malyshev Yegor
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.brainail.everboxing.lingo.cache
 
 import io.reactivex.Completable
@@ -14,11 +30,12 @@ import javax.inject.Singleton
 
 @Singleton
 class SearchResultCacheImpl @Inject constructor(
-        private val searchResultDao: SearchResultDao,
-        private val fileStore: FileStore,
-        private val searchResultInstallDataMapper: SearchResultInstallDataMapper,
-        private val searchResultCacheMapper: SearchResultCacheMapper,
-        private val databaseTransactionRunner: DatabaseTransactionRunner) : SearchResultCache {
+    private val searchResultDao: SearchResultDao,
+    private val fileStore: FileStore,
+    private val searchResultInstallDataMapper: SearchResultInstallDataMapper,
+    private val searchResultCacheMapper: SearchResultCacheMapper,
+    private val databaseTransactionRunner: DatabaseTransactionRunner
+) : SearchResultCache {
 
     override fun clearSearchResults(): Completable {
         return Completable.defer {

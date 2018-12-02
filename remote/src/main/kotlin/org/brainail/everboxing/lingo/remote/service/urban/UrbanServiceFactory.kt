@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Malyshev Yegor
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.brainail.everboxing.lingo.remote.service.urban
 
 import com.google.gson.FieldNamingPolicy
@@ -23,17 +39,18 @@ object UrbanServiceFactory {
 
     private fun makeUrbanService(okHttpClient: OkHttpClient, gson: Gson): UrbanService {
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.urbandictionary.com")
-                .client(okHttpClient)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
+            .baseUrl("https://api.urbandictionary.com")
+            .client(okHttpClient)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
         return retrofit.create(UrbanService::class.java)
     }
 
     private fun makeOkHttpClient(
-            httpLoggingInterceptor: HttpLoggingInterceptor,
-            networkInterceptors: Array<out Interceptor>): OkHttpClient {
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        networkInterceptors: Array<out Interceptor>
+    ): OkHttpClient {
         return OkHttpClient.Builder().apply {
             addInterceptor(httpLoggingInterceptor)
             networkInterceptors.forEach { addNetworkInterceptor(it) }
@@ -44,10 +61,10 @@ object UrbanServiceFactory {
 
     private fun makeGson(): Gson {
         return GsonBuilder()
-                .setLenient()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .create()
+            .setLenient()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create()
     }
 
     private fun makeLoggingInterceptor(isDebug: Boolean): HttpLoggingInterceptor {

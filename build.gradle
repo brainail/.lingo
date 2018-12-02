@@ -1,5 +1,4 @@
 apply plugin: "com.github.ben-manes.versions"
-apply plugin: 'io.gitlab.arturbosch.detekt'
 
 buildscript {
     ext.compileSdkVersion = 28
@@ -41,6 +40,8 @@ buildscript {
     ext.ankoCommonVersion = '0.9.1'
 
     ext.detektPluginVersion = '1.0.0-RC11'
+    ext.spotlessPluginVersion = '3.16.0'
+    ext.ktlintVersion = '0.29.0'
 
     ext.gradleVersionsPluginVersion = '0.17.0'
 
@@ -56,6 +57,7 @@ buildscript {
         classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
         classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$androidNavigationVersion"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion"
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:$spotlessPluginVersion"
     }
 }
 
@@ -85,10 +87,9 @@ allprojects {
         sourceCompatibility = "1.8"
         targetCompatibility = "1.8"
     }
-
-    apply from: "$rootDir/detekt.gradle"
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+subprojects {
+    apply from: "$rootDir/spotless.gradle"
+    apply from: "$rootDir/detekt.gradle"
 }

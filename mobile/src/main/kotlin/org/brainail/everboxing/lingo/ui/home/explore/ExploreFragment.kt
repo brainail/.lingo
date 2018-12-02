@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Malyshev Yegor
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.brainail.everboxing.lingo.ui.home.explore
 
 import android.os.Bundle
@@ -29,8 +45,8 @@ import org.brainail.everboxing.lingo.R.color.material_lime_500 as colorLime500
 import org.brainail.everboxing.lingo.R.color.material_pink_500 as colorPink500
 
 class ExploreFragment :
-        ViewModelAwareFragment(),
-        ScrollablePage, SearchResultClickListener {
+    ViewModelAwareFragment(),
+    ScrollablePage, SearchResultClickListener {
 
     @Inject
     lateinit var navigator: ExploreFragmentNavigator
@@ -54,7 +70,7 @@ class ExploreFragment :
 
     override fun scrollToTop() {
         (searchResultsRecyclerView.layoutManager as? LinearLayoutManager)
-                ?.scrollToPositionWithOffset(0, 0)
+            ?.scrollToPositionWithOffset(0, 0)
     }
 
     override fun onSearchResultClick(item: SearchResultModel) {
@@ -63,31 +79,36 @@ class ExploreFragment :
 
     private fun initSearch() {
         searchViewModel.searchResults()
-                .observeNonNull(viewLifecycleOwner) { screenViewModel.searchResults(it) }
+            .observeNonNull(viewLifecycleOwner) { screenViewModel.searchResults(it) }
         searchViewModel.searchSuggestions()
-                .observeNonNull(viewLifecycleOwner) { screenViewModel.searchSuggestions(it) }
+            .observeNonNull(viewLifecycleOwner) { screenViewModel.searchSuggestions(it) }
 
         screenViewModel.presentSuggestions()
-                .observeNonNull(viewLifecycleOwner) { searchViewModel.suggestionsPrepared(it) }
+            .observeNonNull(viewLifecycleOwner) { searchViewModel.suggestionsPrepared(it) }
         screenViewModel.startSuggestionsLoading()
-                .observeK(viewLifecycleOwner) { searchViewModel.suggestionsStartedLoading() }
+            .observeK(viewLifecycleOwner) { searchViewModel.suggestionsStartedLoading() }
         screenViewModel.viewState()
-                .observeNonNull(viewLifecycleOwner) { renderViewState(it) }
+            .observeNonNull(viewLifecycleOwner) { renderViewState(it) }
 
         screenViewModel.navigateToSearchResultEvent()
-                .observeNonNull(viewLifecycleOwner) { navigator.openWordDetails(it) }
+            .observeNonNull(viewLifecycleOwner) { navigator.openWordDetails(it) }
 
         searchResultsAdapter = ExploreSearchResultsAdapter(this)
         searchResultsRecyclerView.adapter = searchResultsAdapter
 
-        searchResultsItemTouchHelper = ItemTouchHelper(object : SwipeToActionCallback(requireActivity(),
-                IconInfo(R.drawable.ic_twotone_favorite_black_24dp,
-                        R.color.colorAccent,
-                        pixelOffset(R.dimen.material_component_lists_icon_left_padding)),
-                IconInfo(R.drawable.ic_twotone_delete_black_24dp,
-                        R.color.colorPrimarySecondary,
-                        pixelOffset(R.dimen.material_component_lists_icon_left_padding))) {
-
+        searchResultsItemTouchHelper = ItemTouchHelper(object : SwipeToActionCallback(
+            requireActivity(),
+            IconInfo(
+                R.drawable.ic_twotone_favorite_black_24dp,
+                R.color.colorAccent,
+                pixelOffset(R.dimen.material_component_lists_icon_left_padding)
+            ),
+            IconInfo(
+                R.drawable.ic_twotone_delete_black_24dp,
+                R.color.colorPrimarySecondary,
+                pixelOffset(R.dimen.material_component_lists_icon_left_padding)
+            )
+        ) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = when (direction) {
                 ItemTouchHelper.LEFT -> screenViewModel.forgetSearchResultAt(viewHolder.adapterPosition)
                 ItemTouchHelper.RIGHT -> screenViewModel.favoriteSearchResultAt(viewHolder.adapterPosition)

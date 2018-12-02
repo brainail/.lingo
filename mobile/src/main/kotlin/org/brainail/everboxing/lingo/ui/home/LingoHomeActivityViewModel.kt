@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Malyshev Yegor
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.brainail.everboxing.lingo.ui.home
 
 import androidx.lifecycle.LiveData
@@ -11,14 +27,8 @@ import javax.inject.Inject
 
 @SharedViewModel(klazz = SearchViewModel::class)
 class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
-
-    enum class NavigationItem {
-        BACKWARD, SCROLL_TO_TOP
-    }
-
-    enum class NavigationTabItem {
-        EXPLORE, FAVOURITE, HISTORY
-    }
+    enum class NavigationItem { BACKWARD, SCROLL_TO_TOP }
+    enum class NavigationTabItem { EXPLORE, FAVOURITE, HISTORY }
 
     private val navigation = SingleEventLiveData<NavigationItem>()
     private val navigationTab = SingleEventLiveData<NavigationTabItem>()
@@ -92,7 +102,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
     @Suppress("unused")
     private fun initNavigationState(viewModelSavedState: ViewModelSavedState?) {
         val savedNavigation = viewModelSavedState
-                ?.get<String>(KEY_NAVIGATION_TAB_STATE) ?: NavigationTabItem.EXPLORE.name
+            ?.get<String>(KEY_NAVIGATION_TAB_STATE) ?: NavigationTabItem.EXPLORE.name
         navigationTab.value = NavigationTabItem.valueOf(savedNavigation)
     }
 

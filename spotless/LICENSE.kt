@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Malyshev Yegor
+ * Copyright $YEAR Malyshev Yegor
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,3 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.cache.mapper
-
-/**
- * Interface for model mappers.
- */
-interface Mapper<E, D> {
-    fun mapFromCache(input: E): D
-    fun mapToCache(input: D): E
-}
