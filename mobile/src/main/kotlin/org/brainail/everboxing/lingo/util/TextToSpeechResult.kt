@@ -1,4 +1,4 @@
-package org.brainail.everboxing.lingo.model
+package org.brainail.everboxing.lingo.util
 
 sealed class TextToSpeechResult {
     class Successful(val text: String) : TextToSpeechResult()

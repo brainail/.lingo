@@ -26,6 +26,7 @@ class ElasticSearchHighlighter @Inject constructor(private val context: Context)
      *
      * @return Highlighted text using special markups
      */
+    @Suppress("ComplexMethod")
     @WorkerThread
     fun makeHighlighted(text: String, word: String): CharSequence {
         val textLength = text.length

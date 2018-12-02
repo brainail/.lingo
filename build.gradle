@@ -1,4 +1,5 @@
 apply plugin: "com.github.ben-manes.versions"
+apply plugin: 'io.gitlab.arturbosch.detekt'
 
 buildscript {
     ext.compileSdkVersion = 28
@@ -39,11 +40,14 @@ buildscript {
 
     ext.ankoCommonVersion = '0.9.1'
 
+    ext.detektPluginVersion = '1.0.0-RC11'
+
     ext.gradleVersionsPluginVersion = '0.17.0'
 
     repositories {
         google()
         jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
 
     dependencies {
@@ -51,6 +55,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
         classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$androidNavigationVersion"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion"
     }
 }
 
@@ -80,6 +85,8 @@ allprojects {
         sourceCompatibility = "1.8"
         targetCompatibility = "1.8"
     }
+
+    apply from: "$rootDir/detekt.gradle"
 }
 
 task clean(type: Delete) {

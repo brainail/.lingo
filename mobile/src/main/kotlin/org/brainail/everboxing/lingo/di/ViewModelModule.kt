@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
+import org.brainail.everboxing.lingo.base.util.tryOrRuntime
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlin.reflect.KClass
@@ -23,11 +24,9 @@ class ViewModelFactory @Inject constructor(
         val creator = creators[modelClass] ?: creators.asIterable().firstOrNull {
             modelClass.isAssignableFrom(it.key)
         }?.value ?: throw IllegalArgumentException("Unknown model class $modelClass")
-        return try {
+        return tryOrRuntime {
             @Suppress("UNCHECKED_CAST")
             creator.get() as T
-        } catch (exception: Exception) {
-            throw RuntimeException(exception)
         }
     }
 }

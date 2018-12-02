@@ -1,4 +1,4 @@
-package org.brainail.everboxing.lingo.util
+package org.brainail.everboxing.lingo.util.ui
 
 import android.content.Context
 import android.util.AttributeSet
@@ -22,7 +22,9 @@ class SearchViewBehavior : CoordinatorLayout.Behavior<FloatingSearchView> {
         return super.layoutDependsOn(parent, child, dependency)
     }
 
-    override fun onDependentViewChanged(parent: CoordinatorLayout, child: FloatingSearchView, dependency: View): Boolean {
+    override fun onDependentViewChanged(
+            parent: CoordinatorLayout, child: FloatingSearchView, dependency: View): Boolean {
+
         if (dependency is AppBarLayout) {
             val layoutParams = dependency.getLayoutParams() as CoordinatorLayout.LayoutParams
             val behavior = layoutParams.behavior as? AppBarLayout.Behavior

@@ -49,7 +49,7 @@
         app:fsv_contentBackgroundColor="@color/material_light_white"
         app:fsv_cornerRadius="1dp"
         app:fsv_menu="@menu/menu_home_search"
-        app:layout_behavior="org.brainail.everboxing.lingo.util.SearchViewBehavior"
+        app:layout_behavior="org.brainail.everboxing.lingo.util.ui.SearchViewBehavior"
         app:logo="@drawable/ic_search_logo"
         app:theme="@style/AppWidget.FloatingSearchView"/>
 

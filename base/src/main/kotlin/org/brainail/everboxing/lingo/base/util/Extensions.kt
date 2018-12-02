@@ -21,8 +21,17 @@ inline fun consume(f: () -> Unit): Boolean {
 inline fun safeTry(block: () -> Unit) {
     try {
         block()
-    } catch (error: Throwable) {
+    } catch (ignore: Throwable) {
         // do nothing
+    }
+}
+
+@Suppress("TooGenericExceptionCaught")
+inline fun <T> tryOrRuntime(block: () -> T): T {
+    return try {
+        block()
+    } catch (cause: Throwable) {
+        throw RuntimeException(cause)
     }
 }
 

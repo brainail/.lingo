@@ -1,3 +1,4 @@
+@file:JvmName("ArchUtils")
 @file:Suppress("NOTHING_TO_INLINE")
 
 package org.brainail.everboxing.lingo.util.extensions

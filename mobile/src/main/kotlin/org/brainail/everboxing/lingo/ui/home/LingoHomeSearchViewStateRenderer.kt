@@ -70,6 +70,7 @@ class LingoHomeSearchViewStateRenderer(
     }
 
     companion object {
-        private const val NO_FOCUS_SEARCH_SCROLL_FLAGS = SCROLL_FLAG_SCROLL or SCROLL_FLAG_SNAP or SCROLL_FLAG_ENTER_ALWAYS
+        private const val NO_FOCUS_SEARCH_SCROLL_FLAGS =
+                SCROLL_FLAG_SCROLL or SCROLL_FLAG_SNAP or SCROLL_FLAG_ENTER_ALWAYS
     }
 }

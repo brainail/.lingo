@@ -2,8 +2,8 @@ package org.brainail.everboxing.lingo.ui.home.search
 
 import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.model.SuggestionModel
-import org.brainail.everboxing.lingo.model.TextToSpeechResult
 import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
+import org.brainail.everboxing.lingo.util.TextToSpeechResult
 
 data class SearchViewState(
         val isInFocus: Boolean = false,
@@ -60,7 +60,7 @@ data class SearchViewState(
                     displayedText = query,
                     isClearAvailable = viewState.isInFocus && query.isNotEmpty(),
                     isLogoDisplayed = !viewState.isInFocus && query.isEmpty(),
-                    cursorPosition = SearchViewState.CursorPosition.KEEP)
+                    cursorPosition = CursorPosition.KEEP)
         }
     }
 
@@ -69,17 +69,20 @@ data class SearchViewState(
             return viewState.copy(
                     isInFocus = false,
                     displayedText = query,
-                    cursorPosition = SearchViewState.CursorPosition.KEEP)
+                    cursorPosition = CursorPosition.KEEP)
         }
     }
 
-    class RequestFocusGain(private val isInFocus: Boolean) : PartialViewStateChange<SearchViewState> {
+    class RequestFocusGain(
+            private val isInFocus: Boolean,
+            private val newCursorPosition: CursorPosition = CursorPosition.KEEP
+    ) : PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                     isInFocus = isInFocus,
                     isClearAvailable = isInFocus && viewState.displayedText.isNotEmpty(),
                     isLogoDisplayed = !isInFocus && viewState.displayedText.isEmpty(),
-                    cursorPosition = SearchViewState.CursorPosition.KEEP)
+                    cursorPosition = newCursorPosition)
         }
     }
 
@@ -87,7 +90,7 @@ data class SearchViewState(
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                     isInFocus = false,
-                    cursorPosition = SearchViewState.CursorPosition.KEEP)
+                    cursorPosition = CursorPosition.KEEP)
         }
     }
 
@@ -95,17 +98,18 @@ data class SearchViewState(
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                     displayedText = "",
-                    cursorPosition = SearchViewState.CursorPosition.KEEP)
+                    cursorPosition = CursorPosition.KEEP)
         }
     }
 
-    class TextToSpeechResultSuccess(private val result: TextToSpeechResult.Successful) :
-            PartialViewStateChange<SearchViewState> {
+    class TextToSpeechResultSuccess(
+            private val result: TextToSpeechResult.Successful
+    ) : PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                     isInFocus = true,
                     displayedText = result.text,
-                    cursorPosition = SearchViewState.CursorPosition.END)
+                    cursorPosition = CursorPosition.END)
         }
     }
 }

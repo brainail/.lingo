@@ -3,7 +3,6 @@ package org.brainail.everboxing.lingo.ui.home.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.brainail.everboxing.lingo.model.SuggestionModel
-import org.brainail.everboxing.lingo.model.TextToSpeechResult
 import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
 import org.brainail.everboxing.lingo.ui.base.RxAwareViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState.ClearIconClicked
@@ -15,6 +14,7 @@ import org.brainail.everboxing.lingo.ui.home.search.SearchViewState.SuggestionsS
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState.TextToSpeechResultSuccess
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState.UpdateQuery
 import org.brainail.everboxing.lingo.util.SingleEventLiveData
+import org.brainail.everboxing.lingo.util.TextToSpeechResult
 
 abstract class SearchViewModel : RxAwareViewModel() {
 

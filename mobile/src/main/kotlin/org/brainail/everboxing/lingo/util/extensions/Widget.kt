@@ -1,3 +1,5 @@
+@file:JvmName("WidgetUtils")
+
 package org.brainail.everboxing.lingo.util.extensions
 
 import android.text.Editable

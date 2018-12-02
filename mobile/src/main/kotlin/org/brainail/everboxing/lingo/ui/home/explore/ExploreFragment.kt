@@ -21,6 +21,7 @@ import org.brainail.everboxing.lingo.util.extensions.getViewModel
 import org.brainail.everboxing.lingo.util.extensions.inflate
 import org.brainail.everboxing.lingo.util.extensions.observeK
 import org.brainail.everboxing.lingo.util.extensions.observeNonNull
+import org.brainail.everboxing.lingo.util.extensions.pixelOffset
 import org.brainail.everboxing.lingo.util.ui.SwipeToActionCallback
 import javax.inject.Inject
 import org.brainail.everboxing.lingo.R.color.material_indigo_500 as colorIndigo500
@@ -61,21 +62,31 @@ class ExploreFragment :
     }
 
     private fun initSearch() {
-        searchViewModel.searchResults().observeNonNull(viewLifecycleOwner) { screenViewModel.searchResults(it) }
-        searchViewModel.searchSuggestions().observeNonNull(viewLifecycleOwner) { screenViewModel.searchSuggestions(it) }
+        searchViewModel.searchResults()
+                .observeNonNull(viewLifecycleOwner) { screenViewModel.searchResults(it) }
+        searchViewModel.searchSuggestions()
+                .observeNonNull(viewLifecycleOwner) { screenViewModel.searchSuggestions(it) }
 
-        screenViewModel.presentSuggestions().observeNonNull(viewLifecycleOwner) { searchViewModel.suggestionsPrepared(it) }
-        screenViewModel.startSuggestionsLoading().observeK(viewLifecycleOwner) { searchViewModel.suggestionsStartedLoading() }
-        screenViewModel.viewState().observeNonNull(viewLifecycleOwner) { renderViewState(it) }
+        screenViewModel.presentSuggestions()
+                .observeNonNull(viewLifecycleOwner) { searchViewModel.suggestionsPrepared(it) }
+        screenViewModel.startSuggestionsLoading()
+                .observeK(viewLifecycleOwner) { searchViewModel.suggestionsStartedLoading() }
+        screenViewModel.viewState()
+                .observeNonNull(viewLifecycleOwner) { renderViewState(it) }
 
-        screenViewModel.navigateToSearchResultEvent().observeNonNull(viewLifecycleOwner) { navigator.openWordDetails(it) }
+        screenViewModel.navigateToSearchResultEvent()
+                .observeNonNull(viewLifecycleOwner) { navigator.openWordDetails(it) }
 
         searchResultsAdapter = ExploreSearchResultsAdapter(this)
         searchResultsRecyclerView.adapter = searchResultsAdapter
 
         searchResultsItemTouchHelper = ItemTouchHelper(object : SwipeToActionCallback(requireActivity(),
-                IconInfo(R.drawable.ic_twotone_favorite_black_24dp, R.color.colorAccent),
-                IconInfo(R.drawable.ic_twotone_delete_black_24dp, R.color.colorPrimarySecondary)) {
+                IconInfo(R.drawable.ic_twotone_favorite_black_24dp,
+                        R.color.colorAccent,
+                        pixelOffset(R.dimen.material_component_lists_icon_left_padding)),
+                IconInfo(R.drawable.ic_twotone_delete_black_24dp,
+                        R.color.colorPrimarySecondary,
+                        pixelOffset(R.dimen.material_component_lists_icon_left_padding))) {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = when (direction) {
                 ItemTouchHelper.LEFT -> screenViewModel.forgetSearchResultAt(viewHolder.adapterPosition)

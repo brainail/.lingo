@@ -5,8 +5,8 @@ import org.brainail.everboxing.lingo.model.SuggestionModel
 import org.brainail.everboxing.lingo.ui.base.ViewModelSavedState
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState
+import org.brainail.everboxing.lingo.util.SharedViewModel
 import org.brainail.everboxing.lingo.util.SingleEventLiveData
-import org.brainail.everboxing.lingo.util.extensions.SharedViewModel
 import javax.inject.Inject
 
 @SharedViewModel(klazz = SearchViewModel::class)
@@ -66,7 +66,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
         val viewState = searchViewState.value!!
         when (viewState.isInFocus) {
             true -> submitQuery(viewState.displayedText)
-            else -> applyChanges(SearchViewState.RequestFocusGain(true))
+            else -> applyChanges(SearchViewState.RequestFocusGain(true, SearchViewState.CursorPosition.END))
         }
     }
 

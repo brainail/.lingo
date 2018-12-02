@@ -1,3 +1,5 @@
+@file:JvmName("ViewModelUtils")
+
 package org.brainail.everboxing.lingo.util.extensions
 
 import androidx.fragment.app.Fragment
@@ -5,19 +7,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import org.brainail.everboxing.lingo.util.SharedViewModel
 import kotlin.reflect.KClass
-
-/**
- * [klazz] Shared class
- *
- * [key] Extra key in order make a difference
- *
- * The purposes of this annotation is to give some extra information about
- * a possible shared class between [android.app.Activity] and [Fragment]
- */
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.CLASS)
-annotation class SharedViewModel(val klazz: KClass<out ViewModel>, val key: String = "")
 
 inline fun <reified VM : ViewModel> FragmentActivity.getViewModel(provider: ViewModelProvider.Factory)
         = ViewModelProviders.of(this, provider).get(VM::class.viewModelProviderKey(), VM::class.java)

@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.android.support.AndroidSupportInjectionModule
 import org.brainail.everboxing.lingo.di.subcomponent.AppSubcomponentsModule
-import org.brainail.everboxing.lingo.util.AndroidLogTree
+import org.brainail.everboxing.lingo.util.log.AndroidLogTree
 import org.brainail.logger.L
 import javax.inject.Singleton
 

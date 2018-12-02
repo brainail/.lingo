@@ -121,6 +121,10 @@ class LingoHomeActivityViewRenderer(
     private fun scheduleAlignActionButtonAction(action: () -> Unit) {
         uiExecutor.removeCallbacks(alignFabCenterAction)
         uiExecutor.removeCallbacks(alignFabEndAction)
-        uiExecutor.postDelayed(action, 200)
+        uiExecutor.postDelayed(action, ALIGN_ACTION_BUTTON_DELAY_MILLIS)
+    }
+
+    companion object {
+        private const val ALIGN_ACTION_BUTTON_DELAY_MILLIS = 200L
     }
 }

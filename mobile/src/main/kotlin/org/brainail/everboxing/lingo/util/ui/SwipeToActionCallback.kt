@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.Px
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback
 import androidx.recyclerview.widget.RecyclerView
@@ -20,14 +21,16 @@ abstract class SwipeToActionCallback(
         (if (iconLeftInfo != null) ItemTouchHelper.LEFT else 0)
                 or (if (iconRightInfo != null) ItemTouchHelper.RIGHT else 0)) {
 
-    private val iconLeft by lazyFast { iconLeftInfo?.run { context.drawable(iconId) } }
+    private val iconLeft by lazyFast { iconLeftInfo?.run { context.drawable(resId) } }
     private val backgroundLeft by lazyFast { iconLeftInfo?.run { context.color(backgroundId) } ?: 0 }
     private val iconLeftWidth by lazyFast { iconLeft?.intrinsicWidth ?: 0 }
     private val iconLeftHeight by lazyFast { iconLeft?.intrinsicHeight ?: 0 }
-    private val iconRight by lazyFast { iconRightInfo?.run { context.drawable(iconId) } }
+    private val iconLeftOffset by lazyFast { iconLeftInfo?.sideOffset ?: 0 }
+    private val iconRight by lazyFast { iconRightInfo?.run { context.drawable(resId) } }
     private val backgroundRight by lazyFast { iconRightInfo?.run { context.color(backgroundId) } ?: 0 }
     private val iconRightWidth by lazyFast { iconRight?.intrinsicWidth ?: 0 }
     private val iconRightHeight by lazyFast { iconRight?.intrinsicHeight ?: 0 }
+    private val iconRightOffset by lazyFast { iconRightInfo?.sideOffset ?: 0 }
     private val background = ColorDrawable()
 
     private var left = 0
@@ -67,7 +70,7 @@ abstract class SwipeToActionCallback(
 
         // calc position of icon
         top = itemView.top + (height - iconRightHeight) / 2
-        right = itemView.right - 60
+        right = itemView.right - iconRightOffset
         left = right - iconRightWidth
         bottom = top + iconRightHeight
 
@@ -87,7 +90,7 @@ abstract class SwipeToActionCallback(
 
         // calc position of icon
         top = itemView.top + (height - iconLeftHeight) / 2
-        left = itemView.left + 60
+        left = itemView.left + iconLeftOffset
         right = left + iconLeftWidth
         bottom = top + iconRightHeight
 
@@ -96,5 +99,5 @@ abstract class SwipeToActionCallback(
         icon.draw(canvas)
     }
 
-    class IconInfo(@DrawableRes val iconId: Int, @ColorRes val backgroundId: Int)
+    class IconInfo(@DrawableRes val resId: Int, @ColorRes val backgroundId: Int, @Px val sideOffset: Int)
 }

@@ -13,6 +13,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object UrbanServiceFactory {
+    private const val DEFAULT_CONNECT_TIMEOUT_SECONDS = 15L
+    private const val DEFAULT_READ_TIMEOUT_SECONDS = 15L
 
     fun makeUrbanService(isDebug: Boolean, vararg networkInterceptors: Interceptor): UrbanService {
         val okHttpClient = makeOkHttpClient(makeLoggingInterceptor(isDebug), networkInterceptors)
@@ -35,8 +37,8 @@ object UrbanServiceFactory {
         return OkHttpClient.Builder().apply {
             addInterceptor(httpLoggingInterceptor)
             networkInterceptors.forEach { addNetworkInterceptor(it) }
-            connectTimeout(15, TimeUnit.SECONDS)
-            readTimeout(15, TimeUnit.SECONDS)
+            connectTimeout(DEFAULT_CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            readTimeout(DEFAULT_READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         }.build()
     }
 

@@ -1,4 +1,4 @@
-package org.brainail.everboxing.lingo.util
+package org.brainail.everboxing.lingo.util.log
 
 import android.util.Log
 import org.brainail.logger.L
@@ -58,6 +58,7 @@ class AndroidLogTree : L.Tree() {
     /**
      * Break up `message` into maximum-length chunks (if needed) and send to either
      */
+    @Suppress("ComplexMethod")
     override fun log(priority: L.LogPriority, tag: String, rawMessage: String, t: Throwable?) {
         val androidLogPriority = toAndroidLogPriority(priority)
 
@@ -109,9 +110,9 @@ class AndroidLogTree : L.Tree() {
     }
 
     companion object {
-        const private val MAX_LOG_LENGTH = 4000
-        const private val MAX_TAG_LENGTH = 23
-        const private val CALL_STACK_INDEX = 5
+        private const val MAX_LOG_LENGTH = 4000
+        private const val MAX_TAG_LENGTH = 23
+        private const val CALL_STACK_INDEX = 5
         private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
     }
 }
