@@ -38,7 +38,7 @@ class InstallUrbanServiceDataTask(context: Context, workerParams: WorkerParamete
 
         installUrbanServiceDataUseCase.execute(pathToData).blockingAwait()
 
-        return Result.SUCCESS
+        return Result.success()
     }
 
     companion object {

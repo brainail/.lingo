@@ -19,7 +19,10 @@ package org.brainail.everboxing.lingo.data.settings
 import android.content.SharedPreferences
 import org.brainail.everboxing.lingo.data.settings.PrefDelegates.nullableString
 import org.brainail.everboxing.lingo.domain.settings.UserSettings
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserSettingsImpl(sharedPreferences: SharedPreferences) : UserSettings {
+@Singleton
+class UserSettingsImpl @Inject constructor(sharedPreferences: SharedPreferences) : UserSettings {
     override var userProfile: String? by nullableString(sharedPreferences, "user_profile", null)
 }

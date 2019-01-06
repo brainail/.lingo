@@ -28,7 +28,7 @@ abstract class SuggestionDao : BaseDao<SuggestionCacheEntity> {
     open fun saveSuggestions(suggestions: List<SuggestionCacheEntity>) {
         val (recent, new) = suggestions.partition { it.isRecent }
         insert(new)
-        insertOrRecreate(recent) // move old/new to top
+        insertOrRecreate(recent) // recent items should be always on top
     }
 
     @Query("select * from suggestions where word like :query || '%' order by sg_id desc limit :limit")
@@ -40,4 +40,14 @@ abstract class SuggestionDao : BaseDao<SuggestionCacheEntity> {
         order by sg_id desc limit :limit"""
     )
     abstract fun getRecentSuggestions(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SuggestionCacheEntity>>
+
+    @Query(
+        """select * from suggestions
+        where is_recent = 0 and word like :query || '%'
+        order by sg_id desc limit :limit"""
+    )
+    abstract fun getNonRecentSuggestions(
+        query: String,
+        limit: Int = Int.MAX_VALUE
+    ): Flowable<List<SuggestionCacheEntity>>
 }

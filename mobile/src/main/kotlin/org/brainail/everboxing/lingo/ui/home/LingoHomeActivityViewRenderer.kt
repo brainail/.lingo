@@ -17,18 +17,23 @@
 package org.brainail.everboxing.lingo.ui.home
 
 import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.brainail.everboxing.lingo.R
+import org.brainail.everboxing.lingo.util.extensions.lockInAppBar
 import org.brainail.everboxing.lingo.widget.AppCompatBottomAppBar
 
 /**
@@ -39,8 +44,11 @@ class LingoHomeActivityViewRenderer(
     private val appBarView: AppBarLayout,
     private val bottomAppBarView: AppCompatBottomAppBar,
     private val actionButtonView: FloatingActionButton,
-    private val uiExecutor: Handler
+    private val toolbarUnderlay: View,
+    private val floatingSearchView: View
 ) : LifecycleObserver {
+
+    private val uiExecutor: Handler = Handler(Looper.getMainLooper())
 
     private val alignFabCenterAction = {
         if (bottomAppBarView.fabAlignmentMode != BottomAppBar.FAB_ALIGNMENT_MODE_CENTER) { // avoid blinking
@@ -54,8 +62,8 @@ class LingoHomeActivityViewRenderer(
         }
     }
 
-    private val renderPageSwitchingAction = { _: NavController, navDestination: NavDestination ->
-        renderPageSwitching(navDestination.id)
+    private val renderPageSwitchingAction = NavController.OnDestinationChangedListener { _, destination, _ ->
+        renderPageSwitching(destination.id)
     }
 
     fun init() {
@@ -95,13 +103,13 @@ class LingoHomeActivityViewRenderer(
 
     private fun startListenToBackStack() {
         val navController = activity.findNavController(R.id.lingoHomeNavigationFragment)
-        navController.removeOnNavigatedListener(renderPageSwitchingAction)
-        navController.addOnNavigatedListener(renderPageSwitchingAction)
+        navController.removeOnDestinationChangedListener(renderPageSwitchingAction)
+        navController.addOnDestinationChangedListener(renderPageSwitchingAction)
     }
 
     private fun stopListenToBackStack() {
         val navController = activity.findNavController(R.id.lingoHomeNavigationFragment)
-        navController.removeOnNavigatedListener(renderPageSwitchingAction)
+        navController.removeOnDestinationChangedListener(renderPageSwitchingAction)
     }
 
     private fun renderPageSwitching(@IdRes fragmentDestinationId: Int?) {
@@ -109,16 +117,18 @@ class LingoHomeActivityViewRenderer(
             R.id.wordDetailsPageDestination -> enableWordDetailsPageMode()
             else -> enableLingoHomePageMode()
         }
+
         when (fragmentDestinationId) {
             R.id.explorePageDestination -> selectHomeMenuItem(R.id.menu_home_explore)
+            R.id.favoritePageDestination -> selectHomeMenuItem(R.id.menu_home_favorite)
+            R.id.historyPageDestination -> selectHomeMenuItem(R.id.menu_home_history)
         }
     }
 
     private fun enableWordDetailsPageMode() {
-        appBarView.setExpanded(false)
-        if (null == bottomAppBarView.menu.findItem(R.id.menu_details_share)) { // avoid blinking
-            bottomAppBarView.replaceMenu(R.menu.menu_details_bottom_bar)
-        }
+        showOrHideSearch(false)
+        bottomAppBarView.takeIf { null == bottomAppBarView.menu.findItem(R.id.menu_details_share) }
+            ?.replaceMenu(R.menu.menu_details_bottom_bar) // avoid blinking
         bottomAppBarView.show()
         scheduleAlignActionButtonAction(alignFabCenterAction)
         actionButtonView.id = R.id.detailsActionButtonView
@@ -126,13 +136,20 @@ class LingoHomeActivityViewRenderer(
     }
 
     private fun enableLingoHomePageMode() {
-        appBarView.setExpanded(true)
-        if (null == bottomAppBarView.menu.findItem(R.id.menu_home_explore)) { // avoid blinking
-            bottomAppBarView.replaceMenu(R.menu.menu_home_bottom_bar)
-        }
+        showOrHideSearch(true)
+        bottomAppBarView.takeIf { null == bottomAppBarView.menu.findItem(R.id.menu_home_explore) }
+            ?.replaceMenu(R.menu.menu_home_bottom_bar) // avoid blinking
         scheduleAlignActionButtonAction(alignFabEndAction)
         actionButtonView.id = R.id.homeActionButtonView
         actionButtonView.setImageResource(R.drawable.ic_search_black_24dp)
+    }
+
+    private fun showOrHideSearch(show: Boolean) {
+        floatingSearchView.isVisible = show
+        floatingSearchView.isEnabled = show
+        appBarView.updateLayoutParams { height = if (show) ViewGroup.LayoutParams.WRAP_CONTENT else 0 }
+        toolbarUnderlay.lockInAppBar(!show)
+        appBarView.setExpanded(true) // always expand in order to push the current content down
     }
 
     private fun scheduleAlignActionButtonAction(action: () -> Unit) {

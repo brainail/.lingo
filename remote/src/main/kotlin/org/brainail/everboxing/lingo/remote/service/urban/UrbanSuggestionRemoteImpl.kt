@@ -31,6 +31,6 @@ class UrbanSuggestionRemoteImpl @Inject constructor(
     override fun getSuggestions(query: String): Single<List<SuggestionEntity>> {
         return urbanService.getSuggestions(query)
             .logEvents()
-            .map { it.results.map { entityMapper.mapFromRemote(it) } }
+            .map { it.results.map { suggestion -> entityMapper.mapF(suggestion) } }
     }
 }

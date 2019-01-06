@@ -37,22 +37,23 @@ class SearchResultCacheImpl @Inject constructor(
     private val databaseTransactionRunner: DatabaseTransactionRunner
 ) : SearchResultCache {
 
-    override fun clearSearchResults(): Completable {
-        return Completable.defer {
-            searchResultDao.deleteAll()
-            Completable.complete()
-        }
-    }
-
     override fun saveSearchResults(searchResults: List<SearchResultEntity>): Completable {
         return Completable.defer {
-            searchResultDao.insert(searchResults.map { searchResultCacheMapper.mapToCache(it) })
+            searchResultDao.insert(searchResults.map { searchResultCacheMapper.mapT(it) })
             Completable.complete()
         }
     }
 
-    override fun getSearchResults(query: String): Flowable<List<SearchResultEntity>> {
-        return searchResultDao.getSearchResults(query).map { it.map { searchResultCacheMapper.mapFromCache(it) } }
+    override fun getSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultDao
+            .getSearchResults(query, limit)
+            .map { it.map { searchResult -> searchResultCacheMapper.mapF(searchResult) } }
+    }
+
+    override fun getDistinctByWordSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultDao
+            .getDistinctByWordSearchResults(query, limit)
+            .map { it.map { searchResult -> searchResultCacheMapper.mapF(searchResult) } }
     }
 
     override fun favoriteSearchResult(id: Int): Completable {
@@ -73,8 +74,8 @@ class SearchResultCacheImpl @Inject constructor(
         return Completable.defer {
             databaseTransactionRunner.invoke {
                 fileStore.openAsset(pathToData).bufferedReader(Charsets.UTF_8).useLines {
-                    it.forEach {
-                        val entity = searchResultInstallDataMapper.mapToCache(it)
+                    it.forEach { fileContent ->
+                        val entity = searchResultInstallDataMapper.mapT(fileContent)
                         searchResultDao.insert(entity)
                     }
                 }

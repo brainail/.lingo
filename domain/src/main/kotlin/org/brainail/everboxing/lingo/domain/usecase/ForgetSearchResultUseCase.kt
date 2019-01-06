@@ -27,7 +27,8 @@ class ForgetSearchResultUseCase @Inject constructor(
 ) {
 
     fun execute(id: Int): Completable {
-        return searchResultRepository.forgetSearchResult(id)
+        return searchResultRepository
+            .forgetSearchResult(id)
             .compose(appExecutors.applyCompletableSchedulers())
     }
 }

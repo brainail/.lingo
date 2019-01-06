@@ -21,11 +21,11 @@ import org.brainail.everboxing.lingo.data.model.SuggestionEntity
 import javax.inject.Inject
 
 class SuggestionCacheMapper @Inject constructor() : Mapper<SuggestionCacheEntity, SuggestionEntity> {
-    override fun mapFromCache(input: SuggestionCacheEntity): SuggestionEntity {
+    override fun mapF(input: SuggestionCacheEntity): SuggestionEntity {
         return SuggestionEntity(input.word, input.description, input.isRecent, input.id)
     }
 
-    override fun mapToCache(input: SuggestionEntity): SuggestionCacheEntity {
+    override fun mapT(input: SuggestionEntity): SuggestionCacheEntity {
         return SuggestionCacheEntity(input.id, input.word, input.description, input.isRecent)
     }
 }

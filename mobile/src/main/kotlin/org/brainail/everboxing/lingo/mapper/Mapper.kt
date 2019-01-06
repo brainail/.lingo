@@ -16,10 +16,14 @@
 
 package org.brainail.everboxing.lingo.mapper
 
-/**
- * Interface for model mappers.
- */
-interface Mapper<D, V> {
-    fun mapToModel(input: D): V
-    fun mapFromModel(input: V): D
+interface Mapper<F, T> {
+    /**
+     * Maps __FROM__ to __TO__
+     */
+    fun mapF(input: F): T = throw UnsupportedOperationException()
+
+    /**
+     * Maps __TO__ to __FROM__
+     */
+    fun mapT(input: T): F = throw UnsupportedOperationException()
 }

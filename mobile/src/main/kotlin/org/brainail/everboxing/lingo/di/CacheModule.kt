@@ -51,7 +51,8 @@ class CacheModule {
         databaseTransactionRunner: DatabaseTransactionRunner
     ): SearchResultCache {
         return SearchResultCacheImpl(
-            searchResultDao, fileStore,
+            searchResultDao,
+            fileStore,
             SearchResultInstallDataMapperFactory.makeMapper(),
             searchResultCacheMapper,
             databaseTransactionRunner

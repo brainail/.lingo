@@ -16,6 +16,18 @@
 
 package org.brainail.everboxing.lingo.ui.base
 
+import android.os.Bundle
+import androidx.transition.TransitionInflater
 import dagger.android.support.DaggerFragment
+import org.brainail.everboxing.lingo.R
 
-abstract class BaseFragment : DaggerFragment()
+abstract class BaseFragment : DaggerFragment() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        TransitionInflater.from(context).run {
+            enterTransition = inflateTransition(R.transition.fragment_enter)
+            exitTransition = inflateTransition(R.transition.fragment_exit)
+        }
+    }
+}

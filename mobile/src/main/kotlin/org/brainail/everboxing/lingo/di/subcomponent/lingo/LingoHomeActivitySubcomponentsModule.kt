@@ -26,12 +26,22 @@ import org.brainail.everboxing.lingo.di.scope.FragmentScope
 import org.brainail.everboxing.lingo.ui.home.details.WordDetailsFragment
 import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragment
 import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentViewModel
+import org.brainail.everboxing.lingo.ui.home.favorite.FavoriteFragment
+import org.brainail.everboxing.lingo.ui.home.history.HistoryFragment
 
 @Module
 abstract class LingoHomeActivitySubcomponentsModule {
     @FragmentScope
-    @ContributesAndroidInjector(modules = [LingoSearchFragmentModule::class])
-    abstract fun contributeLingoSearchFragmentInjector(): ExploreFragment
+    @ContributesAndroidInjector(modules = [LingoExploreFragmentModule::class])
+    abstract fun contributeLingoExploreFragmentInjector(): ExploreFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract fun contributeLingoFavoriteFragmentInjector(): FavoriteFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract fun contributeLingoHistoryFragmentInjector(): HistoryFragment
 
     @FragmentScope
     @ContributesAndroidInjector

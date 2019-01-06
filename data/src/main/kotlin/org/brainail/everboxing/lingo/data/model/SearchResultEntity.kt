@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package org.brainail.everboxing.lingo.data.model
 
 data class SearchResultEntity(
@@ -25,3 +27,5 @@ data class SearchResultEntity(
     val id: Int = 0,
     val favorite: Boolean = false
 )
+
+internal inline fun SearchResultEntity.toSuggestion() = SuggestionEntity(word, definition)

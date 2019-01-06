@@ -19,6 +19,7 @@ package org.brainail.everboxing.lingo.domain.usecase
 import io.reactivex.Flowable
 import org.brainail.everboxing.lingo.domain.executor.AppExecutors
 import org.brainail.everboxing.lingo.domain.model.Suggestion
+import org.brainail.everboxing.lingo.domain.model.toHighlighted
 import org.brainail.everboxing.lingo.domain.repository.SuggestionsRepository
 import javax.inject.Inject
 
@@ -28,8 +29,13 @@ class FindSuggestionsUseCase @Inject constructor(
 ) {
 
     fun execute(query: String): Flowable<List<Suggestion>> {
-        return suggestionsRepository.getSuggestions(query)
-            .onErrorReturn { emptyList() }
+        return suggestionsRepository.getSuggestions(query, NUMBER_OF_RECENT, NUMBER_OF_OTHERS)
             .compose(appExecutors.applyFlowableBackgroundSchedulers())
+            .map { it.map { suggestion -> suggestion.toHighlighted(query) } }
+    }
+
+    companion object {
+        private const val NUMBER_OF_RECENT = 3
+        private const val NUMBER_OF_OTHERS = 47
     }
 }

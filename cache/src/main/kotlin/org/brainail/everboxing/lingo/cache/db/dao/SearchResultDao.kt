@@ -23,8 +23,20 @@ import org.brainail.everboxing.lingo.cache.model.SearchResultCacheEntity
 
 @Dao
 abstract class SearchResultDao : BaseDao<SearchResultCacheEntity> {
-    @Query("select * from search_results where word like :query || '%' order by sr_id desc")
-    abstract fun getSearchResults(query: String): Flowable<List<SearchResultCacheEntity>>
+    @Query("select * from search_results where word like :query || '%' order by sr_id desc limit :limit")
+    abstract fun getSearchResults(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SearchResultCacheEntity>>
+
+    @Query(
+        """select * from search_results
+        where word like :query || '%'
+        group by lower(word)
+        having max(sr_id)
+        order by sr_id desc limit :limit"""
+    )
+    abstract fun getDistinctByWordSearchResults(
+        query: String,
+        limit: Int = Int.MAX_VALUE
+    ): Flowable<List<SearchResultCacheEntity>>
 
     @Query("delete from search_results")
     abstract fun deleteAll()

@@ -27,16 +27,16 @@ class SearchResultCacheDataSource @Inject constructor(
     private val searchResultCache: SearchResultCache
 ) : SearchResultDataSource {
 
-    override fun clearSearchResults(): Completable {
-        return searchResultCache.clearSearchResults()
-    }
-
     override fun saveSearchResults(searchResults: List<SearchResultEntity>): Completable {
         return searchResultCache.saveSearchResults(searchResults)
     }
 
-    override fun getSearchResults(query: String): Flowable<List<SearchResultEntity>> {
-        return searchResultCache.getSearchResults(query)
+    override fun getSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultCache.getSearchResults(query, limit)
+    }
+
+    override fun getDistinctByWordSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultCache.getDistinctByWordSearchResults(query, limit)
     }
 
     override fun favoriteSearchResult(id: Int): Completable {

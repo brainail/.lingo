@@ -26,6 +26,7 @@ import org.brainail.everboxing.lingo.navigator.SceneNavigator
 import org.brainail.everboxing.lingo.util.NavigableBack
 import org.brainail.everboxing.lingo.util.ScrollablePage
 import org.brainail.everboxing.lingo.util.extensions.getNavigationTopFragment
+import org.brainail.everboxing.lingo.util.extensions.navigateFromStart
 
 /**
  * Navigates to other screens from [LingoHomeActivity]
@@ -36,16 +37,21 @@ class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(a
     }
 
     fun showExplorePage() {
-        val navController = activity.findNavController(R.id.lingoHomeNavigationFragment)
-        if (navController.currentDestination?.id != R.id.explorePageDestination) {
-            navController.navigate(R.id.explorePageDestination)
-        }
+        activity.navigateFromStart(R.id.lingoHomeNavigationFragment, R.id.explorePageDestination)
+    }
+
+    fun showFavoritePage() {
+        activity.navigateFromStart(R.id.lingoHomeNavigationFragment, R.id.favoritePageDestination)
+    }
+
+    fun showHistoryPage() {
+        activity.navigateFromStart(R.id.lingoHomeNavigationFragment, R.id.historyPageDestination)
     }
 
     fun goBack() {
         val fragment = activity.getNavigationTopFragment(R.id.lingoHomeNavigationFragment)
         if ((fragment as? NavigableBack)?.goBack() != true) {
-            if (!activity.findNavController(R.id.lingoHomeNavigationFragment).navigateUp()) {
+            if (!activity.findNavController(R.id.lingoHomeNavigationFragment).popBackStack()) {
                 activity.supportFinishAfterTransition()
             }
         }

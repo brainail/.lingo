@@ -16,9 +16,14 @@
 
 package org.brainail.everboxing.lingo.remote.mapper
 
-/**
- * Interface for model mappers.
- */
-interface Mapper<in E, out D> {
-    fun mapFromRemote(input: E): D
+interface Mapper<F, T> {
+    /**
+     * Maps __FROM__ to __TO__
+     */
+    fun mapF(input: F): T = throw UnsupportedOperationException()
+
+    /**
+     * Maps __TO__ to __FROM__
+     */
+    fun mapT(input: T): F = throw UnsupportedOperationException()
 }

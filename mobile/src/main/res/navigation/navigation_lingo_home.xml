@@ -16,6 +16,26 @@
     </fragment>
 
     <fragment
+        android:id="@+id/favoritePageDestination"
+        android:name="org.brainail.everboxing.lingo.ui.home.favorite.FavoriteFragment"
+        tools:layout="@layout/fragment_favorite">
+
+        <action
+            android:id="@+id/openWordDetailsAction"
+            app:destination="@id/wordDetailsPageDestination"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyPageDestination"
+        android:name="org.brainail.everboxing.lingo.ui.home.history.HistoryFragment"
+        tools:layout="@layout/fragment_history">
+
+        <action
+            android:id="@+id/openWordDetailsAction"
+            app:destination="@id/wordDetailsPageDestination"/>
+    </fragment>
+
+    <fragment
         android:id="@+id/wordDetailsPageDestination"
         android:name="org.brainail.everboxing.lingo.ui.home.details.WordDetailsFragment"
         tools:layout="@layout/fragment_word_details">

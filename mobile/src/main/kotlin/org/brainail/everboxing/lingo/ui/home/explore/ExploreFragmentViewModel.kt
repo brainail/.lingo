@@ -20,9 +20,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import org.brainail.everboxing.lingo.app.Constants
 import org.brainail.everboxing.lingo.base.util.lazyFast
@@ -30,15 +28,15 @@ import org.brainail.everboxing.lingo.domain.executor.AppExecutors
 import org.brainail.everboxing.lingo.domain.model.SearchResult
 import org.brainail.everboxing.lingo.domain.model.Suggestion
 import org.brainail.everboxing.lingo.domain.usecase.FavoriteSearchResultUseCase
-import org.brainail.everboxing.lingo.domain.usecase.FindRecentSuggestionsUseCase
 import org.brainail.everboxing.lingo.domain.usecase.FindSearchResultsUseCase
 import org.brainail.everboxing.lingo.domain.usecase.FindSuggestionsUseCase
 import org.brainail.everboxing.lingo.domain.usecase.ForgetSearchResultUseCase
-import org.brainail.everboxing.lingo.domain.usecase.SaveRecentSuggestionUseCase
+import org.brainail.everboxing.lingo.domain.usecase.SaveSuggestionUseCase
 import org.brainail.everboxing.lingo.mapper.SearchResultModelMapper
 import org.brainail.everboxing.lingo.mapper.SuggestionModelMapper
 import org.brainail.everboxing.lingo.model.SearchResultModel
 import org.brainail.everboxing.lingo.model.SuggestionModel
+import org.brainail.everboxing.lingo.model.toRecent
 import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
 import org.brainail.everboxing.lingo.ui.base.RxAwareViewModel
 import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentViewState.SearchResultsPrepared
@@ -50,9 +48,8 @@ import javax.inject.Inject
 
 class ExploreFragmentViewModel @Inject constructor(
     private val findSuggestionsUseCase: FindSuggestionsUseCase,
-    private val findRecentSuggestionsUseCase: FindRecentSuggestionsUseCase,
     private val findSearchResultsUseCase: FindSearchResultsUseCase,
-    private val saveRecentSuggestionUseCase: SaveRecentSuggestionUseCase,
+    private val saveRecentSuggestionUseCase: SaveSuggestionUseCase,
     private val favoriteSearchResultUseCase: FavoriteSearchResultUseCase,
     private val forgetSearchResultUseCase: ForgetSearchResultUseCase,
     private val suggestionModelMapper: SuggestionModelMapper,
@@ -118,17 +115,13 @@ class ExploreFragmentViewModel @Inject constructor(
             .debounce(Constants.DEBOUNCE_SEARCH_REQUEST_MILLIS, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .switchMap { findSuggestions(it) }
-            .map { it.map { suggestionModelMapper.mapToModel(it) } }
+            .map { it.map { suggestion -> suggestionModelMapper.mapF(suggestion) } }
             .observeOn(appExecutors.mainScheduler)
             .subscribe { presentSuggestions.value = it }
     }
 
     private fun findSuggestions(query: String): Observable<List<Suggestion>> {
-        val suggestions: Flowable<List<Suggestion>> = Flowable.combineLatest(
-            findRecentSuggestionsUseCase.execute(query),
-            findSuggestionsUseCase.execute(query),
-            BiFunction { recent, other -> recent + other })
-        return suggestions
+        return findSuggestionsUseCase.execute(query)
             .toObservable()
             .doOnSubscribe { startSuggestionsLoading.call() }
             .subscribeOn(appExecutors.mainScheduler) // for doOnSubscribe
@@ -142,11 +135,11 @@ class ExploreFragmentViewModel @Inject constructor(
                 cur.word == next.word && cur.isSilent == next.isSilent
             }
             .doOnNext {
-                it.takeIf { it.word.isNotBlank() && !it.isSilent }
-                    ?.let { saveRecentSuggestion(it).subscribe() }
+                it.takeIf { suggestion -> suggestion.word.isNotBlank() && !suggestion.isSilent }
+                    ?.let { suggestion -> saveRecentSuggestion(suggestion).subscribe() }
             }
             .switchMap { findResults(it.word.toString()) }
-            .map { it.map { searchResultModelMapper.mapToModel(it) } }
+            .map { it.map { searchResult -> searchResultModelMapper.mapF(searchResult) } }
             .observeOn(appExecutors.mainScheduler)
             .subscribe { applyChanges(SearchResultsPrepared(it)) }
     }
@@ -160,7 +153,7 @@ class ExploreFragmentViewModel @Inject constructor(
     }
 
     private fun saveRecentSuggestion(suggestion: SuggestionModel): Completable {
-        return saveRecentSuggestionUseCase.execute(suggestionModelMapper.mapFromModel(suggestion))
+        return saveRecentSuggestionUseCase.execute(suggestionModelMapper.mapT(suggestion.toRecent()))
     }
 
     private fun applyChanges(

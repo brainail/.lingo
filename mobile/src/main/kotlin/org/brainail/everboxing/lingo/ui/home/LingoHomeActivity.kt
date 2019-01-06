@@ -18,7 +18,6 @@ package org.brainail.everboxing.lingo.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import kotlinx.android.synthetic.main.activity_lingo_home.*
 import org.brainail.everboxing.lingo.R
@@ -56,11 +55,17 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     }
 
     private val screenRenderer by lazyFast {
-        LingoHomeActivityViewRenderer(this, appBarView, bottomAppBarView, homeActionButtonView, Handler())
+        LingoHomeActivityViewRenderer(
+            this, appBarView, bottomAppBarView,
+            homeActionButtonView, toolbarUnderlay, floatingSearchView
+        )
     }
 
     private val searchViewStateRenderer by lazyFast {
-        LingoHomeSearchViewStateRenderer(this, floatingSearchView, appBarView, toolbarUnderlay, bottomAppBarView)
+        LingoHomeSearchViewStateRenderer(
+            this, floatingSearchView, appBarView,
+            toolbarUnderlay, bottomAppBarView
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -150,18 +155,9 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     private fun navigateTabTo(navigationTabItem: LingoHomeActivityViewModel.NavigationTabItem) {
         L.v("navigateTabTo: navigationTabItem = $navigationTabItem")
         when (navigationTabItem) {
-            NavigationTabItem.EXPLORE -> {
-                navigator.showExplorePage()
-                screenRenderer.selectHomeMenuItem(R.id.menu_home_explore)
-            }
-            NavigationTabItem.FAVOURITE -> {
-                navigator.showExplorePage()
-                screenRenderer.selectHomeMenuItem(R.id.menu_home_favorite)
-            }
-            NavigationTabItem.HISTORY -> {
-                navigator.showExplorePage()
-                screenRenderer.selectHomeMenuItem(R.id.menu_home_history)
-            }
+            NavigationTabItem.EXPLORE -> navigator.showExplorePage()
+            NavigationTabItem.FAVOURITE -> navigator.showFavoritePage()
+            NavigationTabItem.HISTORY -> navigator.showHistoryPage()
         }.checkAllMatched
     }
 
@@ -173,9 +169,8 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-            REQ_CODE_SPEECH_INPUT -> {
-                screenViewModel.handleTextToSpeechResult(textToSpeechResultMapper.transform(resultCode, data))
-            }
+            REQ_CODE_SPEECH_INPUT ->
+                screenViewModel.handleTextToSpeechResult(textToSpeechResultMapper.mapF(resultCode, data))
         }
     }
 }

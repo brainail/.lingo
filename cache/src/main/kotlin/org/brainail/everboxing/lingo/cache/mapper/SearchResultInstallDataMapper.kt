@@ -29,7 +29,7 @@ class SearchResultInstallDataMapper @Inject constructor(
     private val parser: Gson
 ) : Mapper<SearchResultCacheEntity, String> {
 
-    override fun mapToCache(input: String): SearchResultCacheEntity {
+    override fun mapT(input: String): SearchResultCacheEntity {
         val entity = parser.fromJson(input, SearchResultUrbanInstallEntity::class.java)
         return SearchResultCacheEntity(
             0, entity.defid, entity.word,
@@ -37,8 +37,6 @@ class SearchResultInstallDataMapper @Inject constructor(
             entity.permalink, false
         )
     }
-
-    override fun mapFromCache(input: SearchResultCacheEntity) = throw UnsupportedOperationException()
 }
 
 object SearchResultInstallDataMapperFactory {

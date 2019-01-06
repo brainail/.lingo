@@ -27,10 +27,6 @@ class SuggestionsCacheDataSource @Inject constructor(
     private val suggestionCache: SuggestionCache
 ) : SuggestionDataSource {
 
-    override fun clearSuggestions(): Completable {
-        return suggestionCache.clearSuggestions()
-    }
-
     override fun saveSuggestions(suggestions: List<SuggestionEntity>): Completable {
         return suggestionCache.saveSuggestions(suggestions)
     }
@@ -40,6 +36,10 @@ class SuggestionsCacheDataSource @Inject constructor(
     }
 
     override fun getRecentSuggestions(query: String, limit: Int): Flowable<List<SuggestionEntity>> {
-        return suggestionCache.getSuggestions(query, limit)
+        return suggestionCache.getRecentSuggestions(query, limit)
+    }
+
+    override fun getNonRecentSuggestions(query: String, limit: Int): Flowable<List<SuggestionEntity>> {
+        return suggestionCache.getNonRecentSuggestions(query, limit)
     }
 }

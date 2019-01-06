@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package org.brainail.everboxing.lingo.model
 
 data class SuggestionModel(
@@ -23,3 +25,5 @@ data class SuggestionModel(
     val id: Int = 0,
     val isSilent: Boolean = false
 )
+
+inline fun SuggestionModel.toRecent() = copy(isRecent = true)

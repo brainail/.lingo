@@ -21,9 +21,11 @@ import io.reactivex.Flowable
 import org.brainail.everboxing.lingo.domain.model.Suggestion
 
 interface SuggestionsRepository {
-    fun clearSuggestions(): Completable
-    fun saveSuggestions(suggestions: List<Suggestion>): Completable
-    fun getSuggestions(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<Suggestion>>
-    fun getRecentSuggestions(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<Suggestion>>
-    fun saveSuggestionAsRecent(suggestion: Suggestion): Completable
+    fun getSuggestions(
+        query: String,
+        limitOfRecent: Int = Int.MAX_VALUE,
+        limitOfOthers: Int = Int.MAX_VALUE
+    ): Flowable<List<Suggestion>>
+
+    fun saveSuggestion(suggestion: Suggestion): Completable
 }

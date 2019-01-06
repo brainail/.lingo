@@ -21,8 +21,9 @@
         android:background="@color/material_light_white"
         android:clickable="true"
         android:focusable="true"
+        android:transitionGroup="true"
         android:foreground="?selectableItemBackground"
-        android:onClick="@{() -> searchResultClickListener.onSearchResultClick(searchResult)}"
+        android:onClick="@{(v) -> searchResultClickListener.onSearchResultClick(v, searchResult)}"
         android:stateListAnimator="@animator/animator_elevation_2dp"
         tools:ignore="UnusedAttribute">
 

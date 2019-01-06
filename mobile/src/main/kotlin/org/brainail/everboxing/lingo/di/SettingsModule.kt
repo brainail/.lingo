@@ -16,22 +16,18 @@
 
 package org.brainail.everboxing.lingo.di
 
-import android.content.SharedPreferences
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import org.brainail.everboxing.lingo.data.settings.SyncSettingsImpl
 import org.brainail.everboxing.lingo.data.settings.UserSettingsImpl
 import org.brainail.everboxing.lingo.domain.settings.SyncSettings
 import org.brainail.everboxing.lingo.domain.settings.UserSettings
-import javax.inject.Singleton
 
 @Module
-class SettingsModule {
-    @Provides
-    @Singleton
-    fun provideUserSettings(sharedPreferences: SharedPreferences): UserSettings = UserSettingsImpl(sharedPreferences)
+abstract class SettingsModule {
+    @Binds
+    abstract fun bindUserSettings(userSettings: UserSettingsImpl): UserSettings
 
-    @Provides
-    @Singleton
-    fun provideSyncSettings(sharedPreferences: SharedPreferences): SyncSettings = SyncSettingsImpl(sharedPreferences)
+    @Binds
+    abstract fun bindSyncSettings(syncSettings: SyncSettingsImpl): SyncSettings
 }

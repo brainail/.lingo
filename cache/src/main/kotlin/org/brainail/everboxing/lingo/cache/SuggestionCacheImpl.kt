@@ -29,25 +29,28 @@ class SuggestionCacheImpl @Inject constructor(
     private val entityMapper: SuggestionCacheMapper
 ) : SuggestionCache {
 
-    override fun clearSuggestions(): Completable {
-        return Completable.defer {
-            // completing ...
-            Completable.complete()
-        }
-    }
-
     override fun saveSuggestions(suggestions: List<SuggestionEntity>): Completable {
         return Completable.defer {
-            suggestionDao.saveSuggestions(suggestions.map { entityMapper.mapToCache(it) })
+            suggestionDao.saveSuggestions(suggestions.map { entityMapper.mapT(it) })
             Completable.complete()
         }
     }
 
     override fun getSuggestions(query: String, limit: Int): Flowable<List<SuggestionEntity>> {
-        return suggestionDao.getSuggestions(query, limit).map { it.map { entityMapper.mapFromCache(it) } }
+        return suggestionDao
+            .getSuggestions(query, limit)
+            .map { it.map { suggestion -> entityMapper.mapF(suggestion) } }
     }
 
     override fun getRecentSuggestions(query: String, limit: Int): Flowable<List<SuggestionEntity>> {
-        return suggestionDao.getRecentSuggestions(query, limit).map { it.map { entityMapper.mapFromCache(it) } }
+        return suggestionDao
+            .getRecentSuggestions(query, limit)
+            .map { it.map { suggestion -> entityMapper.mapF(suggestion) } }
+    }
+
+    override fun getNonRecentSuggestions(query: String, limit: Int): Flowable<List<SuggestionEntity>> {
+        return suggestionDao
+            .getNonRecentSuggestions(query, limit)
+            .map { it.map { suggestion -> entityMapper.mapF(suggestion) } }
     }
 }

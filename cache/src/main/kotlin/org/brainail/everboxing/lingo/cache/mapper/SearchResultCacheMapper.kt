@@ -23,14 +23,14 @@ import javax.inject.Singleton
 
 @Singleton
 class SearchResultCacheMapper @Inject constructor() : Mapper<SearchResultCacheEntity, SearchResultEntity> {
-    override fun mapFromCache(input: SearchResultCacheEntity): SearchResultEntity {
+    override fun mapF(input: SearchResultCacheEntity): SearchResultEntity {
         return SearchResultEntity(
             input.definitionId, input.word, input.definition,
             input.example, input.link, input.id, input.favorite
         )
     }
 
-    override fun mapToCache(input: SearchResultEntity): SearchResultCacheEntity {
+    override fun mapT(input: SearchResultEntity): SearchResultCacheEntity {
         return SearchResultCacheEntity(
             input.id, input.definitionId, input.word,
             input.definition, input.example, input.link, input.favorite

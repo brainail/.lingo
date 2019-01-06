@@ -17,6 +17,7 @@
 package org.brainail.everboxing.lingo.ui.home.explore
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -30,7 +31,7 @@ class ExploreSearchResultsAdapter(
     private val listenersDelegate = ListenersDelegate()
 
     interface SearchResultClickListener {
-        fun onSearchResultClick(item: SearchResultModel)
+        fun onSearchResultClick(itemView: View, item: SearchResultModel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExploreSearchResultViewHolder {
@@ -43,8 +44,8 @@ class ExploreSearchResultsAdapter(
     }
 
     inner class ListenersDelegate : SearchResultClickListener {
-        override fun onSearchResultClick(item: SearchResultModel) {
-            searchResultClickListener?.onSearchResultClick(item)
+        override fun onSearchResultClick(itemView: View, item: SearchResultModel) {
+            searchResultClickListener?.onSearchResultClick(itemView, item)
         }
     }
 

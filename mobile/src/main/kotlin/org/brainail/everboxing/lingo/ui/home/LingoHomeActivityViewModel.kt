@@ -51,14 +51,15 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
     }
 
     fun navigateTabTo(navigationTabItem: NavigationTabItem) {
-        if (searchViewState.value!!.isInFocus) {
-            requestFocusGain(false)
-        } else if (navigationTab.value == navigationTabItem) {
+        if (navigationTab.value == navigationTabItem) {
             navigation.value = NavigationItem.SCROLL_TO_TOP
             return
+        } else if (searchViewState.value!!.isInFocus) {
+            requestFocusGain(false)
         }
 
         navigationTab.value = navigationTabItem
+        submitQuerySilently(searchViewState.value!!.displayedText) // simulate new creation
     }
 
     fun navigateTo(navigationItem: NavigationItem) {

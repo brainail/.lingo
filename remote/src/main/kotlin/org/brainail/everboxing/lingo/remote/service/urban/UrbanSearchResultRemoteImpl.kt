@@ -28,7 +28,8 @@ class UrbanSearchResultRemoteImpl @Inject constructor(
 ) : SearchResultRemote {
 
     override fun getSearchResults(query: String): Single<List<SearchResultEntity>> {
-        return urbanService.getSearchResults(query)
-            .map { it.list.map { entityMapper.mapFromRemote(it) } }
+        return urbanService
+            .getSearchResults(query)
+            .map { it.list.map { searchResult -> entityMapper.mapF(searchResult) } }
     }
 }

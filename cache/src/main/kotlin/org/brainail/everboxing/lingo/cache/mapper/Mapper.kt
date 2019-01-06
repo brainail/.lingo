@@ -16,10 +16,14 @@
 
 package org.brainail.everboxing.lingo.cache.mapper
 
-/**
- * Interface for model mappers.
- */
-interface Mapper<E, D> {
-    fun mapFromCache(input: E): D
-    fun mapToCache(input: D): E
+interface Mapper<F, T> {
+    /**
+     * Maps __FROM__ to __TO__
+     */
+    fun mapF(input: F): T = throw UnsupportedOperationException()
+
+    /**
+     * Maps __TO__ to __FROM__
+     */
+    fun mapT(input: T): F = throw UnsupportedOperationException()
 }

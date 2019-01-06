@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package org.brainail.everboxing.lingo.domain.model
 
 data class Suggestion(
@@ -23,3 +25,5 @@ data class Suggestion(
     val id: Int = 0,
     val highlights: String? = null
 )
+
+internal inline fun Suggestion.toHighlighted(highlights: String?) = copy(highlights = highlights)

@@ -21,7 +21,7 @@ import org.brainail.everboxing.lingo.remote.model.UrbanSuggestionRemoteEntity
 import javax.inject.Inject
 
 class UrbanSuggestionRemoteMapper @Inject constructor() : Mapper<UrbanSuggestionRemoteEntity, SuggestionEntity> {
-    override fun mapFromRemote(input: UrbanSuggestionRemoteEntity): SuggestionEntity {
+    override fun mapF(input: UrbanSuggestionRemoteEntity): SuggestionEntity {
         return SuggestionEntity(input.term, input.preview)
     }
 }

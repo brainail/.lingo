@@ -22,13 +22,14 @@ import org.brainail.everboxing.lingo.domain.model.Suggestion
 import org.brainail.everboxing.lingo.domain.repository.SuggestionsRepository
 import javax.inject.Inject
 
-class SaveRecentSuggestionUseCase @Inject constructor(
+class SaveSuggestionUseCase @Inject constructor(
     private val appExecutors: AppExecutors,
     private val suggestionsRepository: SuggestionsRepository
 ) {
 
     fun execute(suggestion: Suggestion): Completable {
-        return suggestionsRepository.saveSuggestionAsRecent(suggestion)
+        return suggestionsRepository
+            .saveSuggestion(suggestion)
             .compose(appExecutors.applyCompletableSchedulers())
     }
 }

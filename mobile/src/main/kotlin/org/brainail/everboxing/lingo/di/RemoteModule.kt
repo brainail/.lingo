@@ -35,7 +35,7 @@ class RemoteModule {
     @Provides
     @Singleton
     fun provideSuggestionRemote(
-        service: UrbanService, // TODO: we should able specify others
+        service: UrbanService, // TODO: ability to specify others
         entityMapper: UrbanSuggestionRemoteMapper
     ): SuggestionRemote {
         return UrbanSuggestionRemoteImpl(service, entityMapper)
@@ -44,7 +44,7 @@ class RemoteModule {
     @Provides
     @Singleton
     fun provideSearchResultRemote(
-        service: UrbanService, // TODO: we should able specify others
+        service: UrbanService, // TODO: ability to specify others
         entityMapper: UrbanSearchResultRemoteMapper
     ): SearchResultRemote {
         return UrbanSearchResultRemoteImpl(service, entityMapper)

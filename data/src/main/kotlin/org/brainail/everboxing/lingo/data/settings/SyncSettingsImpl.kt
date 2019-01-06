@@ -20,8 +20,11 @@ import android.content.SharedPreferences
 import org.brainail.everboxing.lingo.data.settings.PrefDelegates.boolean
 import org.brainail.everboxing.lingo.domain.ServiceType
 import org.brainail.everboxing.lingo.domain.settings.SyncSettings
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SyncSettingsImpl(sharedPreferences: SharedPreferences) : SyncSettings {
+@Singleton
+class SyncSettingsImpl @Inject constructor(sharedPreferences: SharedPreferences) : SyncSettings {
     override var isPreinstalledUrbanDataInitialized by boolean(
         sharedPreferences,
         "preinstalled_${ServiceType.URBAN.key}_data_initialized",

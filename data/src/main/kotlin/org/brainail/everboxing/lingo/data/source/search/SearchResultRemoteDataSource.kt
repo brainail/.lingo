@@ -26,7 +26,7 @@ class SearchResultRemoteDataSource @Inject constructor(
     private val searchResultRemote: SearchResultRemote
 ) : SearchResultDataSource {
 
-    override fun getSearchResults(query: String): Flowable<List<SearchResultEntity>> {
+    override fun getSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
         return searchResultRemote.getSearchResults(query).toFlowable()
     }
 }

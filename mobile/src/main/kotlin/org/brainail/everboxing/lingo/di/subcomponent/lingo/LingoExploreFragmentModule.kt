@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.util
+package org.brainail.everboxing.lingo.di.subcomponent.lingo
 
-import android.content.Context
-import org.brainail.everboxing.lingo.data.repository.file.FileStore
-import java.io.InputStream
-import javax.inject.Inject
-import javax.inject.Singleton
+import dagger.Module
+import dagger.Provides
+import org.brainail.everboxing.lingo.di.scope.FragmentScope
+import org.brainail.everboxing.lingo.ui.home.LingoHomeActivity
+import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentNavigator
 
-@Singleton
-class AndroidFileStore @Inject constructor(private val context: Context) : FileStore {
-    override fun openAsset(path: String): InputStream {
-        return context.assets.open(path)
-    }
+@Module
+class LingoExploreFragmentModule {
+    @Provides
+    @FragmentScope
+    fun provideLingoExploreFragmentNavigator(activity: LingoHomeActivity) = ExploreFragmentNavigator(activity)
 }

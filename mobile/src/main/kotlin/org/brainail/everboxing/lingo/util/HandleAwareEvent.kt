@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.di.subcomponent.lingo
+package org.brainail.everboxing.lingo.util
 
-import dagger.Module
-import dagger.Provides
-import org.brainail.everboxing.lingo.di.scope.FragmentScope
-import org.brainail.everboxing.lingo.ui.home.LingoHomeActivity
-import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentNavigator
+open class HandleAwareEvent<out T>(private val content: T) {
+    var hasBeenHandled = false
+        private set
 
-@Module
-class LingoSearchFragmentModule {
-    @Provides
-    @FragmentScope
-    fun provideLingoSearchFragmentNavigator(activity: LingoHomeActivity) = ExploreFragmentNavigator(activity)
+    fun getContentIfNotHandled(): T? {
+        return if (hasBeenHandled) {
+            null
+        } else {
+            hasBeenHandled = true
+            content
+        }
+    }
+
+    fun peekContent(): T = content
 }

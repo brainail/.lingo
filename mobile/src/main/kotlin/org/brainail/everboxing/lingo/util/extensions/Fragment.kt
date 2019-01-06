@@ -28,6 +28,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.findNavController
+import androidx.navigation.navOptions
 
 inline fun FragmentManager.inTransaction(transaction: FragmentTransaction.() -> FragmentTransaction) {
     beginTransaction().transaction().commit()
@@ -36,6 +38,17 @@ inline fun FragmentManager.inTransaction(transaction: FragmentTransaction.() -> 
 inline fun AppCompatActivity.getNavigationTopFragment(@IdRes navFragmentId: Int): Fragment? {
     val navFragment = supportFragmentManager.findFragmentById(navFragmentId)
     return navFragment?.childFragmentManager?.findFragmentById(navFragmentId)
+}
+
+inline fun AppCompatActivity.navigateFromStart(@IdRes navFragmentId: Int, @IdRes destinationId: Int) {
+    val navController = findNavController(navFragmentId)
+    if (navController.currentDestination?.id != destinationId) {
+        navController.navigate(
+            destinationId,
+            null,
+            navOptions { popUpTo(navController.graph.startDestination, popUpToBuilder = { inclusive = true }) }
+        )
+    }
 }
 
 inline fun Fragment.drawable(@DrawableRes drawable: Int) = ContextCompat.getDrawable(requireContext(), drawable)!!

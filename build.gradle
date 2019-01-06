@@ -5,7 +5,7 @@ buildscript {
     ext.minSdkVersion = 21
     ext.targetSdkVersion = 28
 
-    ext.gradlePluginVersion = '3.3.0-rc01'
+    ext.gradlePluginVersion = '3.3.0-rc03'
     ext.kotlinVersion = '1.3.10'
 
     ext.androidCoreVersion = '1.0.1'
@@ -18,8 +18,8 @@ buildscript {
     ext.androidRecyclerViewCompatVersion = '1.0.0'
     ext.androidLifecycleVersion = '2.0.0'
     ext.androidArchRoomVersion = '2.0.0-rc01'
-    ext.androidWorkManagerVersion = '1.0.0-alpha11'
-    ext.androidNavigationVersion = '1.0.0-alpha07'
+    ext.androidWorkManagerVersion = '1.0.0-beta01'
+    ext.androidNavigationVersion = '1.0.0-alpha09'
 
     ext.facebookStethoVersion = '1.5.0'
 

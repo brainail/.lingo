@@ -65,7 +65,7 @@ class ExploreFragment :
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initSearch()
+        initSearchComponents()
     }
 
     override fun scrollToTop() {
@@ -73,11 +73,11 @@ class ExploreFragment :
             ?.scrollToPositionWithOffset(0, 0)
     }
 
-    override fun onSearchResultClick(item: SearchResultModel) {
+    override fun onSearchResultClick(itemView: View, item: SearchResultModel) {
         screenViewModel.searchResultClicked(item)
     }
 
-    private fun initSearch() {
+    private fun initSearchComponents() {
         searchViewModel.searchResults()
             .observeNonNull(viewLifecycleOwner) { screenViewModel.searchResults(it) }
         searchViewModel.searchSuggestions()
@@ -123,13 +123,5 @@ class ExploreFragment :
     private fun renderViewState(viewState: ExploreFragmentViewState) {
         searchResultsAdapter.submitList(viewState.displayedSearchResults)
         swipeRefreshView.isRefreshing = viewState.isLoadingSearchResults
-    }
-
-    companion object {
-        @JvmStatic
-        val layoutTag: String by lazyFast { "${ExploreFragment::class.java.simpleName}.FragmentTag" }
-
-        @JvmStatic
-        fun newInstance() = ExploreFragment()
     }
 }

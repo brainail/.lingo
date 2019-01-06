@@ -18,9 +18,14 @@ package org.brainail.everboxing.lingo.data.repository.suggestion
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import org.brainail.everboxing.lingo.data.mapper.SuggestionDataMapper
 import org.brainail.everboxing.lingo.data.model.SuggestionEntity
+import org.brainail.everboxing.lingo.data.model.toSuggestion
+import org.brainail.everboxing.lingo.data.source.search.SearchResultsDataSourceFactory
 import org.brainail.everboxing.lingo.data.source.suggestion.SuggestionsDataSourceFactory
+import org.brainail.everboxing.lingo.domain.executor.AppExecutors
 import org.brainail.everboxing.lingo.domain.model.Suggestion
 import org.brainail.everboxing.lingo.domain.repository.SuggestionsRepository
 import javax.inject.Inject
@@ -28,36 +33,80 @@ import javax.inject.Singleton
 
 @Singleton
 class SuggestionsRepositoryImpl @Inject constructor(
-    private val dataSourceFactory: SuggestionsDataSourceFactory,
-    private val suggestionMapper: SuggestionDataMapper
+    private val suggestionsDataSourceFactory: SuggestionsDataSourceFactory,
+    private val searchResultsDataSourceFactory: SearchResultsDataSourceFactory,
+    private val suggestionMapper: SuggestionDataMapper,
+    private val appExecutors: AppExecutors
 ) : SuggestionsRepository {
 
-    override fun clearSuggestions(): Completable {
-        return dataSourceFactory.obtainCacheDataSource().clearSuggestions()
+    override fun getSuggestions(query: String, limitOfRecent: Int, limitOfOthers: Int): Flowable<List<Suggestion>> {
+        val remoteSuggestions = getRemoteSuggestions(query)
+        val cachedSuggestions = getCachedSuggestions(query, limitOfRecent, limitOfOthers)
+            .compose(appExecutors.applyFlowableBackgroundSchedulers()) // be sure to run in parallel
+        val cachedSearchResultsSuggestions = when (query.isBlank()) {
+            true -> Flowable.just(emptyList())
+            else -> getCachedSearchResultsSuggestions(query, limitOfOthers)
+                .compose(appExecutors.applyFlowableBackgroundSchedulers()) // be sure to run in parallel
+        }
+        return Flowable.combineLatest(
+            cachedSuggestions,
+            remoteSuggestions,
+            cachedSearchResultsSuggestions,
+            Function3 { cached, remote, cachedSearchResults ->
+                mergeSuggestions(cached, remote, cachedSearchResults, limitOfOthers)
+            }
+        )
     }
 
-    override fun saveSuggestions(suggestions: List<Suggestion>): Completable {
-        val suggestionEntities = suggestions.map { suggestionMapper.mapToEntity(it) }
-        return saveSuggestionEntities(suggestionEntities)
+    override fun saveSuggestion(suggestion: Suggestion): Completable {
+        return saveSuggestionEntities(listOf(suggestionMapper.mapT(suggestion)))
     }
 
-    override fun getRecentSuggestions(query: String, limit: Int): Flowable<List<Suggestion>> {
-        return dataSourceFactory.obtainCacheDataSource()
-            .getRecentSuggestions(query, limit)
-            .map { it.map { suggestionMapper.mapFromEntity(it).copy(highlights = query) } }
+    private fun getCachedSuggestions(
+        query: String,
+        limitOfRecent: Int,
+        limitOfOthers: Int
+    ): Flowable<List<Suggestion>> {
+        val cachedSource = suggestionsDataSourceFactory.obtainCacheDataSource()
+        return Flowable.combineLatest(
+            cachedSource.getRecentSuggestions(query, limitOfRecent),
+            cachedSource.getNonRecentSuggestions(query, limitOfOthers),
+            BiFunction { recent, others ->
+                (recent + others).map { suggestion -> suggestionMapper.mapF(suggestion) } }
+        )
     }
 
-    override fun getSuggestions(query: String, limit: Int): Flowable<List<Suggestion>> {
-        return dataSourceFactory.obtainRemoteDataSource()
+    private fun getRemoteSuggestions(query: String): Flowable<List<Suggestion>> {
+        return suggestionsDataSourceFactory.obtainRemoteDataSource()
             .getSuggestions(query)
-            .map { it.map { suggestionMapper.mapFromEntity(it).copy(highlights = query) } }
+            .onErrorReturn { emptyList() }
+            .map { it.map { suggestion -> suggestionMapper.mapF(suggestion) } }
     }
 
-    override fun saveSuggestionAsRecent(suggestion: Suggestion): Completable {
-        return saveSuggestionEntities(listOf(suggestionMapper.mapToEntity(suggestion).copy(isRecent = true)))
+    private fun getCachedSearchResultsSuggestions(query: String, limitOfOthers: Int): Flowable<List<Suggestion>> {
+        return searchResultsDataSourceFactory.obtainCacheDataSource()
+            .getDistinctByWordSearchResults(query, limitOfOthers)
+            .map { it.map { searchResult -> suggestionMapper.mapF(searchResult.toSuggestion()) } }
+    }
+
+    /**
+     * Merges suggestions as (recent | fresh | cached)
+     */
+    private fun mergeSuggestions(
+        cached: List<Suggestion>,
+        remote: List<Suggestion>,
+        cachedSearchResults: List<Suggestion>,
+        limitOfOthers: Int
+    ): List<Suggestion> {
+        val (cachedRecent, cachedOthers) = cached.partition { it.isRecent }
+        val remoteSet = remote.map { it.word.toLowerCase() }.toHashSet()
+        val allCachedNew = (cachedOthers + cachedSearchResults)
+            .distinctBy { it.word.toLowerCase() }
+            .filter { it.word !in remoteSet }
+        return cachedRecent + (remote + allCachedNew).take(limitOfOthers)
     }
 
     private fun saveSuggestionEntities(suggestions: List<SuggestionEntity>): Completable {
-        return dataSourceFactory.obtainCacheDataSource().saveSuggestions(suggestions)
+        return suggestionsDataSourceFactory.obtainCacheDataSource().saveSuggestions(suggestions)
     }
 }

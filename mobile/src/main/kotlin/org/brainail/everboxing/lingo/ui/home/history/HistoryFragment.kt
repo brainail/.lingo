@@ -14,43 +14,29 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.ui.home.details
+package org.brainail.everboxing.lingo.ui.home.history
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_word_details.*
 import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.ui.base.BaseViewModel
 import org.brainail.everboxing.lingo.ui.base.ViewModelAwareFragment
-import org.brainail.everboxing.lingo.util.MenuItemClickHandler
-import org.brainail.everboxing.lingo.util.ViewClickHandler
+import org.brainail.everboxing.lingo.util.extensions.inflate
 
-class WordDetailsFragment
-    : ViewModelAwareFragment(), MenuItemClickHandler, ViewClickHandler {
+class HistoryFragment :
+    ViewModelAwareFragment() {
 
     override fun createPrimaryViewModels(): Array<BaseViewModel>? {
         return null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_word_details, container, false)
+        return container?.inflate(R.layout.fragment_history)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val detailsArgs = WordDetailsFragmentArgs.fromBundle(arguments!!)
-        searchResultWord.text = detailsArgs.wordItem.word
-        searchResultDefinition.text = detailsArgs.wordItem.definition
-        searchResultExamples.text = detailsArgs.wordItem.example
-    }
-
-    override fun handleMenuItemClick(menuId: Int): Boolean {
-        return super.handleMenuItemClick(menuId)
-    }
-
-    override fun handleViewClick(viewId: Int): Boolean {
-        return super.handleViewClick(viewId)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
     }
 }
