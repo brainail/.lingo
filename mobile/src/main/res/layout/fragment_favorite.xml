@@ -7,10 +7,12 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <androidx.core.widget.NestedScrollView
-        android:background="@color/material_orange_300"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchResultsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </androidx.core.widget.NestedScrollView>
+        android:layout_height="match_parent"
+        android:transitionGroup="false"
+        android:clipChildren="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_search_result"/>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

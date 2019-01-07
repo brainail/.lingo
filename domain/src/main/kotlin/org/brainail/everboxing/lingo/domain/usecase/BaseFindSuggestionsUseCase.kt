@@ -16,14 +16,23 @@
 
 package org.brainail.everboxing.lingo.domain.usecase
 
+import io.reactivex.Flowable
 import org.brainail.everboxing.lingo.domain.executor.AppExecutors
-import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
-import javax.inject.Inject
+import org.brainail.everboxing.lingo.domain.model.Suggestion
+import org.brainail.everboxing.lingo.domain.model.toHighlighted
 
-class FindSearchResultsUseCase @Inject constructor(
-    appExecutors: AppExecutors,
-    private val searchResultRepository: SearchResultRepository
-) : BaseFindSearchResultsUseCase(appExecutors) {
+abstract class BaseFindSuggestionsUseCase(private val appExecutors: AppExecutors) {
 
-    override fun getSearchResults(query: String) = searchResultRepository.getSearchResults(query)
+    abstract fun getSuggestions(query: String): Flowable<List<Suggestion>>
+
+    fun execute(query: String): Flowable<List<Suggestion>> {
+        return getSuggestions(query)
+            .compose(appExecutors.applyFlowableBackgroundSchedulers())
+            .map { it.map { suggestion -> suggestion.toHighlighted(query) } }
+    }
+
+    companion object {
+        const val NUMBER_OF_RECENT = 3
+        const val NUMBER_OF_OTHERS = 47
+    }
 }

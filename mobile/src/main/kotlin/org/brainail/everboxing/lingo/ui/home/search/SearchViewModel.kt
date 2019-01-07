@@ -36,9 +36,9 @@ abstract class SearchViewModel : RxAwareViewModel() {
     enum class SearchNavigationItem { DRAWER, TEXT_TO_SPEECH }
 
     protected val searchViewState = MutableLiveData<SearchViewState>()
+    private val searchSuggestions = MutableLiveData<String>()
+    private val searchResults = MutableLiveData<SuggestionModel>()
     protected val searchNavigation = SingleEventLiveData<SearchNavigationItem>()
-    private val searchSuggestions = SingleEventLiveData<String>()
-    private val searchResults = SingleEventLiveData<SuggestionModel>()
 
     init {
         searchViewState.value = SearchViewState.INITIAL

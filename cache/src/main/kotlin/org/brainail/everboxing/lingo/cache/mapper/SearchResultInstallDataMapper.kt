@@ -34,7 +34,8 @@ class SearchResultInstallDataMapper @Inject constructor(
         return SearchResultCacheEntity(
             0, entity.defid, entity.word,
             entity.definition, entity.example,
-            entity.permalink, false
+            entity.permalink,
+            false, false
         )
     }
 }

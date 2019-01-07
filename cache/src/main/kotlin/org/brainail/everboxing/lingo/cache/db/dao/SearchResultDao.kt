@@ -28,6 +28,26 @@ abstract class SearchResultDao : BaseDao<SearchResultCacheEntity> {
 
     @Query(
         """select * from search_results
+            where favorite = 1 and word like :query || '%'
+            order by sr_id desc limit :limit"""
+    )
+    abstract fun getFavoriteSearchResults(
+        query: String,
+        limit: Int = Int.MAX_VALUE
+    ): Flowable<List<SearchResultCacheEntity>>
+
+    @Query(
+        """select * from search_results
+            where history = 1 and word like :query || '%'
+            order by sr_id desc limit :limit"""
+    )
+    abstract fun getHistorySearchResults(
+        query: String,
+        limit: Int = Int.MAX_VALUE
+    ): Flowable<List<SearchResultCacheEntity>>
+
+    @Query(
+        """select * from search_results
         where word like :query || '%'
         group by lower(word)
         having max(sr_id)
@@ -38,11 +58,38 @@ abstract class SearchResultDao : BaseDao<SearchResultCacheEntity> {
         limit: Int = Int.MAX_VALUE
     ): Flowable<List<SearchResultCacheEntity>>
 
+    @Query(
+        """select * from search_results
+        where favorite = 1 and word like :query || '%'
+        group by lower(word)
+        having max(sr_id)
+        order by sr_id desc limit :limit"""
+    )
+    abstract fun getDistinctByWordFavoriteSearchResults(
+        query: String,
+        limit: Int = Int.MAX_VALUE
+    ): Flowable<List<SearchResultCacheEntity>>
+
+    @Query(
+        """select * from search_results
+        where history = 1 and word like :query || '%'
+        group by lower(word)
+        having max(sr_id)
+        order by sr_id desc limit :limit"""
+    )
+    abstract fun getDistinctByWordHistorySearchResults(
+        query: String,
+        limit: Int = Int.MAX_VALUE
+    ): Flowable<List<SearchResultCacheEntity>>
+
     @Query("delete from search_results")
     abstract fun deleteAll()
 
     @Query("update search_results set favorite = 1 - favorite where sr_id = :id")
-    abstract fun favoriteSearchResult(id: Int)
+    abstract fun toggleSearchResultInFavorites(id: Int)
+
+    @Query("update search_results set history = 1 where sr_id = :id")
+    abstract fun saveSearchResultInHistory(id: Int)
 
     @Query("delete from search_results where sr_id = :id")
     abstract fun forgetSearchResult(id: Int)

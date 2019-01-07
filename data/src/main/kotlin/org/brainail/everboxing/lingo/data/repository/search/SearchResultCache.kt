@@ -21,10 +21,24 @@ import io.reactivex.Flowable
 import org.brainail.everboxing.lingo.data.model.SearchResultEntity
 
 interface SearchResultCache {
+    fun getDistinctByWordSearchResults(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SearchResultEntity>>
+
+    fun getDistinctByWordFavoriteSearchResults(
+        query: String,
+        limit: Int = Int.MAX_VALUE
+    ): Flowable<List<SearchResultEntity>>
+
+    fun getDistinctByWordHistorySearchResults(
+        query: String,
+        limit: Int = Int.MAX_VALUE
+    ): Flowable<List<SearchResultEntity>>
+
     fun saveSearchResults(searchResults: List<SearchResultEntity>): Completable
     fun getSearchResults(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SearchResultEntity>>
-    fun getDistinctByWordSearchResults(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SearchResultEntity>>
-    fun favoriteSearchResult(id: Int): Completable
+    fun getFavoriteSearchResults(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SearchResultEntity>>
+    fun getHistorySearchResults(query: String, limit: Int = Int.MAX_VALUE): Flowable<List<SearchResultEntity>>
+    fun toggleSearchResultInFavorites(id: Int): Completable
+    fun saveSearchResultInHistory(id: Int): Completable
     fun forgetSearchResult(id: Int): Completable
     fun installUrbanSearchResult(pathToData: String): Completable
 }

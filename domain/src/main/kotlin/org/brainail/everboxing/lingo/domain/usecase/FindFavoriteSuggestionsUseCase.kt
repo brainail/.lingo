@@ -17,13 +17,14 @@
 package org.brainail.everboxing.lingo.domain.usecase
 
 import org.brainail.everboxing.lingo.domain.executor.AppExecutors
-import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
+import org.brainail.everboxing.lingo.domain.repository.SuggestionsRepository
 import javax.inject.Inject
 
-class FindSearchResultsUseCase @Inject constructor(
+class FindFavoriteSuggestionsUseCase @Inject constructor(
     appExecutors: AppExecutors,
-    private val searchResultRepository: SearchResultRepository
-) : BaseFindSearchResultsUseCase(appExecutors) {
+    private val suggestionsRepository: SuggestionsRepository
+) : BaseFindSuggestionsUseCase(appExecutors) {
 
-    override fun getSearchResults(query: String) = searchResultRepository.getSearchResults(query)
+    override fun getSuggestions(query: String) =
+        suggestionsRepository.getFavoriteSuggestions(query, NUMBER_OF_RECENT, NUMBER_OF_OTHERS)
 }

@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.ui.home.explore
+package org.brainail.everboxing.lingo.ui.home.history
 
-import org.brainail.everboxing.lingo.databinding.ItemSearchResultBinding
+import androidx.appcompat.app.AppCompatActivity
 import org.brainail.everboxing.lingo.model.SearchResultModel
-import org.brainail.everboxing.lingo.ui.base.BindingViewHolder
+import org.brainail.everboxing.lingo.ui.home.search.results.SearchResultsFragmentNavigator
 
-class ExploreSearchResultViewHolder(
-    binding: ItemSearchResultBinding,
-    searchResultClickListener: ExploreSearchResultsAdapter.SearchResultClickListener
-) : BindingViewHolder<ItemSearchResultBinding>(binding) {
-
-    init {
-        binding.searchResultClickListener = searchResultClickListener
-    }
-
-    fun bindTo(item: SearchResultModel) {
-        binding.searchResult = item
-        binding.executePendingBindings()
-    }
+class HistoryFragmentNavigator(activity: AppCompatActivity) : SearchResultsFragmentNavigator(activity) {
+    override fun getOpenWordDetailsAction(item: SearchResultModel) =
+        HistoryFragmentDirections.OpenWordDetailsAction(item)
 }

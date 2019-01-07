@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.ui.home.explore
+package org.brainail.everboxing.lingo.ui.home.search.results
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
+import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.model.SearchResultModel
-import org.brainail.everboxing.lingo.ui.home.search.results.SearchResultsFragmentNavigator
+import org.brainail.everboxing.lingo.navigator.SceneNavigator
 
-class ExploreFragmentNavigator(activity: AppCompatActivity) : SearchResultsFragmentNavigator(activity) {
-    override fun getOpenWordDetailsAction(item: SearchResultModel) =
-        ExploreFragmentDirections.OpenWordDetailsAction(item)
+abstract class SearchResultsFragmentNavigator(activity: AppCompatActivity) : SceneNavigator(activity) {
+    abstract fun getOpenWordDetailsAction(item: SearchResultModel): NavDirections
+
+    fun openWordDetails(item: SearchResultModel) {
+        val navController = activity.findNavController(R.id.lingoHomeNavigationFragment)
+        navController.navigate(getOpenWordDetailsAction(item))
+    }
 }

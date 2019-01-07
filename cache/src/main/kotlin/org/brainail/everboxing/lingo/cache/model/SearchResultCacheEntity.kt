@@ -40,5 +40,7 @@ data class SearchResultCacheEntity(
     @ColumnInfo(name = "link")
     val link: String,
     @ColumnInfo(name = "favorite")
-    val favorite: Boolean
+    val favorite: Boolean,
+    @ColumnInfo(name = "history")
+    val history: Boolean
 )

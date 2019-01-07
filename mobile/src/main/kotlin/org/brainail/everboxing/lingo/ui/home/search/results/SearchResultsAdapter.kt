@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.ui.home.explore
+package org.brainail.everboxing.lingo.ui.home.search.results
 
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +24,9 @@ import androidx.recyclerview.widget.ListAdapter
 import org.brainail.everboxing.lingo.databinding.ItemSearchResultBinding
 import org.brainail.everboxing.lingo.model.SearchResultModel
 
-class ExploreSearchResultsAdapter(
+class SearchResultsAdapter(
     private val searchResultClickListener: SearchResultClickListener? = null
-) : ListAdapter<SearchResultModel, ExploreSearchResultViewHolder>(diffCallback) {
+) : ListAdapter<SearchResultModel, SearchResultViewHolder>(diffCallback) {
 
     private val listenersDelegate = ListenersDelegate()
 
@@ -34,12 +34,12 @@ class ExploreSearchResultsAdapter(
         fun onSearchResultClick(itemView: View, item: SearchResultModel)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExploreSearchResultViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
         val binding = ItemSearchResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ExploreSearchResultViewHolder(binding, listenersDelegate)
+        return SearchResultViewHolder(binding, listenersDelegate)
     }
 
-    override fun onBindViewHolder(holder: ExploreSearchResultViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
         holder.bindTo(getItem(position))
     }
 

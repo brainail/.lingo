@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.domain.usecase
+@file:JvmName("RecyclerViewUtils")
+@file:Suppress("NOTHING_TO_INLINE")
 
-import org.brainail.everboxing.lingo.domain.executor.AppExecutors
-import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
-import javax.inject.Inject
+package org.brainail.everboxing.lingo.util.extensions
 
-class FindSearchResultsUseCase @Inject constructor(
-    appExecutors: AppExecutors,
-    private val searchResultRepository: SearchResultRepository
-) : BaseFindSearchResultsUseCase(appExecutors) {
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
-    override fun getSearchResults(query: String) = searchResultRepository.getSearchResults(query)
+inline fun RecyclerView.scrollToTop() {
+    (layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(0, 0)
 }

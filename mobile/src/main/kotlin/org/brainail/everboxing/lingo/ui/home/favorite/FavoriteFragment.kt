@@ -16,27 +16,16 @@
 
 package org.brainail.everboxing.lingo.ui.home.favorite
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import kotlinx.android.synthetic.main.fragment_favorite.*
 import org.brainail.everboxing.lingo.R
-import org.brainail.everboxing.lingo.ui.base.BaseViewModel
-import org.brainail.everboxing.lingo.ui.base.ViewModelAwareFragment
-import org.brainail.everboxing.lingo.util.extensions.inflate
+import org.brainail.everboxing.lingo.ui.home.search.results.SearchResultsFragment
+import org.brainail.everboxing.lingo.util.extensions.getViewModel
 
-class FavoriteFragment :
-    ViewModelAwareFragment() {
-
-    override fun createPrimaryViewModels(): Array<BaseViewModel>? {
-        return null
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return container?.inflate(R.layout.fragment_favorite)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
+class FavoriteFragment : SearchResultsFragment() {
+    override fun obtainScreenViewModel() = getViewModel<FavoriteFragmentViewModel>(viewModelFactory)
+    override fun screenLayoutId() = R.layout.fragment_favorite
+    override fun recyclerView(): RecyclerView = searchResultsRecyclerView
+    override fun refreshView(): SwipeRefreshLayout = swipeRefreshView
 }

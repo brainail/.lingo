@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 /**
  * [klazz] Shared class
  *
- * [key] Extra key in order make a difference
+ * [key] Extra key in order to make a difference
  *
  * The purposes of this annotation is to give some extra information about
  * a possible shared class between [android.app.Activity] and [androidx.fragment.app.Fragment]

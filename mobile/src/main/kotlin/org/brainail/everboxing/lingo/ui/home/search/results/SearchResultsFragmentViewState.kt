@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.ui.home.explore
+package org.brainail.everboxing.lingo.ui.home.search.results
 
 import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.model.SearchResultModel
 import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
 
-data class ExploreFragmentViewState(
+data class SearchResultsFragmentViewState(
     val isLoadingSearchResults: Boolean = false,
     val displayedSearchResults: List<SearchResultModel> = emptyList()
 ) {
 
     companion object {
         val INITIAL by lazyFast {
-            ExploreFragmentViewState(isLoadingSearchResults = false)
+            SearchResultsFragmentViewState(isLoadingSearchResults = false)
         }
     }
 
-    object SearchResultsStartedLoading : PartialViewStateChange<ExploreFragmentViewState> {
-        override fun applyTo(viewState: ExploreFragmentViewState): ExploreFragmentViewState {
+    object SearchResultsStartedLoading : PartialViewStateChange<SearchResultsFragmentViewState> {
+        override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
             return viewState.copy(isLoadingSearchResults = true)
         }
     }
 
     class SearchResultsPrepared(private val searchResults: List<SearchResultModel>) :
-        PartialViewStateChange<ExploreFragmentViewState> {
-        override fun applyTo(viewState: ExploreFragmentViewState): ExploreFragmentViewState {
+        PartialViewStateChange<SearchResultsFragmentViewState> {
+        override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
             return viewState.copy(
                 isLoadingSearchResults = false,
                 displayedSearchResults = searchResults
@@ -48,16 +48,16 @@ data class ExploreFragmentViewState(
     }
 
     class ForgetSearchResult(private val item: SearchResultModel) :
-        PartialViewStateChange<ExploreFragmentViewState> {
-        override fun applyTo(viewState: ExploreFragmentViewState): ExploreFragmentViewState {
+        PartialViewStateChange<SearchResultsFragmentViewState> {
+        override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
             val newResults = viewState.displayedSearchResults.filter { it.id != item.id }
             return viewState.copy(displayedSearchResults = newResults)
         }
     }
 
     class FavoriteSearchResult(private val item: SearchResultModel) :
-        PartialViewStateChange<ExploreFragmentViewState> {
-        override fun applyTo(viewState: ExploreFragmentViewState): ExploreFragmentViewState {
+        PartialViewStateChange<SearchResultsFragmentViewState> {
+        override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
             val newResults = viewState.displayedSearchResults.map {
                 if (it.id != item.id) it else it.copy(favorite = !it.favorite)
             }

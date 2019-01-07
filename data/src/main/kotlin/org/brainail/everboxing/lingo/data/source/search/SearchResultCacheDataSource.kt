@@ -35,12 +35,32 @@ class SearchResultCacheDataSource @Inject constructor(
         return searchResultCache.getSearchResults(query, limit)
     }
 
+    override fun getFavoriteSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultCache.getFavoriteSearchResults(query, limit)
+    }
+
+    override fun getHistorySearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultCache.getHistorySearchResults(query, limit)
+    }
+
     override fun getDistinctByWordSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
         return searchResultCache.getDistinctByWordSearchResults(query, limit)
     }
 
-    override fun favoriteSearchResult(id: Int): Completable {
-        return searchResultCache.favoriteSearchResult(id)
+    override fun getDistinctByWordFavoriteSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultCache.getDistinctByWordFavoriteSearchResults(query, limit)
+    }
+
+    override fun getDistinctByWordHistorySearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultCache.getDistinctByWordHistorySearchResults(query, limit)
+    }
+
+    override fun toggleSearchResultInFavorites(id: Int): Completable {
+        return searchResultCache.toggleSearchResultInFavorites(id)
+    }
+
+    override fun saveSearchResultInHistory(id: Int): Completable {
+        return searchResultCache.saveSearchResultInHistory(id)
     }
 
     override fun forgetSearchResult(id: Int): Completable {

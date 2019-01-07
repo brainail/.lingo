@@ -115,9 +115,9 @@ complexity:
     active: true
     thresholdInFiles: 21
     thresholdInClasses: 21
-    thresholdInInterfaces: 11
+    thresholdInInterfaces: 21
     thresholdInObjects: 21
-    thresholdInEnums: 11
+    thresholdInEnums: 21
     ignoreDeprecated: false
     ignorePrivate: false
 

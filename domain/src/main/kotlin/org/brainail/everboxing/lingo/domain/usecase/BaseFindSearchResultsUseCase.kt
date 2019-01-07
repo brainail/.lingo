@@ -16,14 +16,17 @@
 
 package org.brainail.everboxing.lingo.domain.usecase
 
+import io.reactivex.Flowable
 import org.brainail.everboxing.lingo.domain.executor.AppExecutors
-import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
-import javax.inject.Inject
+import org.brainail.everboxing.lingo.domain.model.SearchResult
 
-class FindSearchResultsUseCase @Inject constructor(
-    appExecutors: AppExecutors,
-    private val searchResultRepository: SearchResultRepository
-) : BaseFindSearchResultsUseCase(appExecutors) {
+abstract class BaseFindSearchResultsUseCase(private val appExecutors: AppExecutors) {
 
-    override fun getSearchResults(query: String) = searchResultRepository.getSearchResults(query)
+    abstract fun getSearchResults(query: String): Flowable<List<SearchResult>>
+
+    fun execute(query: String): Flowable<List<SearchResult>> {
+        return getSearchResults(query)
+            .map { it.filter { searchResult -> searchResult.word.isNotBlank() } }
+            .compose(appExecutors.applyFlowableBackgroundSchedulers())
+    }
 }

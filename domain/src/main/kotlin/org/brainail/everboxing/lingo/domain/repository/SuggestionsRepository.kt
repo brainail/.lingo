@@ -27,5 +27,17 @@ interface SuggestionsRepository {
         limitOfOthers: Int = Int.MAX_VALUE
     ): Flowable<List<Suggestion>>
 
+    fun getFavoriteSuggestions(
+        query: String,
+        limitOfRecent: Int = Int.MAX_VALUE,
+        limitOfOthers: Int = Int.MAX_VALUE
+    ): Flowable<List<Suggestion>>
+
+    fun getHistorySuggestions(
+        query: String,
+        limitOfRecent: Int = Int.MAX_VALUE,
+        limitOfOthers: Int = Int.MAX_VALUE
+    ): Flowable<List<Suggestion>>
+
     fun saveSuggestion(suggestion: Suggestion): Completable
 }

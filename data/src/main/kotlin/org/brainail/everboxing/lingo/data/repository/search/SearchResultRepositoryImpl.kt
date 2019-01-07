@@ -49,8 +49,26 @@ class SearchResultRepositoryImpl @Inject constructor(
             .map { it.map { result -> searchResultMapper.mapF(result) } }
     }
 
-    override fun favoriteSearchResult(id: Int): Completable {
-        return searchResultsDataSourceFactory.obtainCacheDataSource().favoriteSearchResult(id)
+    @SuppressLint("CheckResult")
+    override fun getFavoriteSearchResults(query: String): Flowable<List<SearchResult>> {
+        return searchResultsDataSourceFactory.obtainCacheDataSource()
+            .getFavoriteSearchResults(query)
+            .map { it.map { result -> searchResultMapper.mapF(result) } }
+    }
+
+    @SuppressLint("CheckResult")
+    override fun getHistorySearchResults(query: String): Flowable<List<SearchResult>> {
+        return searchResultsDataSourceFactory.obtainCacheDataSource()
+            .getHistorySearchResults(query)
+            .map { it.map { result -> searchResultMapper.mapF(result) } }
+    }
+
+    override fun toggleSearchResultInFavorites(id: Int): Completable {
+        return searchResultsDataSourceFactory.obtainCacheDataSource().toggleSearchResultInFavorites(id)
+    }
+
+    override fun saveSearchResultInHistory(id: Int): Completable {
+        return searchResultsDataSourceFactory.obtainCacheDataSource().saveSearchResultInHistory(id)
     }
 
     override fun forgetSearchResult(id: Int): Completable {

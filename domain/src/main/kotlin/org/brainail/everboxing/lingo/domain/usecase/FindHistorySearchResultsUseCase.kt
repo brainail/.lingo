@@ -20,10 +20,10 @@ import org.brainail.everboxing.lingo.domain.executor.AppExecutors
 import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
 import javax.inject.Inject
 
-class FindSearchResultsUseCase @Inject constructor(
+class FindHistorySearchResultsUseCase @Inject constructor(
     appExecutors: AppExecutors,
     private val searchResultRepository: SearchResultRepository
 ) : BaseFindSearchResultsUseCase(appExecutors) {
 
-    override fun getSearchResults(query: String) = searchResultRepository.getSearchResults(query)
+    override fun getSearchResults(query: String) = searchResultRepository.getHistorySearchResults(query)
 }

@@ -27,7 +27,9 @@ import org.brainail.everboxing.lingo.ui.home.details.WordDetailsFragment
 import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragment
 import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentViewModel
 import org.brainail.everboxing.lingo.ui.home.favorite.FavoriteFragment
+import org.brainail.everboxing.lingo.ui.home.favorite.FavoriteFragmentViewModel
 import org.brainail.everboxing.lingo.ui.home.history.HistoryFragment
+import org.brainail.everboxing.lingo.ui.home.history.HistoryFragmentViewModel
 
 @Module
 abstract class LingoHomeActivitySubcomponentsModule {
@@ -36,11 +38,11 @@ abstract class LingoHomeActivitySubcomponentsModule {
     abstract fun contributeLingoExploreFragmentInjector(): ExploreFragment
 
     @FragmentScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [LingoFavoriteFragmentModule::class])
     abstract fun contributeLingoFavoriteFragmentInjector(): FavoriteFragment
 
     @FragmentScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [LingoHistoryFragmentModule::class])
     abstract fun contributeLingoHistoryFragmentInjector(): HistoryFragment
 
     @FragmentScope
@@ -50,5 +52,15 @@ abstract class LingoHomeActivitySubcomponentsModule {
     @Binds
     @IntoMap
     @ViewModelKey(ExploreFragmentViewModel::class)
-    abstract fun bindLingoSearchFragmentViewModel(viewModel: ExploreFragmentViewModel): ViewModel
+    abstract fun bindLingoExploreFragmentViewModel(viewModel: ExploreFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FavoriteFragmentViewModel::class)
+    abstract fun bindLingoFavoriteFragmentViewModel(viewModel: FavoriteFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HistoryFragmentViewModel::class)
+    abstract fun bindLingoHistoryFragmentViewModel(viewModel: HistoryFragmentViewModel): ViewModel
 }

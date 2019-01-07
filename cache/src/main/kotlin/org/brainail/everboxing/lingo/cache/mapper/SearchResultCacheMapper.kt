@@ -26,14 +26,16 @@ class SearchResultCacheMapper @Inject constructor() : Mapper<SearchResultCacheEn
     override fun mapF(input: SearchResultCacheEntity): SearchResultEntity {
         return SearchResultEntity(
             input.definitionId, input.word, input.definition,
-            input.example, input.link, input.id, input.favorite
+            input.example, input.link, input.id,
+            input.favorite, input.history
         )
     }
 
     override fun mapT(input: SearchResultEntity): SearchResultCacheEntity {
         return SearchResultCacheEntity(
             input.id, input.definitionId, input.word,
-            input.definition, input.example, input.link, input.favorite
+            input.definition, input.example, input.link,
+            input.favorite, input.history
         )
     }
 }

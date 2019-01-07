@@ -25,7 +25,8 @@ data class SearchResultEntity(
     val example: String = "",
     val link: String = "",
     val id: Int = 0,
-    val favorite: Boolean = false
+    val favorite: Boolean = false,
+    val history: Boolean = false
 )
 
 internal inline fun SearchResultEntity.toSuggestion() = SuggestionEntity(word, definition)

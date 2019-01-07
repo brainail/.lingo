@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.ui.home.explore
+package org.brainail.everboxing.lingo.ui.home.favorite
 
 import org.brainail.everboxing.lingo.domain.executor.AppExecutors
-import org.brainail.everboxing.lingo.domain.usecase.FindSearchResultsUseCase
-import org.brainail.everboxing.lingo.domain.usecase.FindSuggestionsUseCase
+import org.brainail.everboxing.lingo.domain.usecase.FindFavoriteSearchResultsUseCase
+import org.brainail.everboxing.lingo.domain.usecase.FindFavoriteSuggestionsUseCase
 import org.brainail.everboxing.lingo.domain.usecase.ForgetSearchResultUseCase
 import org.brainail.everboxing.lingo.domain.usecase.SaveSearchResultInHistoryUseCase
 import org.brainail.everboxing.lingo.domain.usecase.SaveSuggestionUseCase
@@ -28,9 +28,9 @@ import org.brainail.everboxing.lingo.mapper.SuggestionModelMapper
 import org.brainail.everboxing.lingo.ui.home.search.results.SearchResultsFragmentViewModel
 import javax.inject.Inject
 
-class ExploreFragmentViewModel @Inject constructor(
-    private val findSuggestionsUseCase: FindSuggestionsUseCase,
-    private val findSearchResultsUseCase: FindSearchResultsUseCase,
+class FavoriteFragmentViewModel @Inject constructor(
+    private val findSuggestionsUseCase: FindFavoriteSuggestionsUseCase,
+    private val findSearchResultsUseCase: FindFavoriteSearchResultsUseCase,
     saveRecentSuggestionUseCase: SaveSuggestionUseCase,
     toggleSearchResultUseInFavoritesCase: ToggleSearchResultUseInFavoritesCase,
     saveSearchResultInHistoryUseCase: SaveSearchResultInHistoryUseCase,

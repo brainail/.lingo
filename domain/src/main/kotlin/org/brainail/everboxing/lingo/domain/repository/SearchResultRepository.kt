@@ -23,7 +23,10 @@ import org.brainail.everboxing.lingo.domain.model.SearchResult
 interface SearchResultRepository {
     fun saveSearchResults(searchResults: List<SearchResult>): Completable
     fun getSearchResults(query: String): Flowable<List<SearchResult>>
-    fun favoriteSearchResult(id: Int): Completable
+    fun getFavoriteSearchResults(query: String): Flowable<List<SearchResult>>
+    fun getHistorySearchResults(query: String): Flowable<List<SearchResult>>
+    fun toggleSearchResultInFavorites(id: Int): Completable
+    fun saveSearchResultInHistory(id: Int): Completable
     fun forgetSearchResult(id: Int): Completable
     fun installUrbanSearchResult(pathToData: String): Completable
 }

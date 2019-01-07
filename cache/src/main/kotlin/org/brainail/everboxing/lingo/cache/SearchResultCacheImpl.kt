@@ -50,15 +50,46 @@ class SearchResultCacheImpl @Inject constructor(
             .map { it.map { searchResult -> searchResultCacheMapper.mapF(searchResult) } }
     }
 
+    override fun getFavoriteSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultDao
+            .getFavoriteSearchResults(query, limit)
+            .map { it.map { searchResult -> searchResultCacheMapper.mapF(searchResult) } }
+    }
+
+    override fun getHistorySearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultDao
+            .getHistorySearchResults(query, limit)
+            .map { it.map { searchResult -> searchResultCacheMapper.mapF(searchResult) } }
+    }
+
     override fun getDistinctByWordSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
         return searchResultDao
             .getDistinctByWordSearchResults(query, limit)
             .map { it.map { searchResult -> searchResultCacheMapper.mapF(searchResult) } }
     }
 
-    override fun favoriteSearchResult(id: Int): Completable {
+    override fun getDistinctByWordFavoriteSearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultDao
+            .getDistinctByWordFavoriteSearchResults(query, limit)
+            .map { it.map { searchResult -> searchResultCacheMapper.mapF(searchResult) } }
+    }
+
+    override fun getDistinctByWordHistorySearchResults(query: String, limit: Int): Flowable<List<SearchResultEntity>> {
+        return searchResultDao
+            .getDistinctByWordHistorySearchResults(query, limit)
+            .map { it.map { searchResult -> searchResultCacheMapper.mapF(searchResult) } }
+    }
+
+    override fun toggleSearchResultInFavorites(id: Int): Completable {
         return Completable.defer {
-            searchResultDao.favoriteSearchResult(id)
+            searchResultDao.toggleSearchResultInFavorites(id)
+            Completable.complete()
+        }
+    }
+
+    override fun saveSearchResultInHistory(id: Int): Completable {
+        return Completable.defer {
+            searchResultDao.saveSearchResultInHistory(id)
             Completable.complete()
         }
     }

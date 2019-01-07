@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.domain.usecase
+package org.brainail.everboxing.lingo.ui.home.favorite
 
-import org.brainail.everboxing.lingo.domain.executor.AppExecutors
-import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
-import javax.inject.Inject
+import androidx.appcompat.app.AppCompatActivity
+import org.brainail.everboxing.lingo.model.SearchResultModel
+import org.brainail.everboxing.lingo.ui.home.search.results.SearchResultsFragmentNavigator
 
-class FindSearchResultsUseCase @Inject constructor(
-    appExecutors: AppExecutors,
-    private val searchResultRepository: SearchResultRepository
-) : BaseFindSearchResultsUseCase(appExecutors) {
-
-    override fun getSearchResults(query: String) = searchResultRepository.getSearchResults(query)
+class FavoriteFragmentNavigator(activity: AppCompatActivity) : SearchResultsFragmentNavigator(activity) {
+    override fun getOpenWordDetailsAction(item: SearchResultModel) =
+        FavoriteFragmentDirections.OpenWordDetailsAction(item)
 }

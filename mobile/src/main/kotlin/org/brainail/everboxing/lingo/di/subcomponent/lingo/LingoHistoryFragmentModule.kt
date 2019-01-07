@@ -20,13 +20,13 @@ import dagger.Module
 import dagger.Provides
 import org.brainail.everboxing.lingo.di.scope.FragmentScope
 import org.brainail.everboxing.lingo.ui.home.LingoHomeActivity
-import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentNavigator
+import org.brainail.everboxing.lingo.ui.home.history.HistoryFragmentNavigator
 import org.brainail.everboxing.lingo.ui.home.search.results.SearchResultsFragmentNavigator
 
 @Module
-class LingoExploreFragmentModule {
+class LingoHistoryFragmentModule {
     @Provides
     @FragmentScope
-    fun provideLingoExploreFragmentNavigator(activity: LingoHomeActivity): SearchResultsFragmentNavigator =
-        ExploreFragmentNavigator(activity)
+    fun provideLingoHistoryFragmentNavigator(activity: LingoHomeActivity): SearchResultsFragmentNavigator =
+        HistoryFragmentNavigator(activity)
 }

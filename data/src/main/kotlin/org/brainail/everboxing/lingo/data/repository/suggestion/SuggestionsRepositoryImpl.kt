@@ -58,6 +58,50 @@ class SuggestionsRepositoryImpl @Inject constructor(
         )
     }
 
+    override fun getFavoriteSuggestions(
+        query: String,
+        limitOfRecent: Int,
+        limitOfOthers: Int
+    ): Flowable<List<Suggestion>> {
+        val recentSuggestions = suggestionsDataSourceFactory.obtainCacheDataSource()
+            .getRecentSuggestions(query, limitOfRecent)
+            .map { it.map { suggestion -> suggestionMapper.mapF(suggestion) } }
+        val cachedFavoriteSearchResultsSuggestions = when (query.isBlank()) {
+            true -> Flowable.just(emptyList())
+            else -> getFavoriteCachedSearchResultsSuggestions(query, limitOfOthers)
+                .compose(appExecutors.applyFlowableBackgroundSchedulers()) // be sure to run in parallel
+        }
+        return Flowable.combineLatest(
+            recentSuggestions,
+            cachedFavoriteSearchResultsSuggestions,
+            BiFunction { recent, cachedFavoriteSearchResults ->
+                recent + cachedFavoriteSearchResults
+            }
+        )
+    }
+
+    override fun getHistorySuggestions(
+        query: String,
+        limitOfRecent: Int,
+        limitOfOthers: Int
+    ): Flowable<List<Suggestion>> {
+        val recentSuggestions = suggestionsDataSourceFactory.obtainCacheDataSource()
+            .getRecentSuggestions(query, limitOfRecent)
+            .map { it.map { suggestion -> suggestionMapper.mapF(suggestion) } }
+        val cachedHistorySearchResultsSuggestions = when (query.isBlank()) {
+            true -> Flowable.just(emptyList())
+            else -> getHistoryCachedSearchResultsSuggestions(query, limitOfOthers)
+                .compose(appExecutors.applyFlowableBackgroundSchedulers()) // be sure to run in parallel
+        }
+        return Flowable.combineLatest(
+            recentSuggestions,
+            cachedHistorySearchResultsSuggestions,
+            BiFunction { recent, cachedHistorySearchResults ->
+                recent + cachedHistorySearchResults
+            }
+        )
+    }
+
     override fun saveSuggestion(suggestion: Suggestion): Completable {
         return saveSuggestionEntities(listOf(suggestionMapper.mapT(suggestion)))
     }
@@ -72,7 +116,8 @@ class SuggestionsRepositoryImpl @Inject constructor(
             cachedSource.getRecentSuggestions(query, limitOfRecent),
             cachedSource.getNonRecentSuggestions(query, limitOfOthers),
             BiFunction { recent, others ->
-                (recent + others).map { suggestion -> suggestionMapper.mapF(suggestion) } }
+                (recent + others).map { suggestion -> suggestionMapper.mapF(suggestion) }
+            }
         )
     }
 
@@ -86,6 +131,24 @@ class SuggestionsRepositoryImpl @Inject constructor(
     private fun getCachedSearchResultsSuggestions(query: String, limitOfOthers: Int): Flowable<List<Suggestion>> {
         return searchResultsDataSourceFactory.obtainCacheDataSource()
             .getDistinctByWordSearchResults(query, limitOfOthers)
+            .map { it.map { searchResult -> suggestionMapper.mapF(searchResult.toSuggestion()) } }
+    }
+
+    private fun getFavoriteCachedSearchResultsSuggestions(
+        query: String,
+        limitOfOthers: Int
+    ): Flowable<List<Suggestion>> {
+        return searchResultsDataSourceFactory.obtainCacheDataSource()
+            .getDistinctByWordFavoriteSearchResults(query, limitOfOthers)
+            .map { it.map { searchResult -> suggestionMapper.mapF(searchResult.toSuggestion()) } }
+    }
+
+    private fun getHistoryCachedSearchResultsSuggestions(
+        query: String,
+        limitOfOthers: Int
+    ): Flowable<List<Suggestion>> {
+        return searchResultsDataSourceFactory.obtainCacheDataSource()
+            .getDistinctByWordHistorySearchResults(query, limitOfOthers)
             .map { it.map { searchResult -> suggestionMapper.mapF(searchResult.toSuggestion()) } }
     }
 

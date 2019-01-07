@@ -16,14 +16,18 @@
 
 package org.brainail.everboxing.lingo.domain.usecase
 
+import io.reactivex.Completable
 import org.brainail.everboxing.lingo.domain.executor.AppExecutors
 import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
 import javax.inject.Inject
 
-class FindSearchResultsUseCase @Inject constructor(
-    appExecutors: AppExecutors,
+class ToggleSearchResultUseInFavoritesCase @Inject constructor(
+    private val appExecutors: AppExecutors,
     private val searchResultRepository: SearchResultRepository
-) : BaseFindSearchResultsUseCase(appExecutors) {
+) {
 
-    override fun getSearchResults(query: String) = searchResultRepository.getSearchResults(query)
+    fun execute(id: Int): Completable {
+        return searchResultRepository.toggleSearchResultInFavorites(id)
+            .compose(appExecutors.applyCompletableSchedulers())
+    }
 }
