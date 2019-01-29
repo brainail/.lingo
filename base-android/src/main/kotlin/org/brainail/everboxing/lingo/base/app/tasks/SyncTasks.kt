@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.base.tasks
+package org.brainail.everboxing.lingo.base.app.tasks
 
 interface SyncTasks {
     fun installUrbanServiceData(pathToData: String)

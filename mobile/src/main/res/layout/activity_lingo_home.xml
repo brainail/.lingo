@@ -36,7 +36,7 @@
         android:id="@+id/floatingSearchView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="@string/menu_search"
+        android:hint="@string/textHintSearch"
         android:paddingLeft="6dp"
         android:paddingRight="6dp"
         android:paddingTop="4dp"

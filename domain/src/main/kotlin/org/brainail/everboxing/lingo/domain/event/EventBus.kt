@@ -31,12 +31,12 @@ class EventBus<T : Any>(val name: String) {
     }
 
     fun postSticky(event: T) {
-        stickyEvents.put(event.javaClass, event)
+        stickyEvents[event.javaClass] = event
         subject.onNext(event)
     }
 
-    fun removeSticky(klass: KClass<out T>) {
-        stickyEvents.remove(klass.java)
+    fun removeSticky(clazz: KClass<out T>) {
+        stickyEvents.remove(clazz.java)
     }
 
     fun observe(): Observable<T> = subject.mergeWith(Observable.fromIterable(stickyEvents.values))

@@ -41,6 +41,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
     override fun initState(viewModelSavedState: ViewModelSavedState?) {
         super.initState(viewModelSavedState)
         initDisplayedTextState(viewModelSavedState)
+        initNavigationState(viewModelSavedState)
     }
 
     override fun saveState(): ViewModelSavedState {
@@ -63,11 +64,9 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
     }
 
     fun navigateTo(navigationItem: NavigationItem) {
-        if (searchViewState.value!!.isInFocus) {
-            if (NavigationItem.BACKWARD == navigationItem) {
-                requestFocusGain(false)
-                return
-            }
+        if (searchViewState.value!!.isInFocus && NavigationItem.BACKWARD == navigationItem) {
+            requestFocusGain(false)
+            return
         }
 
         navigation.value = navigationItem

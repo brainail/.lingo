@@ -18,7 +18,7 @@ package org.brainail.everboxing.lingo.tasks
 
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import org.brainail.everboxing.lingo.base.tasks.SyncTasks
+import org.brainail.everboxing.lingo.base.app.tasks.SyncTasks
 import javax.inject.Inject
 
 class SyncTasksImpl @Inject constructor(private val workManager: WorkManager) : SyncTasks {

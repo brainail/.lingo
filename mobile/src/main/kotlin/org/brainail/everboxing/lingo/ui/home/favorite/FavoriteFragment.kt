@@ -25,7 +25,7 @@ import org.brainail.everboxing.lingo.util.extensions.getViewModel
 
 class FavoriteFragment : SearchResultsFragment() {
     override fun obtainScreenViewModel() = getViewModel<FavoriteFragmentViewModel>(viewModelFactory)
-    override fun screenLayoutId() = R.layout.fragment_favorite
+    override fun pageLayoutId() = R.layout.fragment_favorite
     override fun recyclerView(): RecyclerView = searchResultsRecyclerView
     override fun refreshView(): SwipeRefreshLayout = swipeRefreshView
 }

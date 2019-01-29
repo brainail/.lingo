@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.domain.usecase.InstallUrbanServiceDataUseCase
 import org.brainail.everboxing.lingo.tasks.di.AndroidWorkerInjector
 import org.brainail.logger.L
@@ -45,7 +44,7 @@ class InstallUrbanServiceDataTask(context: Context, workerParams: WorkerParamete
         private const val PARAM_PATH_TO_DATA = "path-to-data"
 
         @JvmStatic
-        val workerTag: String by lazyFast { "${InstallUrbanServiceDataTask::class.java.simpleName}.WorkerTag" }
+        val workerTag = "${InstallUrbanServiceDataTask::class.java.simpleName}.WorkerTag"
 
         @JvmStatic
         fun makeInputData(pathToData: String) = Data.Builder()

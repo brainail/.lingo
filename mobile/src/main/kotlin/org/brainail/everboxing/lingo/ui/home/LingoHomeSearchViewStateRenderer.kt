@@ -23,6 +23,7 @@ import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.ui.home.search.SearchSuggestionsAdapter
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState
 import org.brainail.everboxing.lingo.util.extensions.lockInAppBar
+import org.brainail.everboxing.lingo.util.extensions.scrollToTopOnSubmitList
 import org.brainail.everboxing.lingo.widget.AppCompatBottomAppBar
 import org.brainail.flysearch.FloatingSearchView
 import org.brainail.logger.L
@@ -38,8 +39,8 @@ class LingoHomeSearchViewStateRenderer(
     private val bottomAppBarView: AppCompatBottomAppBar
 ) {
 
-    fun renderSearchViewState(viewState: SearchViewState) {
-        L.i("renderSearchViewState: viewState = $viewState")
+    fun render(viewState: SearchViewState) {
+        L.i("render()")
 
         // update text
         when (viewState.displayedText.isEmpty()) {
@@ -66,6 +67,9 @@ class LingoHomeSearchViewStateRenderer(
 
         // items
         (floatingSearchView.adapter as SearchSuggestionsAdapter).submitList(viewState.displayedSuggestions)
+        if (SearchViewState.ScrollPosition.TOP == viewState.suggestionsScrollPosition) {
+            floatingSearchView.recyclerView.scrollToTopOnSubmitList()
+        }
 
         // render visual appearance of other items only if we allow it,
         // in such a way we won't affect widgets which should be only affected for our home page

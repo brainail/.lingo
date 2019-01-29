@@ -7,19 +7,19 @@
     <item
         android:id="@+id/menu_home_explore"
         android:icon="@drawable/ic_twotone_view_agenda_24dp"
-        android:title="@string/tab_explore"
+        android:title="@string/textTabExplore"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_home_history"
         android:icon="@drawable/ic_twotone_watch_later_24dp"
-        android:title="@string/tab_history"
+        android:title="@string/textTabHistory"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_home_favorite"
         android:icon="@drawable/ic_twotone_favorite_24dp"
-        android:title="@string/tab_favourite"
+        android:title="@string/textTabFavourite"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
 </menu>

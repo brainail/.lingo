@@ -18,12 +18,12 @@ package org.brainail.everboxing.lingo.di
 
 import dagger.Binds
 import dagger.Module
-import org.brainail.everboxing.lingo.data.repository.file.FileStore
+import org.brainail.everboxing.lingo.base.file.FileStore
 import org.brainail.everboxing.lingo.data.repository.search.SearchResultRepositoryImpl
 import org.brainail.everboxing.lingo.data.repository.suggestion.SuggestionsRepositoryImpl
 import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
 import org.brainail.everboxing.lingo.domain.repository.SuggestionsRepository
-import org.brainail.everboxing.lingo.util.AndroidFileStore
+import org.brainail.everboxing.lingo.base.app.file.AndroidFileStore
 
 @Module
 abstract class DataModule {

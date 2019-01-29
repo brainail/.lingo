@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Malyshev Yegor
+ * Copyright 2019 Malyshev Yegor
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,11 @@
 
 package org.brainail.everboxing.lingo.util
 
-import android.content.Context
-import org.brainail.everboxing.lingo.data.repository.file.FileStore
-import java.io.InputStream
-import javax.inject.Inject
-import javax.inject.Singleton
+import androidx.recyclerview.widget.RecyclerView
 
-@Singleton
-class AndroidFileStore @Inject constructor(private val context: Context) : FileStore {
-    override fun openAsset(path: String): InputStream {
-        return context.assets.open(path)
-    }
+open class SimpleAdapterDataObserver : RecyclerView.AdapterDataObserver() {
+    override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = onChanged()
+    override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) = onChanged()
+    override fun onItemRangeChanged(positionStart: Int, itemCount: Int) = onChanged()
+    override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) = onChanged()
 }

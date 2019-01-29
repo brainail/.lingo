@@ -35,9 +35,10 @@ import org.brainail.everboxing.lingo.ui.home.search.SearchSuggestionsAdapter
 import org.brainail.everboxing.lingo.ui.home.search.SearchSuggestionsAdapter.SuggestionClickListener
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel.SearchNavigationItem
+import org.brainail.everboxing.lingo.util.extensions.addAfterTextChangedListener
 import org.brainail.everboxing.lingo.util.extensions.getViewModel
+import org.brainail.everboxing.lingo.util.extensions.lifecycleAwareLazyFast
 import org.brainail.everboxing.lingo.util.extensions.observeNonNull
-import org.brainail.everboxing.lingo.util.extensions.setAfterTextChangedListener
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
 import javax.inject.Inject
@@ -54,14 +55,14 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         getViewModel<LingoHomeActivityViewModel>(viewModelFactory)
     }
 
-    private val screenRenderer by lazyFast {
+    private val screenRenderer by lifecycleAwareLazyFast(this) {
         LingoHomeActivityViewRenderer(
             this, appBarView, bottomAppBarView,
             homeActionButtonView, toolbarUnderlay, floatingSearchView
         )
     }
 
-    private val searchViewStateRenderer by lazyFast {
+    private val searchViewStateRenderer by lifecycleAwareLazyFast(this) {
         LingoHomeSearchViewStateRenderer(
             this, floatingSearchView, appBarView,
             toolbarUnderlay, bottomAppBarView
@@ -85,7 +86,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
 
     private fun initSearchViewState() {
         screenViewModel.searchViewState().observeNonNull(this) {
-            searchViewStateRenderer.renderSearchViewState(it)
+            searchViewStateRenderer.render(it)
         }
     }
 
@@ -126,7 +127,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
                     else -> false
                 }
             }
-            setAfterTextChangedListener { screenViewModel.updateQuery(it.toString()) }
+            addAfterTextChangedListener { screenViewModel.updateQuery(it.toString()) }
             adapter = SearchSuggestionsAdapter(this@LingoHomeActivity)
         }
     }
@@ -148,7 +149,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         L.v("navigateTo: navigationItem = $navigationItem")
         when (navigationItem) {
             SearchNavigationItem.DRAWER -> toast("open Drawer please")
-            SearchNavigationItem.TEXT_TO_SPEECH -> navigator.showTextToSpeech(R.string.home_text_to_speech_prompt)
+            SearchNavigationItem.TEXT_TO_SPEECH -> navigator.showTextToSpeech(R.string.textHomeSpeechPrompt)
         }.checkAllMatched
     }
 

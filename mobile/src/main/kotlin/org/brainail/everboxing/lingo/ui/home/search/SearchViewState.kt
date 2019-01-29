@@ -29,7 +29,8 @@ data class SearchViewState(
     val isTextToSpeechAvailable: Boolean = false,
     val isLogoDisplayed: Boolean = false,
     private val isLoadingSuggestions: Boolean = false,
-    val displayedSuggestions: List<SuggestionModel> = emptyList()
+    val displayedSuggestions: List<SuggestionModel> = emptyList(),
+    val suggestionsScrollPosition: ScrollPosition = ScrollPosition.KEEP
 ) {
 
     val displayLoading = isInFocus && isLoadingSuggestions
@@ -43,33 +44,46 @@ data class SearchViewState(
                 isClearAvailable = false,
                 isTextToSpeechAvailable = true,
                 cursorPosition = CursorPosition.KEEP,
-                isLoadingSuggestions = false
+                isLoadingSuggestions = false,
+                suggestionsScrollPosition = ScrollPosition.KEEP
             )
         }
     }
 
-    enum class CursorPosition {
-        /** Move to the end */
-        END,
-        /** Keep it as it is */
-        KEEP
-    }
+    /**
+     * [CursorPosition.END] - move to the end
+     * [CursorPosition.KEEP] - keep it as it is
+     */
+    enum class CursorPosition { END, KEEP }
+
+    /**
+     * [ScrollPosition.TOP] - scroll to the top
+     * [ScrollPosition.KEEP] - keep it as it is
+     */
+    enum class ScrollPosition { TOP, KEEP }
 
     object SuggestionsStartedLoading : PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
-                // only indicate progress if we are currently in focus
-                isLoadingSuggestions = viewState.isInFocus
+                isLoadingSuggestions = viewState.isInFocus, // only indicate progress if we are currently in focus
+                cursorPosition = CursorPosition.KEEP,
+                suggestionsScrollPosition = ScrollPosition.KEEP
             )
         }
     }
 
-    class SuggestionsPrepared(private val suggestions: List<SuggestionModel>) :
-        PartialViewStateChange<SearchViewState> {
+    class SuggestionsPrepared(
+        private val suggestions: List<SuggestionModel>
+    ) : PartialViewStateChange<SearchViewState> {
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                 isLoadingSuggestions = false,
-                displayedSuggestions = suggestions
+                displayedSuggestions = suggestions,
+                cursorPosition = CursorPosition.KEEP,
+                suggestionsScrollPosition = when (viewState.isLoadingSuggestions) {
+                    true -> ScrollPosition.TOP
+                    else -> ScrollPosition.KEEP
+                }
             )
         }
     }
@@ -80,7 +94,8 @@ data class SearchViewState(
                 displayedText = query,
                 isClearAvailable = viewState.isInFocus && query.isNotEmpty(),
                 isLogoDisplayed = !viewState.isInFocus && query.isEmpty(),
-                cursorPosition = CursorPosition.KEEP
+                cursorPosition = CursorPosition.KEEP,
+                suggestionsScrollPosition = ScrollPosition.KEEP
             )
         }
     }
@@ -90,7 +105,8 @@ data class SearchViewState(
             return viewState.copy(
                 isInFocus = false,
                 displayedText = query,
-                cursorPosition = CursorPosition.KEEP
+                cursorPosition = CursorPosition.KEEP,
+                suggestionsScrollPosition = ScrollPosition.KEEP
             )
         }
     }
@@ -104,7 +120,8 @@ data class SearchViewState(
                 isInFocus = isInFocus,
                 isClearAvailable = isInFocus && viewState.displayedText.isNotEmpty(),
                 isLogoDisplayed = !isInFocus && viewState.displayedText.isEmpty(),
-                cursorPosition = newCursorPosition
+                cursorPosition = newCursorPosition,
+                suggestionsScrollPosition = if (isInFocus) ScrollPosition.TOP else ScrollPosition.KEEP
             )
         }
     }
@@ -113,7 +130,8 @@ data class SearchViewState(
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                 isInFocus = false,
-                cursorPosition = CursorPosition.KEEP
+                cursorPosition = CursorPosition.KEEP,
+                suggestionsScrollPosition = ScrollPosition.KEEP
             )
         }
     }
@@ -122,7 +140,8 @@ data class SearchViewState(
         override fun applyTo(viewState: SearchViewState): SearchViewState {
             return viewState.copy(
                 displayedText = "",
-                cursorPosition = CursorPosition.KEEP
+                cursorPosition = CursorPosition.KEEP,
+                suggestionsScrollPosition = ScrollPosition.KEEP
             )
         }
     }
@@ -134,7 +153,8 @@ data class SearchViewState(
             return viewState.copy(
                 isInFocus = true,
                 displayedText = result.text,
-                cursorPosition = CursorPosition.END
+                cursorPosition = CursorPosition.END,
+                suggestionsScrollPosition = ScrollPosition.KEEP
             )
         }
     }

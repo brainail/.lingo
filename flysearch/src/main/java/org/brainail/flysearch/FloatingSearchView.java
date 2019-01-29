@@ -66,6 +66,16 @@ public class FloatingSearchView extends ConstraintLayout {
         }
 
         @Override
+        public void onItemRangeChanged(int positionStart, int itemCount) {
+            onChanged();
+        }
+
+        @Override
+        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+            onChanged();
+        }
+
+        @Override
         public void onChanged() {
             updateSuggestionsVisibility();
         }
@@ -410,6 +420,11 @@ public class FloatingSearchView extends ConstraintLayout {
         return mRecyclerView.getAdapter();
     }
 
+    @NonNull
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
+    }
+
     protected LayoutTransition getDefaultLayoutTransition() {
         return new LayoutTransition();
     }
@@ -419,17 +434,8 @@ public class FloatingSearchView extends ConstraintLayout {
         if (null != mCurrentBackgroundAnimator) {
             mCurrentBackgroundAnimator.cancel();
         }
-        if (Build.VERSION.SDK_INT >= 19)
-            mCurrentBackgroundAnimator = ObjectAnimator.ofInt(
-                    mBackgroundDrawable, "alpha", enter ? 255 : 0);
-        else {
-            mCurrentBackgroundAnimator = ValueAnimator.ofInt(enter ? 0 : 255, enter ? 255 : 0);
-            mCurrentBackgroundAnimator.addUpdateListener(animation -> {
-                int value = (Integer) animation.getAnimatedValue();
-                mBackgroundDrawable.setAlpha(value);
-            });
-        }
 
+        mCurrentBackgroundAnimator = ObjectAnimator.ofInt(mBackgroundDrawable, "alpha", enter ? 255 : 0);
         mCurrentBackgroundAnimator.setDuration(enter ? DEFAULT_DURATION_ENTER : DEFAULT_DURATION_EXIT);
         mCurrentBackgroundAnimator.setInterpolator(enter ? DECELERATE : ACCELERATE);
         mCurrentBackgroundAnimator.start();

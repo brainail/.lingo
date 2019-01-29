@@ -33,7 +33,7 @@ import javax.inject.Inject
 class ElasticSearchHighlighter @Inject constructor(private val context: Context) {
 
     private val highlightColor: Int by lazyFast {
-        ContextCompat.getColor(context, R.color.elastic_search_highlighter)
+        ContextCompat.getColor(context, R.color.colorElasticSearchHighlighter)
     }
 
     /**

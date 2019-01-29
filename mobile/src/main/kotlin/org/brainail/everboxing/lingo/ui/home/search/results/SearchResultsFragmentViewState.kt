@@ -22,46 +22,72 @@ import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
 
 data class SearchResultsFragmentViewState(
     val isLoadingSearchResults: Boolean = false,
-    val displayedSearchResults: List<SearchResultModel> = emptyList()
+    val displayedSearchResults: List<SearchResultModel> = emptyList(),
+    val searchResultsScrollPosition: ScrollPosition = ScrollPosition.KEEP
 ) {
 
     companion object {
         val INITIAL by lazyFast {
-            SearchResultsFragmentViewState(isLoadingSearchResults = false)
-        }
-    }
-
-    object SearchResultsStartedLoading : PartialViewStateChange<SearchResultsFragmentViewState> {
-        override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
-            return viewState.copy(isLoadingSearchResults = true)
-        }
-    }
-
-    class SearchResultsPrepared(private val searchResults: List<SearchResultModel>) :
-        PartialViewStateChange<SearchResultsFragmentViewState> {
-        override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
-            return viewState.copy(
+            SearchResultsFragmentViewState(
                 isLoadingSearchResults = false,
-                displayedSearchResults = searchResults
+                searchResultsScrollPosition = ScrollPosition.KEEP
             )
         }
     }
 
-    class ForgetSearchResult(private val item: SearchResultModel) :
-        PartialViewStateChange<SearchResultsFragmentViewState> {
+    /**
+     * [ScrollPosition.TOP] - scroll to the top
+     * [ScrollPosition.KEEP] - keep it as it is
+     */
+    enum class ScrollPosition { TOP, KEEP }
+
+    object SearchResultsStartedLoading : PartialViewStateChange<SearchResultsFragmentViewState> {
         override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
-            val newResults = viewState.displayedSearchResults.filter { it.id != item.id }
-            return viewState.copy(displayedSearchResults = newResults)
+            return viewState.copy(
+                isLoadingSearchResults = true,
+                searchResultsScrollPosition = ScrollPosition.KEEP
+            )
         }
     }
 
-    class FavoriteSearchResult(private val item: SearchResultModel) :
-        PartialViewStateChange<SearchResultsFragmentViewState> {
+    class SearchResultsPrepared(
+        private val searchResults: List<SearchResultModel>
+    ) : PartialViewStateChange<SearchResultsFragmentViewState> {
+        override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
+            return viewState.copy(
+                isLoadingSearchResults = false,
+                displayedSearchResults = searchResults,
+                searchResultsScrollPosition = when (viewState.isLoadingSearchResults) {
+                    true -> ScrollPosition.TOP
+                    else -> ScrollPosition.KEEP
+                }
+            )
+        }
+    }
+
+    class ForgetSearchResult(
+        private val item: SearchResultModel
+    ) : PartialViewStateChange<SearchResultsFragmentViewState> {
+        override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
+            val newResults = viewState.displayedSearchResults.filter { it.id != item.id }
+            return viewState.copy(
+                displayedSearchResults = newResults,
+                searchResultsScrollPosition = ScrollPosition.KEEP
+            )
+        }
+    }
+
+    class FavoriteSearchResult(
+        private val item: SearchResultModel
+    ) : PartialViewStateChange<SearchResultsFragmentViewState> {
         override fun applyTo(viewState: SearchResultsFragmentViewState): SearchResultsFragmentViewState {
             val newResults = viewState.displayedSearchResults.map {
                 if (it.id != item.id) it else it.copy(favorite = !it.favorite)
             }
-            return viewState.copy(displayedSearchResults = newResults)
+            return viewState.copy(
+                displayedSearchResults = newResults,
+                searchResultsScrollPosition = ScrollPosition.KEEP
+            )
         }
     }
 }

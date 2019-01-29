@@ -38,13 +38,9 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
-    implementation "javax.annotation:jsr250-api:$javaxAnnotationVersion"
-    implementation "javax.inject:javax.inject:$javaxInjectVersion"
+    compileOnly "javax.inject:javax.inject:$javaxInjectVersion"
 
     implementation project(':domain')
     implementation project(':logger')
-}
-
-repositories {
-    mavenCentral()
+    implementation project(':base')
 }

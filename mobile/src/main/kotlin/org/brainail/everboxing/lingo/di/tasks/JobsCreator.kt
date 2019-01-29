@@ -21,7 +21,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector
 import dagger.multibindings.IntoMap
-import org.brainail.everboxing.lingo.base.tasks.SyncTasks
+import org.brainail.everboxing.lingo.base.app.tasks.SyncTasks
 import org.brainail.everboxing.lingo.tasks.InstallUrbanServiceDataTask
 import org.brainail.everboxing.lingo.tasks.SyncTasksImpl
 import org.brainail.everboxing.lingo.tasks.di.WorkerKey

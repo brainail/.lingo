@@ -22,5 +22,5 @@ import org.brainail.everboxing.lingo.ui.home.search.results.SearchResultsFragmen
 
 class FavoriteFragmentNavigator(activity: AppCompatActivity) : SearchResultsFragmentNavigator(activity) {
     override fun getOpenWordDetailsAction(item: SearchResultModel) =
-        FavoriteFragmentDirections.OpenWordDetailsAction(item)
+        FavoriteFragmentDirections.openWordDetailsAction(item)
 }

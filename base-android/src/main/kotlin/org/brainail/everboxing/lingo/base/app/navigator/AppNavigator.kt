@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.navigator
+package org.brainail.everboxing.lingo.base.app.navigator
 
 import android.content.Context
 import android.content.Intent
+import javax.inject.Inject
+import javax.inject.Singleton
 
-abstract class Navigator(protected val context: Context) {
-    protected inline fun startActivity(intentFactory: () -> Intent) {
-        context.startActivity(intentFactory())
-    }
+@Singleton
+open class AppNavigator @Inject constructor(context: Context) : Navigator(context) {
+    val addIntentFlags: Intent.() -> Unit = { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
 }

@@ -25,7 +25,7 @@ import org.brainail.everboxing.lingo.cache.db.dao.SuggestionDao
 import org.brainail.everboxing.lingo.cache.mapper.SearchResultCacheMapper
 import org.brainail.everboxing.lingo.cache.mapper.SearchResultInstallDataMapperFactory
 import org.brainail.everboxing.lingo.cache.mapper.SuggestionCacheMapper
-import org.brainail.everboxing.lingo.data.repository.file.FileStore
+import org.brainail.everboxing.lingo.base.file.FileStore
 import org.brainail.everboxing.lingo.data.repository.search.SearchResultCache
 import org.brainail.everboxing.lingo.data.repository.suggestion.SuggestionCache
 import org.brainail.everboxing.lingo.data.util.DatabaseTransactionRunner

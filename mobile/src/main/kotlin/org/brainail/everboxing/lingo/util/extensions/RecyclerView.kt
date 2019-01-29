@@ -21,7 +21,24 @@ package org.brainail.everboxing.lingo.util.extensions
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.brainail.everboxing.lingo.util.SimpleAdapterDataObserver
+
+private var maxScheduledScrollToTopGeneration = 0L
 
 inline fun RecyclerView.scrollToTop() {
     (layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(0, 0)
+}
+
+fun RecyclerView.scrollToTopOnSubmitList() {
+    val runGeneration = ++maxScheduledScrollToTopGeneration
+    adapter?.registerAdapterDataObserver(object : SimpleAdapterDataObserver() {
+        override fun onChanged() {
+            adapter?.unregisterAdapterDataObserver(this)
+            post {
+                if (runGeneration == maxScheduledScrollToTopGeneration) {
+                    scrollToTop()
+                }
+            }
+        }
+    })
 }

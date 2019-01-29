@@ -22,5 +22,5 @@ import org.brainail.everboxing.lingo.ui.home.search.results.SearchResultsFragmen
 
 class HistoryFragmentNavigator(activity: AppCompatActivity) : SearchResultsFragmentNavigator(activity) {
     override fun getOpenWordDetailsAction(item: SearchResultModel) =
-        HistoryFragmentDirections.OpenWordDetailsAction(item)
+        HistoryFragmentDirections.openWordDetailsAction(item)
 }

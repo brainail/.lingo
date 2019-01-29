@@ -1,5 +1,5 @@
 include ':base'
-include ':base-app'
+include ':base-android'
 include ':mobile'
 include ':tasks'
 include ':domain'

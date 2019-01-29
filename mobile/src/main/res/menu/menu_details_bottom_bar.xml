@@ -7,12 +7,12 @@
     <item
         android:id="@+id/menu_details_delete"
         android:icon="@drawable/ic_baseline_delete_24dp"
-        android:title="@string/menu_delete"
+        android:title="@string/textMenuDelete"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_details_share"
         android:icon="@drawable/ic_baseline_share_24dp"
-        android:title="@string/menu_share"
+        android:title="@string/textMenuShare"
         app:showAsAction="ifRoom"/>
 </menu>

@@ -1,16 +1,17 @@
 <resources>
-    <string name="app_name">Lingo</string>
+    <string name="textAppName">Lingo</string>
 
-    <string name="menu_clear">Clear</string>
-    <string name="menu_delete">Delete</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_voice">Voice</string>
-    <string name="menu_search">Search…</string>
-    <string name="menu_loading">Loading…</string>
+    <string name="textMenuClear">Clear</string>
+    <string name="textMenuDelete">Delete</string>
+    <string name="textMenuShare">Share</string>
+    <string name="textMenuVoice">Voice</string>
 
-    <string name="tab_explore">Explore</string>
-    <string name="tab_favourite">Favourite</string>
-    <string name="tab_history">History</string>
+    <string name="textHintSearch">Search…</string>
+    <string name="textDescriptionLoading">Loading…</string>
 
-    <string name="home_text_to_speech_prompt">What are you looking for?</string>
+    <string name="textTabExplore">Explore</string>
+    <string name="textTabFavourite">Favourite</string>
+    <string name="textTabHistory">History</string>
+
+    <string name="textHomeSpeechPrompt">What are you looking for?</string>
 </resources>

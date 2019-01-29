@@ -73,7 +73,7 @@ dependencies {
     implementation "com.facebook.stetho:stetho-okhttp3:$facebookStethoVersion"
 
     implementation project(':base')
-    implementation project(':base-app')
+    implementation project(':base-android')
     implementation project(':tasks')
     implementation project(':domain')
     implementation project(':data')
@@ -90,9 +90,4 @@ configurations.all {
 
 kapt {
     useBuildCache = true
-}
-
-repositories {
-    mavenCentral()
-    maven { url "https://jitpack.io" }
 }

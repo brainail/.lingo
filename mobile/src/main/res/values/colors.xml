@@ -5,5 +5,5 @@
     <color name="colorAccent">@color/material_orange_500</color>
     <color name="colorPrimarySecondary">@color/material_blue_grey_500</color>
 
-    <color name="elastic_search_highlighter">@color/material_green_700</color>
+    <color name="colorElasticSearchHighlighter">@color/material_green_700</color>
 </resources>

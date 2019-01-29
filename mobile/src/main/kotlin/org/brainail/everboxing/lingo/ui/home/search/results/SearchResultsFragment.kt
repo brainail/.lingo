@@ -33,6 +33,7 @@ import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.util.ScrollablePage
 import org.brainail.everboxing.lingo.util.extensions.getActivityViewModel
 import org.brainail.everboxing.lingo.util.extensions.inflate
+import org.brainail.everboxing.lingo.util.extensions.lifecycleAwareLazyFast
 import org.brainail.everboxing.lingo.util.extensions.observeK
 import org.brainail.everboxing.lingo.util.extensions.observeNonNull
 import org.brainail.everboxing.lingo.util.extensions.pixelOffset
@@ -53,7 +54,11 @@ abstract class SearchResultsFragment :
     private val searchViewModel by lazyFast { getActivityViewModel<SearchViewModel>(viewModelFactory) }
     private val screenViewModel by lazyFast { obtainScreenViewModel() }
 
-    private lateinit var searchResultsAdapter: SearchResultsAdapter
+    @Suppress("LeakingThis")
+    private val searchResultsFragmentViewStateRenderer by lifecycleAwareLazyFast(this) {
+        SearchResultsFragmentViewStateRenderer(recyclerView(), refreshView())
+    }
+
     private lateinit var searchResultsItemTouchHelper: ItemTouchHelper
 
     /**
@@ -65,7 +70,7 @@ abstract class SearchResultsFragment :
      * Returns screen's main __layout__
      */
     @LayoutRes
-    abstract fun screenLayoutId(): Int
+    abstract fun pageLayoutId(): Int
 
     /**
      * Returns screen's main list represented by [RecyclerView]
@@ -78,7 +83,7 @@ abstract class SearchResultsFragment :
     abstract fun refreshView(): SwipeRefreshLayout
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return container?.inflate(screenLayoutId())
+        return container?.inflate(pageLayoutId())
     }
 
     override fun createPrimaryViewModels(): Array<BaseViewModel>? = arrayOf(screenViewModel)
@@ -96,7 +101,7 @@ abstract class SearchResultsFragment :
         screenViewModel.searchResultClicked(item)
     }
 
-    open fun initSearchComponents() {
+    private fun initSearchComponents() {
         searchViewModel.searchResults()
             .observeNonNull(viewLifecycleOwner) { screenViewModel.searchResults(it) }
         searchViewModel.searchSuggestions()
@@ -107,13 +112,12 @@ abstract class SearchResultsFragment :
         screenViewModel.startSuggestionsLoading()
             .observeK(viewLifecycleOwner) { searchViewModel.suggestionsStartedLoading() }
         screenViewModel.viewState()
-            .observeNonNull(viewLifecycleOwner) { renderViewState(it) }
+            .observeNonNull(viewLifecycleOwner) { searchResultsFragmentViewStateRenderer.render(it) }
 
         screenViewModel.navigateToSearchResultEvent()
             .observeNonNull(viewLifecycleOwner) { navigator.openWordDetails(it) }
 
-        searchResultsAdapter = SearchResultsAdapter(this)
-        recyclerView().adapter = searchResultsAdapter
+        recyclerView().adapter = SearchResultsAdapter(this)
 
         searchResultsItemTouchHelper = ItemTouchHelper(object : SwipeToActionCallback(
             requireActivity(),
@@ -137,10 +141,5 @@ abstract class SearchResultsFragment :
         searchResultsItemTouchHelper.attachToRecyclerView(recyclerView())
 
         refreshView().setColorSchemeResources(colorPink500, colorIndigo500, colorLime500)
-    }
-
-    open fun renderViewState(viewState: SearchResultsFragmentViewState) {
-        searchResultsAdapter.submitList(viewState.displayedSearchResults)
-        refreshView().isRefreshing = viewState.isLoadingSearchResults
     }
 }

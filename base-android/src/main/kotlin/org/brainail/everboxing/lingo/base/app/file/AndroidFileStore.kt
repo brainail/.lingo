@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.app
+package org.brainail.everboxing.lingo.base.app.file
 
 import android.content.Context
-import android.content.Intent
-import org.brainail.everboxing.lingo.navigator.Navigator
+import org.brainail.everboxing.lingo.base.file.FileStore
+import java.io.InputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-open class AppNavigator @Inject constructor(context: Context) : Navigator(context) {
-    val addIntentFlags: Intent.() -> Unit = { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
+class AndroidFileStore @Inject constructor(private val context: Context) : FileStore {
+    override fun openAsset(path: String): InputStream {
+        return context.assets.open(path)
+    }
 }

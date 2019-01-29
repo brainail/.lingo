@@ -25,7 +25,7 @@ import org.brainail.everboxing.lingo.util.extensions.getViewModel
 
 class HistoryFragment : SearchResultsFragment() {
     override fun obtainScreenViewModel() = getViewModel<HistoryFragmentViewModel>(viewModelFactory)
-    override fun screenLayoutId() = R.layout.fragment_history
+    override fun pageLayoutId() = R.layout.fragment_history
     override fun recyclerView(): RecyclerView = searchResultsRecyclerView
     override fun refreshView(): SwipeRefreshLayout = swipeRefreshView
 }

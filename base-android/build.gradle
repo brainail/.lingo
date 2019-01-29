@@ -34,12 +34,8 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    implementation "javax.annotation:jsr250-api:$javaxAnnotationVersion"
-    implementation "javax.inject:javax.inject:$javaxInjectVersion"
+    compileOnly "javax.inject:javax.inject:$javaxInjectVersion"
 
     implementation project(':logger')
-}
-
-repositories {
-    mavenCentral()
+    implementation project(':base')
 }

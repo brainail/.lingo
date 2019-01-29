@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.brainail.everboxing.lingo.util.log
+package org.brainail.everboxing.lingo.base.app.util
 
 import android.util.Log
 import org.brainail.logger.L

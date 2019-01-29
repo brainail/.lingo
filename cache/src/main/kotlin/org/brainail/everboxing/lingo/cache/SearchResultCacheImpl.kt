@@ -18,11 +18,11 @@ package org.brainail.everboxing.lingo.cache
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import org.brainail.everboxing.lingo.base.file.FileStore
 import org.brainail.everboxing.lingo.cache.db.dao.SearchResultDao
 import org.brainail.everboxing.lingo.cache.mapper.SearchResultCacheMapper
 import org.brainail.everboxing.lingo.cache.mapper.SearchResultInstallDataMapper
 import org.brainail.everboxing.lingo.data.model.SearchResultEntity
-import org.brainail.everboxing.lingo.data.repository.file.FileStore
 import org.brainail.everboxing.lingo.data.repository.search.SearchResultCache
 import org.brainail.everboxing.lingo.data.util.DatabaseTransactionRunner
 import javax.inject.Inject
