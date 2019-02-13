@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModel
 import kotlin.reflect.KClass
 
 /**
- * [klazz] Shared class
+ * [clazz] Shared class
  *
  * [key] Extra key in order to make a difference
  *
@@ -29,4 +29,4 @@ import kotlin.reflect.KClass
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
-annotation class SharedViewModel(val klazz: KClass<out ViewModel>, val key: String = "")
+annotation class SharedViewModel(val clazz: KClass<out ViewModel>, val key: String = "")

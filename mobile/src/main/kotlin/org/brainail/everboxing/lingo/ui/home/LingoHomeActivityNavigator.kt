@@ -26,6 +26,7 @@ import org.brainail.everboxing.lingo.navigator.SceneNavigator
 import org.brainail.everboxing.lingo.util.NavigableBack
 import org.brainail.everboxing.lingo.util.ScrollablePage
 import org.brainail.everboxing.lingo.util.extensions.getNavigationTopFragment
+import org.brainail.everboxing.lingo.util.extensions.isTopFragmentRoot
 import org.brainail.everboxing.lingo.util.extensions.navigateFromStart
 
 /**
@@ -51,8 +52,9 @@ class LingoHomeActivityNavigator(activity: AppCompatActivity) : SceneNavigator(a
     fun goBack() {
         val fragment = activity.getNavigationTopFragment(R.id.lingoHomeNavigationFragment)
         if ((fragment as? NavigableBack)?.goBack() != true) {
-            if (!activity.findNavController(R.id.lingoHomeNavigationFragment).popBackStack()) {
-                activity.supportFinishAfterTransition()
+            when (activity.isTopFragmentRoot(R.id.lingoHomeNavigationFragment)) {
+                true -> activity.supportFinishAfterTransition()
+                else -> activity.findNavController(R.id.lingoHomeNavigationFragment).popBackStack()
             }
         }
     }

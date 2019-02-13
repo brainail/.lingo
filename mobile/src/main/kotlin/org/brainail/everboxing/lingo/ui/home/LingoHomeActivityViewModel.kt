@@ -23,9 +23,10 @@ import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewState
 import org.brainail.everboxing.lingo.util.SharedViewModel
 import org.brainail.everboxing.lingo.util.SingleEventLiveData
+import org.brainail.logger.L
 import javax.inject.Inject
 
-@SharedViewModel(klazz = SearchViewModel::class)
+@SharedViewModel(clazz = SearchViewModel::class)
 class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
     enum class NavigationItem { BACKWARD, SCROLL_TO_TOP }
     enum class NavigationTabItem { EXPLORE, FAVOURITE, HISTORY }
@@ -101,9 +102,13 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
      */
     @Suppress("unused")
     private fun initNavigationState(viewModelSavedState: ViewModelSavedState?) {
-        val savedNavigation = viewModelSavedState
-            ?.get<String>(KEY_NAVIGATION_TAB_STATE) ?: NavigationTabItem.EXPLORE.name
-        navigationTab.value = NavigationTabItem.valueOf(savedNavigation)
+        viewModelSavedState?.get<String>(KEY_NAVIGATION_TAB_STATE)?.also {
+            L.v("initNavigationState(): restore navigation tab $it")
+            navigationTab.setValueSilently(NavigationTabItem.valueOf(it))
+        } ?: run {
+            L.v("initNavigationState(): use default tab for fresh start")
+            navigationTab.value = NavigationTabItem.EXPLORE
+        }
     }
 
     private companion object {

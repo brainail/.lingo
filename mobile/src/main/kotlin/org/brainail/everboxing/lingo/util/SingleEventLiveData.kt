@@ -50,6 +50,12 @@ class SingleEventLiveData<T> : MutableLiveData<T>() {
         super.setValue(value)
     }
 
+    @MainThread
+    fun setValueSilently(value: T?) {
+        mPending.set(false)
+        super.setValue(value)
+    }
+
     /**
      * Used for cases where T is Void, to make calls cleaner.
      */

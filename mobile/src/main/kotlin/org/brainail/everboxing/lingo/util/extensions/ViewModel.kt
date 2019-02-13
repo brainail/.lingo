@@ -38,5 +38,5 @@ inline fun <reified VM : ViewModel> Fragment.getActivityViewModel(provider: View
 fun KClass<out ViewModel>.viewModelProviderKey(): String {
     val clazz = this.java
     val sharedViewModel = clazz.getAnnotation(SharedViewModel::class.java) ?: return clazz.canonicalName!!
-    return sharedViewModel.klazz.java.canonicalName!! + sharedViewModel.key
+    return sharedViewModel.clazz.java.canonicalName!! + sharedViewModel.key
 }

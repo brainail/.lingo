@@ -40,13 +40,18 @@ inline fun AppCompatActivity.getNavigationTopFragment(@IdRes navFragmentId: Int)
     return navFragment?.childFragmentManager?.findFragmentById(navFragmentId)
 }
 
+inline fun AppCompatActivity.isTopFragmentRoot(@IdRes navFragmentId: Int): Boolean {
+    val navFragment = supportFragmentManager.findFragmentById(navFragmentId)
+    return 0 == navFragment?.childFragmentManager?.backStackEntryCount
+}
+
 inline fun AppCompatActivity.navigateFromStart(@IdRes navFragmentId: Int, @IdRes destinationId: Int) {
     val navController = findNavController(navFragmentId)
     if (navController.currentDestination?.id != destinationId) {
         navController.navigate(
             destinationId,
             null,
-            navOptions { popUpTo(navController.graph.startDestination, popUpToBuilder = { inclusive = true }) }
+            navOptions { popUpTo(navController.graph.id, popUpToBuilder = { inclusive = true }) }
         )
     }
 }
