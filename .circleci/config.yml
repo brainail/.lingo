@@ -1,0 +1,106 @@
+version: 2.0
+
+config_android: &config_android
+  docker:
+  - image: circleci/android:api-28-alpha
+  working_directory: ~/lingo
+  environment:
+    JAVA_TOOL_OPTIONS: "-Xmx1024m"
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false"
+    TERM: dumb
+
+update_sdk: &update_sdk
+  run:
+    name: Update SDK
+    command: |
+      mkdir "$ANDROID_HOME/licenses" || true
+      echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
+      echo "84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+      sdkmanager "platform-tools" "platforms;android-28"
+
+gen_cache_key: &gen_cache_key
+  run:
+    name: Generate cache key
+    command: tools/checksum.sh . /tmp/checksum.txt
+
+restore_cache: &restore_cache
+  restore_cache:
+    key: gradle-{{ checksum "/tmp/checksum.txt" }}
+
+save_cache: &save_cache
+  save_cache:
+    paths:
+    - ~/.gradle/caches
+    - ~/.gradle/wrapper
+    key: gradle-{{ checksum "/tmp/checksum.txt" }}
+
+attach_workspace: &attach_workspace
+  attach_workspace:
+    at: ~/lingo
+
+workflow_filter_all: &workflow_filter_all
+  filters:
+    tags:
+      only: /.*/
+
+jobs:
+  build_debug:
+    <<: *config_android
+    steps:
+    - <<: *update_sdk
+    - checkout
+    - <<: *gen_cache_key
+    - <<: *restore_cache
+    - run:
+        name: Download Dependencies
+        command: ./gradlew dependencies
+    - run:
+        name: Assemble debug APK
+        command: ./gradlew assembleDebug
+    - <<: *save_cache
+    - store_artifacts:
+        path: mobile/build/outputs
+        destination: outputs
+
+  check:
+    <<: *config_android
+    steps:
+    - checkout
+    - <<: *attach_workspace
+    - <<: *gen_cache_key
+    - <<: *restore_cache
+    - run:
+        name: Check app and dependencies
+        command: ./gradlew check dependencyUpdates
+    - run:
+        name: Save reports
+        command: |
+          mkdir -p ~/reports/
+          find . -type f -regex ".*/build/reports/.*\.\(xml\|html\|css\|js\)" -exec cp --parents {} ~/reports/ \;
+        when: always
+    - store_artifacts:
+        path: ~/reports
+    - store_artifacts:
+        path: build/dependencyUpdates
+        destination: dependencyUpdates
+    - run:
+        name: Save test results
+        command: |
+          mkdir -p ~/test-results/
+          find . -type f -regex ".*/build/test-results/.*\.\(xml\|html\|css\|js\)" -exec cp --parents {} ~/test-results/ \;
+        when: always
+    - store_test_results:
+        path: ~/test-results
+    - store_artifacts:
+        path: ~/test-results
+
+workflows:
+  version: 2
+  build_test:
+    jobs:
+    - build_debug:
+        <<: *workflow_filter_all
+    - check:
+        requires:
+        - build_debug
+        <<: *workflow_filter_all
