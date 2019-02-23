@@ -6,7 +6,7 @@ buildscript {
     ext.targetSdkVersion = 28
 
     ext.gradlePluginVersion = '3.3.1'
-    ext.kotlinVersion = '1.3.11'
+    ext.kotlinVersion = '1.3.21'
 
     ext.androidCoreVersion = '1.0.1'
     ext.androidFragmentVersion = '1.0.0'
@@ -41,6 +41,9 @@ buildscript {
     ext.detektPluginVersion = '1.0.0-RC11'
     ext.spotlessPluginVersion = '3.16.0'
     ext.ktlintVersion = '0.29.0'
+
+    ext.mockkVersion = '1.8.13'
+    ext.junitVersion = '4.12'
 
     ext.gradleVersionsPluginVersion = '0.17.0'
 
