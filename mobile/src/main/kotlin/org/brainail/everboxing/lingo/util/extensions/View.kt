@@ -20,6 +20,7 @@
 package org.brainail.everboxing.lingo.util.extensions
 
 import android.view.View
+import android.view.ViewTreeObserver
 import com.google.android.material.appbar.AppBarLayout
 
 private const val NO_FOCUS_SEARCH_SCROLL_FLAGS =
@@ -37,4 +38,17 @@ fun View.lockInAppBar(locked: Boolean) {
             layoutParams = this // important in order to have the proper effect
         }
     }
+}
+
+inline fun View.doOnGlobalLayout(crossinline action: (view: View) -> Unit) {
+    val vto = viewTreeObserver
+    vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            action(this@doOnGlobalLayout)
+            when {
+                vto.isAlive -> vto.removeOnGlobalLayoutListener(this)
+                else -> viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        }
+    })
 }

@@ -19,6 +19,7 @@
 
 package org.brainail.everboxing.lingo.util.extensions
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -31,6 +32,7 @@ fun <T, U : LifecycleOwner> lifecycleAwareLazyFast(
 // marker object
 private object UninitializedValue
 
+@SuppressLint("RestrictedApi")
 private class LifecycleAwareLazy<out T>(
     lifecycle: Lifecycle,
     private val initializer: () -> T

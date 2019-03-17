@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Lingo" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,7 +10,7 @@
 
         <item name="floatingSearchViewStyle">@style/AppWidget.FloatingSearchView</item>
 
-        <item name="android:windowBackground">@color/material_blue_grey_50</item>
+        <item name="android:colorBackground">@color/colorWindowBackground</item>
     </style>
 
     <style name="Theme.Lingo.NoActionBar">
