@@ -23,6 +23,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class RxAwareViewModel : BaseViewModel() {
+
     private val disposables = CompositeDisposable()
 
     protected fun <T> bindObservable(observable: Observable<T>): Observable<T> {

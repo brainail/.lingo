@@ -40,6 +40,10 @@ private class LifecycleAwareLazy<out T>(
 
     override fun onStateChanged(source: LifecycleOwner?, event: Lifecycle.Event?) {
         when (event) {
+            // ON_STOP is used even if it doesn't mean that it is going to be destroyed.
+            // ON_DESTROY could be used but only for activities where
+            // for fragments this is also possible but only with viewLifecycle
+            // which is not available for lazy delegate at the time of construction
             Lifecycle.Event.ON_STOP -> lazyValue = UninitializedValue
             else -> return
         }

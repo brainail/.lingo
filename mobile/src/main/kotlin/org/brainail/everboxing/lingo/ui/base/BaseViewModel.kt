@@ -28,20 +28,46 @@ abstract class BaseViewModel : ViewModel() {
     private var isCleared = false
     private var restoreStateCount = 0
 
+    private var initialArgs: ViewModelInitialArgs? = null
+
     init {
         @Suppress("LeakingThis")
         L.d("constructor(): $this")
     }
 
+    /**
+     * Called during screen's creation process.
+     *
+     * Should be called only from an __outside__ environment.
+     */
+    fun initState(viewModelSavedState: ViewModelSavedState?, viewModelInitialArgs: ViewModelInitialArgs?) {
+        initialArgs = viewModelInitialArgs
+        initState(viewModelSavedState)
+    }
+
     @CallSuper
-    open fun initState(viewModelSavedState: ViewModelSavedState?) {
+    protected open fun initState(viewModelSavedState: ViewModelSavedState?) {
         ++restoreStateCount
     }
 
+    /**
+     * Handy method to understand whether it is the first restore or not.
+     *
+     * One of the uses cases for usage is when our process has been killed but restore state exists
+     * and we still need to apply some restore logic because otherwise screen will be empty.
+     */
     protected fun isFirstRestore() = 1 == restoreStateCount
+
+    @Suppress("UNCHECKED_CAST")
+    protected fun <A> getInitialArgs(): A? = initialArgs as A?
 
     @CallSuper
     open fun saveState() = ViewModelSavedState()
+
+    @CallSuper
+    open fun clear() {
+        L.d("clear(): $this")
+    }
 
     final override fun onCleared() {
         // sometimes we can get the same model using different keys and
@@ -54,10 +80,5 @@ abstract class BaseViewModel : ViewModel() {
         isCleared = true
         super.onCleared()
         clear()
-    }
-
-    @CallSuper
-    open fun clear() {
-        L.d("clear(): $this")
     }
 }

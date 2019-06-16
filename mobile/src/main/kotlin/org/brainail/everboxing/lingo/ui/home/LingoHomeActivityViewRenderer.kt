@@ -44,11 +44,23 @@ class LingoHomeActivityViewRenderer(
     private val appBarView: AppBarLayout,
     private val bottomAppBarView: AppCompatBottomAppBar,
     private val actionButtonView: FloatingActionButton,
-    private val toolbarUnderlay: View,
+    private val toolbarUnderlayView: View,
     private val floatingSearchView: View
-) : LifecycleObserver {
+) {
 
     private val uiExecutor: Handler = Handler(Looper.getMainLooper())
+
+    internal open inner class BackStackLifecycleObserver : LifecycleObserver {
+        @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+        protected fun start() {
+            startListenToBackStack()
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        protected fun stop() {
+            stopListenToBackStack()
+        }
+    }
 
     private val alignFabCenterAction = {
         if (bottomAppBarView.fabAlignmentMode != BottomAppBar.FAB_ALIGNMENT_MODE_CENTER) { // avoid blinking
@@ -67,38 +79,28 @@ class LingoHomeActivityViewRenderer(
     }
 
     fun init() {
-        activity.lifecycle.addObserver(this)
+        activity.lifecycle.addObserver(BackStackLifecycleObserver())
     }
 
-    fun selectHomeMenuItem(@IdRes menuItemId: Int) {
+    private fun selectHomeMenuItem(@IdRes menuItemId: Int) {
         val menu = bottomAppBarView.menu
         when (menuItemId) {
-            R.id.menu_home_explore -> {
-                menu.findItem(R.id.menu_home_explore)?.setIcon(R.drawable.ic_baseline_view_agenda_24dp)
-                menu.findItem(R.id.menu_home_favorite)?.setIcon(R.drawable.ic_twotone_favorite_24dp)
-                menu.findItem(R.id.menu_home_history)?.setIcon(R.drawable.ic_twotone_watch_later_24dp)
+            R.id.menuHomeExploreItem -> {
+                menu.findItem(R.id.menuHomeExploreItem)?.setIcon(R.drawable.ic_baseline_view_agenda_24dp)
+                menu.findItem(R.id.menuHomeFavoriteItem)?.setIcon(R.drawable.ic_twotone_favorite_24dp)
+                menu.findItem(R.id.menuHomeHistoryItem)?.setIcon(R.drawable.ic_twotone_watch_later_24dp)
             }
-            R.id.menu_home_favorite -> {
-                menu.findItem(R.id.menu_home_explore)?.setIcon(R.drawable.ic_twotone_view_agenda_24dp)
-                menu.findItem(R.id.menu_home_favorite)?.setIcon(R.drawable.ic_baseline_favorite_24dp)
-                menu.findItem(R.id.menu_home_history)?.setIcon(R.drawable.ic_twotone_watch_later_24dp)
+            R.id.menuHomeFavoriteItem -> {
+                menu.findItem(R.id.menuHomeExploreItem)?.setIcon(R.drawable.ic_twotone_view_agenda_24dp)
+                menu.findItem(R.id.menuHomeFavoriteItem)?.setIcon(R.drawable.ic_baseline_favorite_24dp)
+                menu.findItem(R.id.menuHomeHistoryItem)?.setIcon(R.drawable.ic_twotone_watch_later_24dp)
             }
-            R.id.menu_home_history -> {
-                menu.findItem(R.id.menu_home_explore)?.setIcon(R.drawable.ic_twotone_view_agenda_24dp)
-                menu.findItem(R.id.menu_home_favorite)?.setIcon(R.drawable.ic_twotone_favorite_24dp)
-                menu.findItem(R.id.menu_home_history)?.setIcon(R.drawable.ic_baseline_watch_later_24dp)
+            R.id.menuHomeHistoryItem -> {
+                menu.findItem(R.id.menuHomeExploreItem)?.setIcon(R.drawable.ic_twotone_view_agenda_24dp)
+                menu.findItem(R.id.menuHomeFavoriteItem)?.setIcon(R.drawable.ic_twotone_favorite_24dp)
+                menu.findItem(R.id.menuHomeHistoryItem)?.setIcon(R.drawable.ic_baseline_watch_later_24dp)
             }
         }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    protected fun start() {
-        startListenToBackStack()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    protected fun stop() {
-        stopListenToBackStack()
     }
 
     private fun startListenToBackStack() {
@@ -119,15 +121,15 @@ class LingoHomeActivityViewRenderer(
         }
 
         when (fragmentDestinationId) {
-            R.id.explorePageDestination -> selectHomeMenuItem(R.id.menu_home_explore)
-            R.id.favoritePageDestination -> selectHomeMenuItem(R.id.menu_home_favorite)
-            R.id.historyPageDestination -> selectHomeMenuItem(R.id.menu_home_history)
+            R.id.explorePageDestination -> selectHomeMenuItem(R.id.menuHomeExploreItem)
+            R.id.favoritePageDestination -> selectHomeMenuItem(R.id.menuHomeFavoriteItem)
+            R.id.historyPageDestination -> selectHomeMenuItem(R.id.menuHomeHistoryItem)
         }
     }
 
     private fun enableWordDetailsPageMode() {
         showOrHideSearch(false)
-        bottomAppBarView.takeIf { null == bottomAppBarView.menu.findItem(R.id.menu_details_share) }
+        bottomAppBarView.takeIf { null == bottomAppBarView.menu.findItem(R.id.menuDetailsShareItem) }
             ?.replaceMenu(R.menu.menu_details_bottom_bar) // avoid blinking
         bottomAppBarView.show()
         scheduleAlignActionButtonAction(alignFabCenterAction)
@@ -137,7 +139,7 @@ class LingoHomeActivityViewRenderer(
 
     private fun enableLingoHomePageMode() {
         showOrHideSearch(true)
-        bottomAppBarView.takeIf { null == bottomAppBarView.menu.findItem(R.id.menu_home_explore) }
+        bottomAppBarView.takeIf { null == bottomAppBarView.menu.findItem(R.id.menuHomeExploreItem) }
             ?.replaceMenu(R.menu.menu_home_bottom_bar) // avoid blinking
         scheduleAlignActionButtonAction(alignFabEndAction)
         actionButtonView.id = R.id.homeActionButtonView
@@ -148,7 +150,7 @@ class LingoHomeActivityViewRenderer(
         floatingSearchView.isVisible = show
         floatingSearchView.isEnabled = show
         appBarView.updateLayoutParams { height = if (show) ViewGroup.LayoutParams.WRAP_CONTENT else 0 }
-        toolbarUnderlay.lockInAppBar(!show)
+        toolbarUnderlayView.lockInAppBar(!show)
         appBarView.setExpanded(true) // always expand in order to push the current content down
     }
 

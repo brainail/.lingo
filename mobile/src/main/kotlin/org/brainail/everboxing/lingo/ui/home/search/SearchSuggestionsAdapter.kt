@@ -58,16 +58,16 @@ class SearchSuggestionsAdapter(
         fun bindTo(item: SuggestionModel) {
             suggestionItem = item
 
-            suggestionItemIcon.setImageDrawable(
+            suggestionItemIconView.setImageDrawable(
                 when (item.isRecent) {
                     true -> AppCompatResources.getDrawable(itemView.context, R.drawable.ic_history_control_24dp)
                     else -> AppCompatResources.getDrawable(itemView.context, R.drawable.ic_search_black_24dp)
                 }
             )
 
-            suggestionItemText.text = item.word
-            suggestionItemDescription.text = item.description
-            suggestionItemDescription.isVisible = !item.description.isEmpty()
+            suggestionItemTitleView.text = item.word
+            suggestionItemDescriptionView.text = item.description
+            suggestionItemDescriptionView.isVisible = !item.description.isEmpty()
             itemView.setOnClickListener { suggestionClickListener.onSuggestionClick(suggestionItem) }
         }
     }

@@ -28,21 +28,21 @@
         tools:ignore="UnusedAttribute">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/leftGuideline"
+            android:id="@+id/leftGuidelineView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="@dimen/material_component_cards_left_and_right_padding"/>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/rightGuideline"
+            android:id="@+id/rightGuidelineView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/material_component_cards_left_and_right_padding"/>
 
         <TextView
-            android:id="@+id/searchResultWord"
+            android:id="@+id/searchResultWordView"
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/material_component_cards_top_and_bottom_padding"
             android:layout_height="wrap_content"
@@ -50,15 +50,15 @@
             android:maxLines="2"
             android:text="@{searchResult.word}"
             android:textSize="@dimen/material_typography_title"
-            app:layout_constraintBottom_toTopOf="@id/searchResultDefinition"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintBottom_toTopOf="@id/searchResultDefinitionView"
+            app:layout_constraintEnd_toEndOf="@id/rightGuidelineView"
+            app:layout_constraintStart_toEndOf="@id/leftGuidelineView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="@tools:sample/first_names"/>
 
         <TextView
-            android:id="@+id/searchResultDefinition"
+            android:id="@+id/searchResultDefinitionView"
             android:layout_width="0dp"
             android:layout_marginBottom="@dimen/material_component_cards_top_and_bottom_padding"
             android:layout_height="wrap_content"
@@ -68,9 +68,9 @@
             android:text="@{searchResult.definition}"
             android:textSize="@dimen/material_typography_body1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/searchResultWord"
+            app:layout_constraintEnd_toEndOf="@id/rightGuidelineView"
+            app:layout_constraintStart_toEndOf="@id/leftGuidelineView"
+            app:layout_constraintTop_toBottomOf="@id/searchResultWordView"
             tools:text="@tools:sample/lorem/random"/>
 
         <ImageView

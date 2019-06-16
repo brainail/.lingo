@@ -24,6 +24,7 @@ import dagger.multibindings.IntoMap
 import org.brainail.everboxing.lingo.di.ViewModelKey
 import org.brainail.everboxing.lingo.di.scope.FragmentScope
 import org.brainail.everboxing.lingo.ui.home.details.WordDetailsFragment
+import org.brainail.everboxing.lingo.ui.home.details.WordDetailsFragmentViewModel
 import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragment
 import org.brainail.everboxing.lingo.ui.home.explore.ExploreFragmentViewModel
 import org.brainail.everboxing.lingo.ui.home.favorite.FavoriteFragment
@@ -35,19 +36,19 @@ import org.brainail.everboxing.lingo.ui.home.history.HistoryFragmentViewModel
 abstract class LingoHomeActivitySubcomponentsModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = [LingoExploreFragmentModule::class])
-    abstract fun contributeLingoExploreFragmentInjector(): ExploreFragment
+    abstract fun contributeExploreFragmentInjector(): ExploreFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = [LingoFavoriteFragmentModule::class])
-    abstract fun contributeLingoFavoriteFragmentInjector(): FavoriteFragment
+    abstract fun contributeFavoriteFragmentInjector(): FavoriteFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = [LingoHistoryFragmentModule::class])
-    abstract fun contributeLingoHistoryFragmentInjector(): HistoryFragment
+    abstract fun contributeHistoryFragmentInjector(): HistoryFragment
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun contributeLingoSearchResultDetailsFragmentInjector(): WordDetailsFragment
+    abstract fun contributeWordDetailsFragmentInjector(): WordDetailsFragment
 
     @Binds
     @IntoMap
@@ -63,4 +64,9 @@ abstract class LingoHomeActivitySubcomponentsModule {
     @IntoMap
     @ViewModelKey(HistoryFragmentViewModel::class)
     abstract fun bindLingoHistoryFragmentViewModel(viewModel: HistoryFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(WordDetailsFragmentViewModel::class)
+    abstract fun bindWordDetailsFragmentViewModel(viewModel: WordDetailsFragmentViewModel): ViewModel
 }

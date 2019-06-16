@@ -5,19 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/menu_home_explore"
+        android:id="@+id/menuHomeExploreItem"
         android:icon="@drawable/ic_twotone_view_agenda_24dp"
         android:title="@string/textTabExplore"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
-        android:id="@+id/menu_home_history"
+        android:id="@+id/menuHomeHistoryItem"
         android:icon="@drawable/ic_twotone_watch_later_24dp"
         android:title="@string/textTabHistory"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
-        android:id="@+id/menu_home_favorite"
+        android:id="@+id/menuHomeFavoriteItem"
         android:icon="@drawable/ic_twotone_favorite_24dp"
         android:title="@string/textTabFavourite"
         app:showAsAction="always"

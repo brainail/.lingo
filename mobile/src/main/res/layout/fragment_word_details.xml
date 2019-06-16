@@ -8,14 +8,14 @@
     tools:context=".ui.home.details.WordDetailsFragment">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuideline"
+        android:id="@+id/leftGuidelineView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="@dimen/material_component_cards_left_and_right_padding"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuideline"
+        android:id="@+id/rightGuidelineView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -25,8 +25,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-        app:layout_constraintStart_toEndOf="@id/leftGuideline"
+        app:layout_constraintEnd_toEndOf="@id/rightGuidelineView"
+        app:layout_constraintStart_toEndOf="@id/leftGuidelineView"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -35,29 +35,26 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/searchResultWord"
+                android:id="@+id/wordTitleView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/material_component_cards_top_and_bottom_padding"
                 android:fontFamily="@font/work_sans_bold"
-                android:text="@{searchResult.word}"
                 android:textSize="@dimen/material_typography_title"
                 tools:text="@tools:sample/first_names"/>
 
             <TextView
-                android:id="@+id/searchResultDefinition"
+                android:id="@+id/wordDefinitionView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/material_component_cards_top_and_bottom_padding"
                 android:ellipsize="end"
                 android:fontFamily="@font/work_sans"
-                android:text="@{searchResult.definition}"
                 android:textIsSelectable="true"
                 android:textSize="@dimen/material_typography_body1"
                 tools:text="@tools:sample/lorem/random"/>
 
             <TextView
-                android:id="@+id/searchResultWordExamplesHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/material_component_cards_top_and_bottom_padding"
@@ -66,13 +63,12 @@
                 android:textSize="@dimen/material_typography_subheading"/>
 
             <TextView
-                android:id="@+id/searchResultExamples"
+                android:id="@+id/wordExampleView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/material_component_cards_top_and_bottom_padding"
                 android:ellipsize="end"
                 android:fontFamily="@font/work_sans"
-                android:text="@{searchResult.definition}"
                 android:textIsSelectable="true"
                 android:textSize="@dimen/material_typography_body1"
                 tools:text="@tools:sample/lorem/random"/>

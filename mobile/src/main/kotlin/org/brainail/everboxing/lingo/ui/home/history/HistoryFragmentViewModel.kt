@@ -22,7 +22,7 @@ import org.brainail.everboxing.lingo.domain.usecase.FindHistorySuggestionsUseCas
 import org.brainail.everboxing.lingo.domain.usecase.ForgetSearchResultUseCase
 import org.brainail.everboxing.lingo.domain.usecase.SaveSearchResultInHistoryUseCase
 import org.brainail.everboxing.lingo.domain.usecase.SaveSuggestionUseCase
-import org.brainail.everboxing.lingo.domain.usecase.ToggleSearchResultUseInFavoritesCase
+import org.brainail.everboxing.lingo.domain.usecase.ToggleSearchResultInFavoritesUseCase
 import org.brainail.everboxing.lingo.mapper.SearchResultModelMapper
 import org.brainail.everboxing.lingo.mapper.SuggestionModelMapper
 import org.brainail.everboxing.lingo.ui.home.search.results.SearchResultsFragmentViewModel
@@ -32,7 +32,7 @@ class HistoryFragmentViewModel @Inject constructor(
     private val findSuggestionsUseCase: FindHistorySuggestionsUseCase,
     private val findSearchResultsUseCase: FindHistorySearchResultsUseCase,
     saveRecentSuggestionUseCase: SaveSuggestionUseCase,
-    toggleSearchResultUseInFavoritesCase: ToggleSearchResultUseInFavoritesCase,
+    toggleSearchResultInFavoritesUseCase: ToggleSearchResultInFavoritesUseCase,
     saveSearchResultInHistoryUseCase: SaveSearchResultInHistoryUseCase,
     forgetSearchResultUseCase: ForgetSearchResultUseCase,
     suggestionModelMapper: SuggestionModelMapper,
@@ -40,7 +40,7 @@ class HistoryFragmentViewModel @Inject constructor(
     appExecutors: AppExecutors
 ) : SearchResultsFragmentViewModel(
     saveRecentSuggestionUseCase,
-    toggleSearchResultUseInFavoritesCase,
+    toggleSearchResultInFavoritesUseCase,
     saveSearchResultInHistoryUseCase,
     forgetSearchResultUseCase,
     suggestionModelMapper,

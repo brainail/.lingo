@@ -22,35 +22,53 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_word_details.*
 import org.brainail.everboxing.lingo.R
+import org.brainail.everboxing.lingo.base.util.consume
+import org.brainail.everboxing.lingo.base.util.lazyFast
 import org.brainail.everboxing.lingo.ui.base.BaseViewModel
 import org.brainail.everboxing.lingo.ui.base.ViewModelAwareFragment
+import org.brainail.everboxing.lingo.ui.base.ViewModelInitialArgs
 import org.brainail.everboxing.lingo.util.MenuItemClickHandler
 import org.brainail.everboxing.lingo.util.ViewClickHandler
+import org.brainail.everboxing.lingo.util.extensions.getViewModel
+import org.brainail.everboxing.lingo.util.extensions.lifecycleAwareLazyFast
+import org.brainail.everboxing.lingo.util.extensions.observeNonNull
 
 class WordDetailsFragment
     : ViewModelAwareFragment(), MenuItemClickHandler, ViewClickHandler {
 
-    override fun createPrimaryViewModels(): Array<BaseViewModel>? {
-        return null
+    private val viewStateRenderer by lifecycleAwareLazyFast(this) {
+        WordDetailsFragmentViewStateRenderer(wordTitleView, wordDefinitionView, wordExampleView)
     }
+
+    private val screenViewModel by lazyFast {
+        getViewModel<WordDetailsFragmentViewModel>(viewModelFactory)
+    }
+
+    override fun createPrimaryViewModels(): Array<BaseViewModel> = arrayOf(screenViewModel)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_word_details, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val detailsArgs = WordDetailsFragmentArgs.fromBundle(arguments!!)
-        searchResultWord.text = detailsArgs.wordItem.word
-        searchResultDefinition.text = detailsArgs.wordItem.definition
-        searchResultExamples.text = detailsArgs.wordItem.example
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        screenViewModel.viewState().observeNonNull(viewLifecycleOwner) {
+            viewStateRenderer.render(it)
+        }
     }
 
-    override fun handleMenuItemClick(menuId: Int): Boolean {
-        return super.handleMenuItemClick(menuId)
+    override fun getViewModelInitialArgs(bundle: Bundle?, type: Class<out BaseViewModel>): ViewModelInitialArgs? {
+        return bundle?.let { WordDetailsFragmentInitialArgs(WordDetailsFragmentArgs.fromBundle(it)) }
     }
 
-    override fun handleViewClick(viewId: Int): Boolean {
-        return super.handleViewClick(viewId)
+    override fun handleMenuItemClick(menuId: Int) = when (menuId) {
+        R.id.menuDetailsDeleteItem -> consume { TODO() }
+        R.id.menuDetailsShareItem -> consume { TODO() }
+        else -> super.handleMenuItemClick(menuId)
+    }
+
+    override fun handleViewClick(viewId: Int) = when (viewId) {
+        R.id.detailsActionButtonView -> consume { TODO() }
+        else -> super.handleViewClick(viewId)
     }
 }

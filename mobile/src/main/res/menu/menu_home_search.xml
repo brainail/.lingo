@@ -5,19 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/menu_progress"
+        android:id="@+id/menuSearchProgressItem"
         app:actionLayout="@layout/menu_item_progress"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         android:title=""/>
     <item
-        android:id="@+id/menu_clear"
+        android:id="@+id/menuSearchClearItem"
         android:icon="@drawable/ic_clear_control_24dp"
         android:title="@string/textMenuClear"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
-        android:id="@+id/menu_tts"
+        android:id="@+id/menuSearchTtsItem"
         android:icon="@drawable/ic_mic_control_24dp"
         android:title="@string/textMenuVoice"
         app:showAsAction="always"

@@ -37,7 +37,6 @@ import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel
 import org.brainail.everboxing.lingo.ui.home.search.SearchViewModel.SearchNavigationItem
 import org.brainail.everboxing.lingo.util.extensions.addAfterTextChangedListener
 import org.brainail.everboxing.lingo.util.extensions.getViewModel
-import org.brainail.everboxing.lingo.util.extensions.lifecycleAwareLazyFast
 import org.brainail.everboxing.lingo.util.extensions.observeNonNull
 import org.brainail.logger.L
 import org.jetbrains.anko.toast
@@ -47,7 +46,7 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     @Inject
     lateinit var navigator: LingoHomeActivityNavigator
     @Inject
-    lateinit var actor: LingoHomeActivityActor
+    lateinit var actionsDelegate: LingoHomeActivityActionsDelegate
     @Inject
     lateinit var textToSpeechResultMapper: TextToSpeechResultMapper
 
@@ -55,14 +54,14 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
         getViewModel<LingoHomeActivityViewModel>(viewModelFactory)
     }
 
-    private val screenRenderer by lifecycleAwareLazyFast(this) {
+    private val screenRenderer by lazyFast {
         LingoHomeActivityViewRenderer(
             this, appBarView, bottomAppBarView,
             homeActionButtonView, toolbarUnderlay, floatingSearchView
         )
     }
 
-    private val searchViewStateRenderer by lifecycleAwareLazyFast(this) {
+    private val searchViewStateRenderer by lazyFast {
         LingoHomeSearchViewStateRenderer(
             this, floatingSearchView, appBarView,
             toolbarUnderlay, bottomAppBarView
@@ -93,17 +92,17 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
     private fun initBottomAppBar() {
         bottomAppBarView.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.menu_home_explore -> consume { screenViewModel.navigateTabTo(NavigationTabItem.EXPLORE) }
-                R.id.menu_home_favorite -> consume { screenViewModel.navigateTabTo(NavigationTabItem.FAVOURITE) }
-                R.id.menu_home_history -> consume { screenViewModel.navigateTabTo(NavigationTabItem.HISTORY) }
-                else -> actor.handleMenuItemClick(item.itemId)
+                R.id.menuHomeExploreItem -> consume { screenViewModel.navigateTabTo(NavigationTabItem.EXPLORE) }
+                R.id.menuHomeFavoriteItem -> consume { screenViewModel.navigateTabTo(NavigationTabItem.FAVOURITE) }
+                R.id.menuHomeHistoryItem -> consume { screenViewModel.navigateTabTo(NavigationTabItem.HISTORY) }
+                else -> actionsDelegate.handleMenuItemClick(item.itemId)
             }
         }
 
         homeActionButtonView.setOnClickListener {
             when (homeActionButtonView.id) {
                 R.id.homeActionButtonView -> screenViewModel.actionButtonClicked()
-                else -> actor.handleViewClick(homeActionButtonView.id)
+                else -> actionsDelegate.handleViewClick(homeActionButtonView.id)
             }
         }
     }
@@ -122,8 +121,8 @@ class LingoHomeActivity : ViewModelAwareActivity(), SuggestionClickListener {
             setOnSearchFocusChangedListener { screenViewModel.requestFocusGain(it) }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.menu_clear -> consume { screenViewModel.clearIconClicked() }
-                    R.id.menu_tts -> consume { screenViewModel.textToSpeechIconClicked() }
+                    R.id.menuSearchClearItem -> consume { screenViewModel.clearIconClicked() }
+                    R.id.menuSearchTtsItem -> consume { screenViewModel.textToSpeechIconClicked() }
                     else -> false
                 }
             }

@@ -21,7 +21,7 @@ import org.brainail.everboxing.lingo.domain.executor.AppExecutors
 import org.brainail.everboxing.lingo.domain.repository.SearchResultRepository
 import javax.inject.Inject
 
-class ToggleSearchResultUseInFavoritesCase @Inject constructor(
+class ToggleSearchResultInFavoritesUseCase @Inject constructor(
     private val appExecutors: AppExecutors,
     private val searchResultRepository: SearchResultRepository
 ) {

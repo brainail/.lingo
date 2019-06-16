@@ -11,7 +11,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/suggestionItemIcon"
+        android:id="@+id/suggestionItemIconView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="@null"
@@ -23,7 +23,7 @@
         tools:ignore="ContentDescription"/>
     
     <TextView
-        android:id="@+id/suggestionItemText"
+        android:id="@+id/suggestionItemTitleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -35,14 +35,14 @@
         android:singleLine="true"
         android:textSize="@dimen/material_component_lists_two_line_text_size"
         app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintBottom_toTopOf="@id/suggestionItemDescription"
+        app:layout_constraintBottom_toTopOf="@id/suggestionItemDescriptionView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/suggestionItemIcon"
+        app:layout_constraintStart_toEndOf="@id/suggestionItemIconView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Definition of word"/>
 
     <TextView
-        android:id="@+id/suggestionItemDescription"
+        android:id="@+id/suggestionItemDescriptionView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -55,7 +55,7 @@
         app:layout_constraintWidth_percent="0.7"
         android:textSize="@dimen/material_component_lists_two_line_secondary_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/suggestionItemIcon"
-        app:layout_constraintTop_toBottomOf="@id/suggestionItemText"
+        app:layout_constraintStart_toEndOf="@id/suggestionItemIconView"
+        app:layout_constraintTop_toBottomOf="@id/suggestionItemTitleView"
         tools:text="Description of word really long long, ish ish ish, maybe"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

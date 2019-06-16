@@ -31,7 +31,7 @@ import org.brainail.everboxing.lingo.domain.model.Suggestion
 import org.brainail.everboxing.lingo.domain.usecase.ForgetSearchResultUseCase
 import org.brainail.everboxing.lingo.domain.usecase.SaveSearchResultInHistoryUseCase
 import org.brainail.everboxing.lingo.domain.usecase.SaveSuggestionUseCase
-import org.brainail.everboxing.lingo.domain.usecase.ToggleSearchResultUseInFavoritesCase
+import org.brainail.everboxing.lingo.domain.usecase.ToggleSearchResultInFavoritesUseCase
 import org.brainail.everboxing.lingo.mapper.SearchResultModelMapper
 import org.brainail.everboxing.lingo.mapper.SuggestionModelMapper
 import org.brainail.everboxing.lingo.model.SearchResultModel
@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit
 
 abstract class SearchResultsFragmentViewModel(
     private val saveRecentSuggestionUseCase: SaveSuggestionUseCase,
-    private val toggleSearchResultUseInFavoritesCase: ToggleSearchResultUseInFavoritesCase,
+    private val toggleSearchResultInFavoritesUseCase: ToggleSearchResultInFavoritesUseCase,
     private val saveSearchResultInHistoryUseCase: SaveSearchResultInHistoryUseCase,
     private val forgetSearchResultUseCase: ForgetSearchResultUseCase,
     private val suggestionModelMapper: SuggestionModelMapper,
@@ -75,6 +75,7 @@ abstract class SearchResultsFragmentViewModel(
     fun presentSuggestions(): LiveData<List<SuggestionModel>> = presentSuggestions
     fun startSuggestionsLoading(): LiveData<Void> = startSuggestionsLoading
     fun navigateToSearchResultEvent(): LiveData<SearchResultModel> = navigateToSearchResultEvent
+
     fun viewState(): LiveData<SearchResultsFragmentViewState> = viewState
 
     init {
@@ -110,7 +111,7 @@ abstract class SearchResultsFragmentViewModel(
     fun favoriteSearchResultAt(position: Int) {
         val item = viewState.value!!.displayedSearchResults.getOrNull(position) ?: return
         applyChanges(SearchResultsFragmentViewState.FavoriteSearchResult(item)) // optimistic update
-        toggleSearchResultUseInFavoritesCase.execute(item.id).subscribe()
+        toggleSearchResultInFavoritesUseCase.execute(item.id).subscribe()
     }
 
     fun searchResultClicked(item: SearchResultModel) {
@@ -168,7 +169,7 @@ abstract class SearchResultsFragmentViewModel(
     private fun applyChanges(
         partialViewStateChange: PartialViewStateChange<SearchResultsFragmentViewState>
     ): SearchResultsFragmentViewState {
-        viewState.value = partialViewStateChange.applyTo(viewState = viewState.value!!)
+        viewState.value = partialViewStateChange.applyTo(viewState.value!!)
         return viewState.value!!
     }
 }

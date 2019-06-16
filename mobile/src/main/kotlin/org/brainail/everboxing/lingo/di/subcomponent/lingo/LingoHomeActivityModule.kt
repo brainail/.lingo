@@ -21,7 +21,7 @@ import dagger.Provides
 import org.brainail.everboxing.lingo.di.scope.ActivityScope
 import org.brainail.everboxing.lingo.mapper.TextToSpeechResultMapper
 import org.brainail.everboxing.lingo.ui.home.LingoHomeActivity
-import org.brainail.everboxing.lingo.ui.home.LingoHomeActivityActor
+import org.brainail.everboxing.lingo.ui.home.LingoHomeActivityActionsDelegate
 import org.brainail.everboxing.lingo.ui.home.LingoHomeActivityNavigator
 
 @Module
@@ -32,7 +32,7 @@ class LingoHomeActivityModule {
 
     @Provides
     @ActivityScope
-    fun provideLingoHomeActivityActor(activity: LingoHomeActivity) = LingoHomeActivityActor(activity)
+    fun provideLingoHomeActivityActor(activity: LingoHomeActivity) = LingoHomeActivityActionsDelegate(activity)
 
     @Provides
     @ActivityScope

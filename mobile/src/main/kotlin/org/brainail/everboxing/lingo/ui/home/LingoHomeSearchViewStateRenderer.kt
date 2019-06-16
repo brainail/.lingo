@@ -60,9 +60,9 @@ class LingoHomeSearchViewStateRenderer(
 
         // icons
         floatingSearchView.showSearchLogo(viewState.isLogoDisplayed)
-        floatingSearchView.menu.findItem(R.id.menu_clear)?.isVisible = viewState.isClearAvailable
-        floatingSearchView.menu.findItem(R.id.menu_progress)?.isVisible = viewState.displayLoading
-        floatingSearchView.menu.findItem(R.id.menu_tts)?.isVisible =
+        floatingSearchView.menu.findItem(R.id.menuSearchClearItem)?.isVisible = viewState.isClearAvailable
+        floatingSearchView.menu.findItem(R.id.menuSearchProgressItem)?.isVisible = viewState.displayLoading
+        floatingSearchView.menu.findItem(R.id.menuSearchTtsItem)?.isVisible =
             viewState.isTextToSpeechAvailable && LingoHomeActivityNavigator.canShowTextToSpeech(activity)
 
         // items

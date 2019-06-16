@@ -30,7 +30,10 @@ abstract class ViewModelAwareFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModels?.forEach {
-            it.initState(getViewModelStateFromBundle(savedInstanceState, it::class.java))
+            it.initState(
+                getViewModelStateFromBundle(savedInstanceState, it::class.java),
+                getViewModelInitialArgs(arguments, it::class.java)
+            )
         }
     }
 
@@ -46,6 +49,8 @@ abstract class ViewModelAwareFragment : BaseFragment() {
     private fun getViewModelStateFromBundle(bundle: Bundle?, type: Class<out BaseViewModel>): ViewModelSavedState? {
         return bundle?.getParcelable(KEY_VIEW_MODEL_STATE + "_" + type.name)
     }
+
+    open fun getViewModelInitialArgs(bundle: Bundle?, type: Class<out BaseViewModel>): ViewModelInitialArgs? = null
 
     private fun saveViewModelStateToBundle(
         bundle: Bundle,

@@ -28,6 +28,7 @@ import javax.inject.Inject
 
 @SharedViewModel(clazz = SearchViewModel::class)
 class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
+
     enum class NavigationItem { BACKWARD, SCROLL_TO_TOP }
     enum class NavigationTabItem { EXPLORE, FAVOURITE, HISTORY }
 
@@ -36,8 +37,9 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
 
     fun navigation(): LiveData<NavigationItem> = navigation
     fun navigationTab(): LiveData<NavigationTabItem> = navigationTab
-    fun searchViewState(): LiveData<SearchViewState> = searchViewState
     fun searchNavigation(): LiveData<SearchNavigationItem> = searchNavigation
+
+    fun searchViewState(): LiveData<SearchViewState> = searchViewState
 
     override fun initState(viewModelSavedState: ViewModelSavedState?) {
         super.initState(viewModelSavedState)
@@ -86,7 +88,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
     }
 
     private fun initDisplayedTextState(viewModelSavedState: ViewModelSavedState?) {
-        viewModelSavedState?.also {
+        viewModelSavedState?.let {
             it.takeIf { isFirstRestore() }?.run {
                 val displayedText = get<String>(KEY_DISPLAYED_TEXT_STATE) ?: ""
                 updateQuery(displayedText)
@@ -102,7 +104,7 @@ class LingoHomeActivityViewModel @Inject constructor() : SearchViewModel() {
      */
     @Suppress("unused")
     private fun initNavigationState(viewModelSavedState: ViewModelSavedState?) {
-        viewModelSavedState?.get<String>(KEY_NAVIGATION_TAB_STATE)?.also {
+        viewModelSavedState?.get<String>(KEY_NAVIGATION_TAB_STATE)?.let {
             L.v("initNavigationState(): restore navigation tab $it")
             navigationTab.setValueSilently(NavigationTabItem.valueOf(it))
         } ?: run {
