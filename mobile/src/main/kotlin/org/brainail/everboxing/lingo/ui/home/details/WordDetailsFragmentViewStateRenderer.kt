@@ -17,12 +17,15 @@
 package org.brainail.everboxing.lingo.ui.home.details
 
 import android.widget.TextView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.brainail.everboxing.lingo.R
 import org.brainail.logger.L
 
 class WordDetailsFragmentViewStateRenderer(
     private val wordTitleView: TextView,
     private val wordDefinitionView: TextView,
-    private val wordExampleView: TextView
+    private val wordExampleView: TextView,
+    private val actionButtonView: FloatingActionButton
 ) {
 
     fun render(viewState: WordDetailsFragmentViewState) {
@@ -31,5 +34,10 @@ class WordDetailsFragmentViewStateRenderer(
         wordTitleView.text = viewState.wordTitle
         wordDefinitionView.text = viewState.wordDefinition
         wordExampleView.text = viewState.wordExample
+
+        when (viewState.favorite) {
+            true -> actionButtonView.setImageResource(R.drawable.ic_baseline_favorite_24dp)
+            else -> actionButtonView.setImageResource(R.drawable.ic_twotone_favorite_24dp)
+        }
     }
 }

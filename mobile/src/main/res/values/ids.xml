@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="homeActionButtonView" type="id"/>
-    <item name="detailsActionButtonView" type="id"/>
+    <item name="actionButtonView" type="id"/>
+    <item name="homeSearchActionButtonView" type="id"/>
+    <item name="detailsFavouriteActionButtonView" type="id"/>
 </resources>

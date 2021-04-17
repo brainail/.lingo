@@ -18,8 +18,10 @@ package org.brainail.everboxing.lingo.ui.home.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.activity_lingo_home.*
 import kotlinx.android.synthetic.main.fragment_word_details.*
 import org.brainail.everboxing.lingo.R
 import org.brainail.everboxing.lingo.base.util.consume
@@ -37,7 +39,12 @@ class WordDetailsFragment
     : ViewModelAwareFragment(), MenuItemClickHandler, ViewClickHandler {
 
     private val viewStateRenderer by lifecycleAwareLazyFast(this) {
-        WordDetailsFragmentViewStateRenderer(wordTitleView, wordDefinitionView, wordExampleView)
+        WordDetailsFragmentViewStateRenderer(
+            wordTitleView,
+            wordDefinitionView,
+            wordExampleView,
+            activity!!.actionButtonView
+        )
     }
 
     private val screenViewModel by lazyFast {
@@ -46,7 +53,11 @@ class WordDetailsFragment
 
     override fun createPrimaryViewModels(): Array<BaseViewModel> = arrayOf(screenViewModel)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_word_details, container, false)
     }
 
@@ -57,18 +68,23 @@ class WordDetailsFragment
         }
     }
 
-    override fun getViewModelInitialArgs(bundle: Bundle?, type: Class<out BaseViewModel>): ViewModelInitialArgs? {
+    override fun getViewModelInitialArgs(
+        bundle: Bundle?,
+        type: Class<out BaseViewModel>
+    ): ViewModelInitialArgs? {
         return bundle?.let { WordDetailsFragmentInitialArgs(WordDetailsFragmentArgs.fromBundle(it)) }
     }
 
-    override fun handleMenuItemClick(menuId: Int) = when (menuId) {
+    override fun handleMenuItemClick(menu: MenuItem) = when (menu.itemId) {
         R.id.menuDetailsDeleteItem -> consume { TODO() }
         R.id.menuDetailsShareItem -> consume { TODO() }
-        else -> super.handleMenuItemClick(menuId)
+        else -> super.handleMenuItemClick(menu)
     }
 
-    override fun handleViewClick(viewId: Int) = when (viewId) {
-        R.id.detailsActionButtonView -> consume { TODO() }
-        else -> super.handleViewClick(viewId)
+    override fun handleViewClick(view: View): Boolean {
+        when (view.tag) {
+            R.id.detailsFavouriteActionButtonView -> return consume { TODO() }
+        }
+        return super.handleViewClick(view)
     }
 }

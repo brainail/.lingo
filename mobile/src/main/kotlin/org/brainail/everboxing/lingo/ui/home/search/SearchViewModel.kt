@@ -84,7 +84,7 @@ abstract class SearchViewModel : RxAwareViewModel() {
     fun navigationIconClicked() {
         when (searchViewState.value!!.isInFocus) {
             true -> applyChanges(NavigationIconClickedInFocus)
-            else -> searchNavigation.value = SearchViewModel.SearchNavigationItem.DRAWER
+            else -> searchNavigation.value = SearchNavigationItem.DRAWER
         }
     }
 
@@ -93,7 +93,7 @@ abstract class SearchViewModel : RxAwareViewModel() {
     }
 
     fun textToSpeechIconClicked() {
-        searchNavigation.value = SearchViewModel.SearchNavigationItem.TEXT_TO_SPEECH
+        searchNavigation.value = SearchNavigationItem.TEXT_TO_SPEECH
     }
 
     fun handleTextToSpeechResult(result: TextToSpeechResult) {

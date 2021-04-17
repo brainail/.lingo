@@ -16,8 +16,8 @@
 
 package org.brainail.everboxing.lingo.util
 
-import androidx.annotation.IdRes
+import android.view.MenuItem
 
 interface MenuItemClickHandler {
-    fun handleMenuItemClick(@IdRes menuId: Int): Boolean = false
+    fun handleMenuItemClick(menu: MenuItem): Boolean = false
 }

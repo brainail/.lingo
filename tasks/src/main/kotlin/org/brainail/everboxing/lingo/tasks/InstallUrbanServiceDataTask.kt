@@ -41,7 +41,7 @@ class InstallUrbanServiceDataTask(context: Context, workerParams: WorkerParamete
     }
 
     companion object {
-        private const val PARAM_PATH_TO_DATA = "path-to-data"
+        private const val PARAM_PATH_TO_DATA = "param_path_to_data"
 
         @JvmStatic
         val workerTag = "${InstallUrbanServiceDataTask::class.java.simpleName}.WorkerTag"

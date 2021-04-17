@@ -133,7 +133,7 @@ class LingoHomeActivityViewRenderer(
             ?.replaceMenu(R.menu.menu_details_bottom_bar) // avoid blinking
         bottomAppBarView.show()
         scheduleAlignActionButtonAction(alignFabCenterAction)
-        actionButtonView.id = R.id.detailsActionButtonView
+        actionButtonView.tag = R.id.detailsFavouriteActionButtonView
         actionButtonView.setImageResource(R.drawable.ic_twotone_favorite_24dp)
     }
 
@@ -142,7 +142,7 @@ class LingoHomeActivityViewRenderer(
         bottomAppBarView.takeIf { null == bottomAppBarView.menu.findItem(R.id.menuHomeExploreItem) }
             ?.replaceMenu(R.menu.menu_home_bottom_bar) // avoid blinking
         scheduleAlignActionButtonAction(alignFabEndAction)
-        actionButtonView.id = R.id.homeActionButtonView
+        actionButtonView.tag = R.id.homeSearchActionButtonView
         actionButtonView.setImageResource(R.drawable.ic_search_black_24dp)
     }
 

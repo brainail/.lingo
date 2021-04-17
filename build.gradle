@@ -5,8 +5,8 @@ buildscript {
     ext.minSdkVersion = 21
     ext.targetSdkVersion = 28
 
-    ext.gradlePluginVersion = '3.5.0-beta04'
-    ext.kotlinVersion = '1.3.21'
+    ext.gradlePluginVersion = '4.1.0-alpha09'
+    ext.kotlinVersion = '1.3.61'
 
     ext.androidCoreVersion = '1.0.1'
     ext.androidFragmentVersion = '1.0.0'
@@ -58,7 +58,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
         classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$androidNavigationVersion"
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion"
+        // classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion"
         classpath "com.diffplug.spotless:spotless-plugin-gradle:$spotlessPluginVersion"
     }
 }
@@ -95,5 +95,5 @@ allprojects {
 
 subprojects {
     apply from: "$rootDir/spotless.gradle"
-    apply from: "$rootDir/detekt.gradle"
+    // apply from: "$rootDir/detekt.gradle"
 }

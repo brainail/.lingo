@@ -61,7 +61,7 @@
         tools:visibility="gone"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@id/homeActionButtonView"
+        android:id="@id/actionButtonView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_search_black_24dp"

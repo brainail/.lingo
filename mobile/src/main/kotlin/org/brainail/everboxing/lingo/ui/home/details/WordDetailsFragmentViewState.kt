@@ -23,7 +23,8 @@ import org.brainail.everboxing.lingo.ui.base.PartialViewStateChange
 data class WordDetailsFragmentViewState(
     val wordTitle: String = "",
     val wordDefinition: String = "",
-    val wordExample: String = ""
+    val wordExample: String = "",
+    val favorite: Boolean = false
 ) {
 
     companion object {
@@ -37,7 +38,8 @@ data class WordDetailsFragmentViewState(
             return viewState.copy(
                 wordTitle = word.word,
                 wordDefinition = word.definition,
-                wordExample = word.example
+                wordExample = word.example,
+                favorite = word.favorite
             )
         }
     }

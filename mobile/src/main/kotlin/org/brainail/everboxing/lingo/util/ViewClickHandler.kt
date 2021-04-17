@@ -16,8 +16,8 @@
 
 package org.brainail.everboxing.lingo.util
 
-import androidx.annotation.IdRes
+import android.view.View
 
 interface ViewClickHandler {
-    fun handleViewClick(@IdRes viewId: Int): Boolean = false
+    fun handleViewClick(view: View): Boolean = false
 }

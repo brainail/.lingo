@@ -19,10 +19,10 @@
 
 package org.brainail.everboxing.lingo.util.extensions
 
-import android.annotation.SuppressLint
-import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 
 fun <T, U : LifecycleOwner> lifecycleAwareLazyFast(
     lifecycleOwner: U,
@@ -32,21 +32,14 @@ fun <T, U : LifecycleOwner> lifecycleAwareLazyFast(
 // marker object
 private object UninitializedValue
 
-@SuppressLint("RestrictedApi")
 private class LifecycleAwareLazy<out T>(
     lifecycle: Lifecycle,
     private val initializer: () -> T
-) : Lazy<T>, GenericLifecycleObserver {
+) : Lazy<T>, LifecycleObserver {
 
-    override fun onStateChanged(source: LifecycleOwner?, event: Lifecycle.Event?) {
-        when (event) {
-            // ON_STOP is used even if it doesn't mean that it is going to be destroyed.
-            // ON_DESTROY could be used but only for activities where
-            // for fragments this is also possible but only with viewLifecycle
-            // which is not available for lazy delegate at the time of construction
-            Lifecycle.Event.ON_STOP -> lazyValue = UninitializedValue
-            else -> return
-        }
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun destroy() {
+        lazyValue = UninitializedValue
     }
 
     init {

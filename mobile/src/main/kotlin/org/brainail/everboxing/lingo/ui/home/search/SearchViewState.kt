@@ -158,4 +158,17 @@ data class SearchViewState(
             )
         }
     }
+
+    override fun toString(): String {
+        return "SearchViewState(isInFocus=$isInFocus, " +
+            "displayedText='$displayedText', " +
+            "isClearAvailable=$isClearAvailable, " +
+            "cursorPosition=$cursorPosition, " +
+            "isTextToSpeechAvailable=$isTextToSpeechAvailable, " +
+            "isLogoDisplayed=$isLogoDisplayed, " +
+            "isLoadingSuggestions=$isLoadingSuggestions, " +
+            "displayedSuggestions.size=${displayedSuggestions.size}, " + // custom
+            "suggestionsScrollPosition=$suggestionsScrollPosition, " +
+            "displayLoading=$displayLoading)"
+    }
 }

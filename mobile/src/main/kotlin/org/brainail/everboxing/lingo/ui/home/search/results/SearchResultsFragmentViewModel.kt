@@ -166,6 +166,7 @@ abstract class SearchResultsFragmentViewModel(
         return saveRecentSuggestionUseCase.execute(suggestionModelMapper.mapT(suggestion.toRecent()))
     }
 
+    // TODO: Search for completely new word and this one will be called OMG times!!!!
     private fun applyChanges(
         partialViewStateChange: PartialViewStateChange<SearchResultsFragmentViewState>
     ): SearchResultsFragmentViewState {
